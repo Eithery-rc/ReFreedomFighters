@@ -57,7 +57,7 @@ static u32 THISCALL inventoryCommand(u8 *self, u32 cmdArg, u32 arg) {
       return 0;
     }
     u8 *inner = self + 0x11a;
-    u32 l14 = 0;
+    u32 l14__it[4] = {0}; u32 &l14 = l14__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     vcall<void>(inner, 0x4c, (u32)&l14);
     u32 cur = vcall<u32>(inner, 0x5c, (u32)&l14);
     if (l14 == 0) {

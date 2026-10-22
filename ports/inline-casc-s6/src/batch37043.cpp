@@ -21,7 +21,7 @@ static void THISCALL fn4b3270(u8 *self) {
   B8(0x4d) = 0;
   ext_4b3a70(self);
   void *l1 = self + 0x10e;
-  u32 v;
+  u32 v__it[4]; u32 &v = v__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   (*(v1_t **)l1)[0x4c / 4](l1, (u32)&v);
   u32 item = (*(v1_t **)l1)[0x64 / 4](l1, (u32)&v);
   while (item != 0) {
@@ -30,7 +30,7 @@ static void THISCALL fn4b3270(u8 *self) {
   }
   (*(v0_t **)l1)[0xc / 4](l1);
   void *l2 = self + 0xf2;
-  u32 v2;
+  u32 v2__it[4]; u32 &v2 = v2__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   (*(v1_t **)l2)[0x4c / 4](l2, (u32)&v2);
   item = (*(v1_t **)l2)[0x5c / 4](l2, (u32)&v2);
   if (v2 != 0) {

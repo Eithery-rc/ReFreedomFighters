@@ -53,7 +53,7 @@ static void THISCALL killBoxKill(u8 *self) {
   }
   u8 *list = *(u8 **)(*(u8 **)(self + 0x4a) + 0x18);
   if (!list) return;
-  u32 cookie;
+  u32 cookie__it[4]; u32 &cookie = cookie__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   ((vIter)VT(list, 0x4c))(list, &cookie);
   u32 handle = ((vIter)VT(*(u8 **)(*(u8 **)(self + 0x4a) + 0x18), 0x5c))(*(u8 **)(*(u8 **)(self + 0x4a) + 0x18), &cookie);
   while (cookie) {

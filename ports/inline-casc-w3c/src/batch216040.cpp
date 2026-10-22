@@ -303,7 +303,7 @@ PCREG(5f2400, lifted_5f2400);
 #endif
 extern "C" u32 THISCALL lifted_48a880(u32 ecx_in) {
   SEH_ENTER(0x667760);  // @h_48a880
-  volatile u32 it = 0;
+  volatile u32 it__it[4] = {0}; volatile u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 esi = ecx_in, eax;
   u32 edi = *(u32 *)(esi + 0xae4);
   *(u32 *)esi = 0x68d53c;
@@ -351,7 +351,7 @@ PCREG(48a880, lifted_48a880);
 extern "C" u32 THISCALL lifted_57db50(u32 ecx_in, u32 a0) {
   SEH_ENTER(0x66b342);  // @h_57db50
   volatile u32 tmp = 0;
-  volatile u32 it = 0;
+  volatile u32 it__it[4] = {0}; volatile u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 edi = ecx_in, ebx = a0, eax;
   eax = ext_5626d0_thiscall2(edi, ebx);  // @h1_57db50
   if (!(eax & 0xff)) { SEH_LEAVE(); return eax; }  // @h2_57db50
@@ -544,7 +544,7 @@ extern "C" u32 THISCALL lifted_476720(u32 ecx_in) {
   SEH_ENTER(0x66713b);  // @h_476720
   u8 Lc[0x40] __attribute__((aligned(16)));
   volatile u32 cur = 0;
-  volatile u32 it = 0;
+  volatile u32 it__it[4] = {0}; volatile u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 ebx = ecx_in, eax = 0;
   eax = ext_45d3a0_q1(ebx);
   if (*(u8 *)(ebx + 0x72) == 0) {  // @h1_476720

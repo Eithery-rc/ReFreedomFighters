@@ -23,7 +23,7 @@ static void THISCALL fn4ac310(u8 *self) {
     if (!obj) return;
     vcall<void>(self, 0x8c, (u32)obj);
     u8 *it = self + 0x11a;
-    u32 cnt;
+    u32 cnt__it[4]; u32 &cnt = cnt__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     vcall<void>(it, 0x4c, (u32)&cnt);
     u32 key = vcall<u32>(it, 0x5c, (u32)&cnt);
     if (cnt) {

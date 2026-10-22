@@ -18,7 +18,7 @@ static void THISCALL geomActivateEvents(u8 *self) {
   u8 *X = (u8 *)U32(E, 8);
   if (X == 0)
     return;
-  u32 cnt;
+  u32 cnt__it[4]; u32 &cnt = cnt__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<void>((void *)X, 0x4c, (void *)&cnt);
   E = (u8 *)U32(self, 0x10);
   X = (u8 *)U32(E, 8);

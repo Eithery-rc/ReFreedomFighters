@@ -20,7 +20,7 @@ static u32 vslot(u8 *obj, u32 off) { return *(u32 *)(*(u32 *)obj + off); }
 // Then node = edi + ([this+0x18] - 2) * 4 gets 0, 0, link = [this+0x1c]; if link: [link] = node, else [this+0x20] = node;
 // [this+0x1c] = node; returns edi + 4. Name GUESS.
 static u32 THISCALL linkNodeInsert_4cd880(u8 *self, u32 arg) {
-  u32 tmp = 0;
+  u32 tmp__it[4] = {0}; u32 &tmp = tmp__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 edi;
   u8 *p = *(u8 **)(self + 0x24);
   if (p) {

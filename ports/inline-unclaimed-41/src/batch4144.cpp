@@ -29,7 +29,7 @@ static void THISCALL fn4c5530(u8 *self, u8 *src) {
 
   u8 *R1 = *(u8 **)(src + 0x48);
   if (R1 != 0) {
-    u32 l18 = 0;
+    u32 l18__it[4] = {0}; u32 &l18 = l18__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     ((f1_t)vslot(R1, 0x4c))(R1, (u32)&l18);
     u32 x = ((f1_t)vslot(R1, 0x5c))(R1, (u32)&l18);
     while (l18 != 0) {

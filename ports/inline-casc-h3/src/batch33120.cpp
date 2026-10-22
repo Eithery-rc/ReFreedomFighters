@@ -41,7 +41,7 @@ static u8 THISCALL fn5db4f0(u8 *self, u8 *s) {
   (*(fn_t *)(vt + 0x3c))(s, r);
   o = *(u8 **)(self + 0x84);
   if (o) {
-    u32 n = 0;
+    u32 n__it[4] = {0}; u32 &n = n__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     vcall<u32>(o, 0x4c, (u32)&n);
     o = *(u8 **)(self + 0x84);
     u8 *e = vcall<u8 *>(o, 0x5c, (u32)&n);

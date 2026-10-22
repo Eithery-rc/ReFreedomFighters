@@ -23,7 +23,7 @@ static void THISCALL targetObtainedSendNotify(u8 *self) {
   }
   u8 *list = *(u8 **)(x + 0x18);
   if (!list) return;
-  u32 flag = 0;
+  u32 flag__it[4] = {0}; u32 &flag = flag__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   ((VList4c)*(u32 *)(*(u8 **)list + 0x4c))(list, &flag);
   u8 *item = ((VList5c)*(u32 *)(*(u8 **)list + 0x5c))(list, &flag);
   while (flag) {

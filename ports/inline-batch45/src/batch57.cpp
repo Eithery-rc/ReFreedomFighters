@@ -45,7 +45,7 @@ static u8 THISCALL wantControl(u8 *self, const float *, const float *, const flo
     return 0;
   float foot = ((vcallF0)VT(hero, 0x5b4))(hero);
   u8 *list = *(u8 **)(self + 0x76);
-  u32 it;
+  u32 it__it[4]; u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   if (list) {
     ((vcallVP)VT(list, 0x4c))(list, &it);
     u32 v = ((vcallUP)VT(*(u8 **)(self + 0x76), 0x5c))(*(u8 **)(self + 0x76), &it);

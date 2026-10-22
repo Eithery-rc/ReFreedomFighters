@@ -14,7 +14,7 @@ static void THISCALL repositionCharacterCopyData(u8 *self, u8 *src) {
   *(u32 *)(self + 0x50) = *(u32 *)(src + 0x50);
   void *obj = *(void **)(src + 0x48);
   if (!obj) return;
-  u32 tmp;
+  u32 tmp__it[4]; u32 &tmp = tmp__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   ((outFn)(*(void ***)obj)[0x4c / 4])(obj, &tmp);
   u32 x = ((retOutFn)(*(void ***)obj)[0x5c / 4])(obj, &tmp);
   while (tmp != 0) {

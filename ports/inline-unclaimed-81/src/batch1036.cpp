@@ -14,7 +14,7 @@ extern "C" void __attribute__((cdecl)) ext_634273(void *p, u32 sz);   // GUESS (
 // 0x5daf20 (thiscall: this).
 static void THISCALL tearDownObj(u8 *self) {
   D(self, 0) = 0x6b6754u;
-  u32 tmp = 0;
+  u32 tmp__it[4] = {0}; u32 &tmp = tmp__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u8 *m = (u8 *)D(self, 0x84);
   if (m != 0) {
     vcall<void>(m, 0x4c, (u32)&tmp);

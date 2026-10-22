@@ -18,7 +18,7 @@ static u8 THISCALL fn4bb6b0(u8 *self, u32 arg) {
   u8 *B = self + 0x48;
   u32 esi = vcall<u32>(A, 0x14);
   u32 eax = vcall<u32>(B, 0x14);
-  u32 loc = 0;
+  u32 loc__it[4] = {0}; u32 &loc = loc__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   if ((s32)eax > (s32)esi) {
     vcall<u32>(A, 0x4c, (u32)&loc);
     eax = vcall<u32>(A, 0x5c, (u32)&loc);

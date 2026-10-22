@@ -13,7 +13,7 @@ typedef u32 (THISCALL *tab3_t)(u8 *, u32, u32, u32);
 static void THISCALL fn4ad3a0(u8 *self, u8 *list) {
   if (!list) return;
   if (!vcall<u32>(list, 0x14)) return;
-  u32 it;
+  u32 it__it[4]; u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<void>(list, 0x4c, (u32)&it);
   u32 r = vcall<u32>(list, 0x5c, (u32)&it);
   if (it == 0) return;

@@ -29,7 +29,7 @@ static void THISCALL weaponCopyData(u8 *self, u8 *src) {
   *(u32 *)(self + 0xd3) = *(u32 *)(src + 0xd3);
   u8 *list = *(u8 **)(src + 0xa0);
   if (list) {
-    u32 local = 0;
+    u32 local__it[4] = {0}; u32 &local = local__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     vcall<void>(list, 0x4c, &local);
     u32 item = vcall<u32>(*(void **)(src + 0xa0), 0x5c, &local);
     if (local != 0) {

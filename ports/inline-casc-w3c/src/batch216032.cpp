@@ -1066,7 +1066,7 @@ PCREG(50e150, lifted_50e150);
 extern "C" u32 THISCALL lifted_471020(u32 ecx_in, u32 a0) {
   SEH_ENTER(0x669acb);  // @h_471020
   u8 loc[0x80] __attribute__((aligned(16)));
-  volatile u32 it = 0;
+  volatile u32 it__it[4] = {0}; volatile u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 ebx = ecx_in, esi = a0;
   u32 edi = *(u32 *)(ebx + 0x60);
   u32 tbl = *(u32 *)(G(u32, 0x70039c) + 0x9b);

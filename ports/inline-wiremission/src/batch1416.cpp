@@ -85,7 +85,7 @@ static void THISCALL c02aInit2(u8 *ct) {
     float best = 9.99999968e37f;
     u8 *list = ct + 0x1e8;
     if (list) {
-      u32 it;
+      u32 it__it[4]; u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
       vcall<void, u32 *>(list, 0x4c, &it);
       u32 h = vcall<u32, u32 *>(list, 0x5c, &it);
       while (it) {

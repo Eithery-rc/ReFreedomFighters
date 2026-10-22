@@ -42,7 +42,7 @@ static void STDCALL fn50dfa0(u8 *a) {
   if (ent) {
     void *lst = *(void **)(ent + 0x18);
     if (lst) {
-      u32 var10;
+      u32 var10__it[4]; u32 &var10 = var10__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
       (*(v1_t **)lst)[0x4c / 4](lst, (u32)&var10);
       lst = *(void **)(ent + 0x18);
       u32 id = (*(v1_t **)lst)[0x5c / 4](lst, (u32)&var10);

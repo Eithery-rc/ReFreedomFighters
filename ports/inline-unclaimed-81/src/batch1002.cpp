@@ -14,7 +14,7 @@ static void THISCALL removeActionMaps(u8 *t) {
   u8 *l = (u8 *)D(t, 0x1214);
   if (!l)
     return;
-  u32 f = 0;
+  u32 f__it[4] = {0}; u32 &f = f__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<void>(l, 0x4c, (u32)&f);
   u8 *e = (u8 *)vcall<u32>(l, 0x5c, (u32)&f);
   if (!f)

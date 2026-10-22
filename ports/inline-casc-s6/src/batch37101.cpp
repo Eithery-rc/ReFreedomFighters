@@ -17,7 +17,7 @@ static inline void *winObj() { return *(void **)(*(u8 **)0x70039c + 0x1a9f); }
 static void THISCALL fn535300(u8 *self, u8 *list) {
   s32 count = 0;
   if (!list) return;
-  u32 flag = 0;
+  u32 flag__it[4] = {0}; u32 &flag = flag__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<void>(list, 0x4c, (u32)&flag);
   u32 key = vcall<u32>(list, 0x5c, (u32)&flag);
   if (flag == 0) return;

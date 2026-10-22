@@ -128,7 +128,7 @@ PCREG(456b70, fn456b70);
 
 // 0x4ce550: thiscall(n): this null -> 0; this->slot 0x4c(&loc); r=this->slot 0x5c(&loc); loc==0 -> 0; then up to n more slot 0x5c(&loc) calls (stop at loc==0); n exhausted returns the last slot 0x5c result (eax)
 static u32 THISCALL fn4ce550(u8 *self, u32 n) {
-  u32 loc;
+  u32 loc__it[4]; u32 &loc = loc__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   if (!self) return 0;
   vcall<u32>(self, 0x4c, (u32)&loc);
   u32 r = vcall<u32>(self, 0x5c, (u32)&loc);

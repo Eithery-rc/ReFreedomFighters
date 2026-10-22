@@ -10,7 +10,7 @@ typedef u32 (__attribute__((thiscall)) *Slot2_79)(u8 *, u32, u32);
 // returns the last non-zero step.
 static u32 THISCALL walkCount_4ce5f0(u8 *self, u32 n) {
     if (self == 0) return 0u;
-    u32 local = 0u;
+    u32 local__it[4] = {0u}; u32 &local = local__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     ((Slot1_79)(*(void ***)self)[0x4c / 4])(self, (u32)&local);
     u32 x = ((Slot1_79)(*(void ***)self)[0x64 / 4])(self, (u32)&local);
     if (x == 0u) return 0u;

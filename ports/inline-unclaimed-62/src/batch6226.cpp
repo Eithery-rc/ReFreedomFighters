@@ -13,7 +13,7 @@ static u32 rd32u(const u8 *p) { u32 v; __builtin_memcpy(&v, p, 4); return v; }
 static void wr32u(u8 *p, u32 v) { __builtin_memcpy(p, &v, 4); }
 
 static u32 THISCALL fn4ce6a0(u8 *self, u32 a1, u32 a2) {
-  u32 loc = 0;
+  u32 loc__it[4] = {0}; u32 &loc = loc__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 edi;
   if (rdp(self + 0x24) == 0) {
     edi = ext_4cd540(self, a2) - 4;

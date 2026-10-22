@@ -17,7 +17,7 @@ static u32 THISCALL getActionMap(u8 *selfP, const char *name) {
   u32 obj = rdw(self, 0x1214);
   if (obj == 0)
     return 0;
-  u32 flag = 0;
+  u32 flag__it[4] = {0}; u32 &flag = flag__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   ((F1)rdw(rdw(obj, 0), 0x4c))((u8 *)(unsigned long)obj, (u32)(unsigned long)&flag);
   u32 esi = ((F1)rdw(rdw(obj, 0), 0x5c))((u8 *)(unsigned long)obj, (u32)(unsigned long)&flag);
   if (flag == 0)

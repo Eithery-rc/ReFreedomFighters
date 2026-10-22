@@ -26,7 +26,7 @@ static bool THISCALL searchLightGroupSave_5c7740(u8 *self, u8 *s) {
   vcall<u8 *>(s, 0x44, n);
   u8 *list = *(u8 **)(self + 0x60);
   if (list) {
-    u32 it;
+    u32 it__it[4]; u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     vcall<void>(list, 0x4c, (u32)&it);
     u32 item = vcall<u32>(*(u8 **)(self + 0x60), 0x5c, (u32)&it);
     while (it) {

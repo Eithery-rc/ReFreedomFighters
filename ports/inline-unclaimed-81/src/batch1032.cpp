@@ -12,7 +12,7 @@ static u32 THISCALL recordLoopTick(u8 *self) {
   u8 *o = (u8 *)D(self, 0x12b);
   if (!o)
     return 0;
-  u32 L = 0;
+  u32 L__it[4] = {0}; u32 &L = L__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<void>(o, 0x4c, (u32)&L);
   o = (u8 *)D(self, 0x12b);
   u8 *C = (u8 *)vcall<u32>(o, 0x64, (u32)&L);

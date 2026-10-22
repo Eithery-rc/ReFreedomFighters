@@ -11,7 +11,7 @@ static u32 callSlot(u8 *o, u32 off, u32 arg) {
 
 void THISCALL inputActionMakeExclusive(u8 *self, u32 arg) {
   u8 bl = (u8)arg;
-  u32 L = 0;
+  u32 L__it[4] = {0}; u32 &L = L__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u8 *A = *(u8 **)(self + 0x15);
   if (!A)
     return;

@@ -603,7 +603,7 @@ extern "C" u32 THISCALL hand_57e4f0(u32 T) {
   u8 S188[0x80] __attribute__((aligned(16)));
   u8 tmpA4[0x80] __attribute__((aligned(16)));
   u8 D4[0x80] __attribute__((aligned(16)));
-  volatile u32 it[2];
+  volatile u32 it[4];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 cnt = 0;
   bool found = false;
   for (u32 e = 0; e < F32(T, 0x338); e++) {  // @h1_57e4f0

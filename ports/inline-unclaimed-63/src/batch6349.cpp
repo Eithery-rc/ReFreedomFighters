@@ -20,7 +20,7 @@ static u32 THISCALL unnamed4cd470(u8 *self, u32 a) {
   u32 e;
   u32 o = *(u32 *)(self + 0x24);
   if (o != 0) {
-    u32 L;
+    u32 L__it[4]; u32 &L = L__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     ((p1_fn)(*(u32 *)(*(u32 *)o + 0x4c)))((void *)o, &L);
     u32 n = ((q1_fn)(*(u32 *)(*(u32 *)o + 0x5c)))((void *)o, &L);
     if (L != 0) {

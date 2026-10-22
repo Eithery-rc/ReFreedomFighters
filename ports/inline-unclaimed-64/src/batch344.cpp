@@ -24,7 +24,7 @@ static void THISCALL refreshLoop_45d1f0(u8 *self) {
         u8 *hold = *(u8 **)(self + 0x10);
         u8 *N = *(u8 **)(hold + 0x8);
         if (N != 0) {
-            u32 local = 0;
+            u32 local__it[4] = {0}; u32 &local = local__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
             void **vn = *(void ***)N;
             ((Slot1VFn)vn[0x4c / 4])(N, (u32)&local);
             u8 *N2 = *(u8 **)(*(u8 **)(self + 0x10) + 0x8);

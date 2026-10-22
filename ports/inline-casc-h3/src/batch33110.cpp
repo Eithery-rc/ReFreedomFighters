@@ -49,7 +49,7 @@ PCREG(5cf300, fn5cf300);
 static u8 THISCALL fn44a160(u8 *self, u32 a, u32 f) {
   u8 *o = *(u8 **)(self + 0x18);
   if (!o) return 0;
-  u32 n = 0;
+  u32 n__it[4] = {0}; u32 &n = n__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<u32>(o, 0x4c, (u32)&n);
   o = *(u8 **)(self + 0x18);
   u32 e = vcall<u32>(o, 0x5c, (u32)&n);

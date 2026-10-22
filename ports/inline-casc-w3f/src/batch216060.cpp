@@ -4385,7 +4385,7 @@ extern "C" u32 THISCALL hand_4ad4d0(u32 ecx_in) {
   u32 S90[32] __attribute__((aligned(16)));
   u32 S110[32] __attribute__((aligned(16)));
   u32 S190[32] __attribute__((aligned(16)));
-  volatile u32 L = 0;
+  volatile u32 L__it[4] = {0}; volatile u32 &L = L__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
 #define F32(base, off) (*(volatile u32 *)((base) + (off)))
 #define MGR (F32(G(u32, 0x70039c), 0x9b))
   u32 B = esi + 0x11a;
@@ -8248,7 +8248,7 @@ extern "C" u32 THISCALL hand_4e6ce0(u32 ecx_in) {
   SEH_ENTER(0x666500);
 #define F32(base, off) (*(volatile u32 *)((base) + (off)))
   u32 esi = ecx_in + 0xc;
-  volatile u32 it[2];
+  volatile u32 it[4];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   F32(ecx_in, 0) = 0x68f068;  // @h1_4e6ce0
   if (esi != 0) {  // @h2_4e6ce0
     ((u32(THISCALL *)(u32, u32))VSLOT(esi, 0x4c))(esi, (u32)it);  // @h3_4e6ce0

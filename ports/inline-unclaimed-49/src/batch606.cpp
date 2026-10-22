@@ -42,7 +42,7 @@ static u8 *THISCALL findAction(u8 *self, const char *name, u32 unused, s32 id, u
     u8 *y = *(u8 **)(*(u8 **)(x + 0x10) + 8);
     if (!y)
       return nullptr;
-    u32 tmp = 0;
+    u32 tmp__it[4] = {0}; u32 &tmp = tmp__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     ((vOne)VT(y, 0x4c))(y, (u32)&tmp);
     x = *(u8 **)(self + 0x44);
     y = *(u8 **)(*(u8 **)(x + 0x10) + 8);

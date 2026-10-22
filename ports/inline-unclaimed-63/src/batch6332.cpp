@@ -12,7 +12,7 @@ typedef void(THISCALL * call1v_fn)(void *, u32 *);
 static u32 THISCALL unnamed4ce0c0(u8 *self, u32 target) {
   if (self == 0)
     return 0;
-  u32 local = 0;
+  u32 local__it[4] = {0}; u32 &local = local__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   ((call1v_fn)(*(u32 *)(*(u32 *)self + 0x4c)))((void *)self, &local);
   u32 v = ((call1_fn)(*(u32 *)(*(u32 *)self + 0x64)))((void *)self, &local);
   if (v == 0)

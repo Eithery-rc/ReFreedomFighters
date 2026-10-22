@@ -6,7 +6,7 @@ static void THISCALL fn4d6880(u8 *self) {
   asm volatile("movl %%esi, %0" : "=m"(saved_esi));
   ext_4d92d0(self + 4);
   u8 *list = self + 0xa;
-  u32 valid = 0;
+  u32 valid__it[4] = {0}; u32 &valid = valid__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vcall<void>(list, 0x4c, &valid);
   u32 item = vcall<u32>(list, 0x5c, &valid);
   while (valid) {

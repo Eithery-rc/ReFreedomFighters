@@ -24,7 +24,7 @@ extern "C" u32 THISCALL ext_438a60_thiscall1(u32) __asm__("ext_438a60");
 #endif
 extern "C" u32 THISCALL lifted_43a900(u32 ecx_in) {
   SEH_ENTER(0x665cbc);  // @h_43a900
-  volatile u32 it = 0;
+  volatile u32 it__it[4] = {0}; volatile u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   u32 edi = ecx_in, eax = (u32)(u8 *)&reg;
   u32 m = *(u32 *)(edi + 0x19);
   if (m != 0) {  // @h1_43a900

@@ -16,7 +16,7 @@ static inline u8 *tabObj() { return *(u8 **)(*(u8 **)0x70039c + 0x9b); }
 static void THISCALL fn4ac460(u8 *self) {
   u8 buf[0x84];
   void *l = self + 0x11a;
-  u32 v;
+  u32 v__it[4]; u32 &v = v__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   (*(v1_t **)l)[0x4c / 4](l, (u32)&v);
   u32 item = (*(v1_t **)l)[0x5c / 4](l, (u32)&v);
   if (v == 0) return;

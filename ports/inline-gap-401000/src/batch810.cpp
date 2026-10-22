@@ -15,7 +15,7 @@ static u8 STDCALL fn5c74a0(u8 *s) {
   if (vc0(*(u8 **)(s + 8), 0x14) == 0) return 1;
   if (*(u8 **)(s + 8) == 0) return 0;
 
-  u32 L = 0;
+  u32 L__it[4] = {0}; u32 &L = L__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   vc1(*(u8 **)(s + 8), 0x4c, (u32)&L);
   u32 edi = vc1(*(u8 **)(s + 8), 0x5c, (u32)&L);
   if (L == 0) return 0;

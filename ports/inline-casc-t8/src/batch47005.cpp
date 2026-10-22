@@ -28,7 +28,7 @@ static inline u16 rd16(u8 *p) { return (u16)(p[0] | (p[1] << 8)); }
 static void THISCALL fn4af5b0(u8 *self, u8 *a) {
   u8 *o = *(u8 **)(a + 0x18);
   if (o) {
-    u32 it;
+    u32 it__it[4]; u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     (*(v1_t **)o)[0x4c / 4](o, (u32)&it);
     o = *(u8 **)(a + 0x18);
     u32 id = (*(v1r_t **)o)[0x5c / 4](o, (u32)&it);

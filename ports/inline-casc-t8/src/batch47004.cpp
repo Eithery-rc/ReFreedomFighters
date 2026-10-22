@@ -23,7 +23,7 @@ static u32 THISCALL fn4ce870(u8 *self) {
   }
   u8 *o = *(u8 **)(self + 8);
   if (o) {
-    u32 loc;
+    u32 loc__it[4]; u32 &loc = loc__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     (*(v1_t **)o)[0x4c / 4](o, (u32)&loc);
     o = *(u8 **)(self + 8);
     u32 edi = (*(v1r_t **)o)[0x5c / 4](o, (u32)&loc);

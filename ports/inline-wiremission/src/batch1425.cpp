@@ -48,7 +48,7 @@ static u32 THISCALL c05aCommand(u8 *ct, u32 msg, void *data) {
   vcall<void>(*(u8 **)(a + 0x18), 0xc);   // a's +0x18 FIELD (data), slot 0xc of that object
   u8 *la = *(u8 **)(b + 0x18);
   if (la) {
-    u32 it = 0;
+    u32 it__it[4] = {0}; u32 &it = it__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
     vcall<void, u32 *>(la, 0x4c, &it);
     u32 item = vcall<u32, u32 *>(la, 0x5c, &it);
     while (it) {
