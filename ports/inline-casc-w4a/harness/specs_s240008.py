@@ -15,12 +15,12 @@ def _g634609(c):
     if r.random() < 0.15:
         ck &= ~0x1f
     e.w32(0x6f5630, ck)
-    s = pystub(c, 0, ret=lambda em, k: r.choice([0, 0, 1, _w(c)]))
+    s = pystub(c, 3, ret=lambda em, k: r.choice([0, 0, 1, _w(c)]))       # f(0x7257f0, 0x7257d8, a), stdcall
     n = ck & 0x1f
     rol = ((s << n) | (s >> (32 - n))) & 0xffffffff if n else s
     e.w32(0x7257f8, rol ^ ck)
     e.w32(0x7257f4, 0 if r.random() < 0.5 else _w(c) | 1)
-    hook_rec(c, 0x634aae, 3, this=True, pop=12, ret=lambda em, k: _w(c))
+    hook_rec(c, 0x634aae, 0, this=True, pop=0, ret=lambda em, k: _w(c))     # guard check: ECX = target, no stack args
     hook_rec(c, 0x6345fd, 0, pop=0)
     hook_rec(c, 0x6345b0, 0, pop=0)
     cell = e.r32(0x6760b8)

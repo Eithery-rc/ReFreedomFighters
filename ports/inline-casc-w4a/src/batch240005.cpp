@@ -1,11 +1,11 @@
 // batch240005.cpp - Sonnet-w4a: CRT helpers (encoded-pointer call, startup lock).
 #include "ff.h"
 
-extern "C" u32 THISCALL ext_634aae(u32 self, u32 arg);   // import thunk (ecx = this, 1 stack arg, callee pops)
+extern "C" void THISCALL ext_634aae(u32 fn);   // control-flow-guard check thunk (jmp [0x6764ac]): ecx = the call target, no stack args
 extern "C" u32 ext_634cb5();
 
 // 0x6345bc: no args: if [0x7257f4] == 0: decode the pointer f = ror([cookie] ^ [0x7257fc], cookie & 31), call thunk
-// 634aae with ecx = f and arg 0x7257f0, then return f(); else import1(v) then return import2([0x7257f4]) (v = the same value)
+// guard check 634aae(ecx = f), then return f(0x7257f0) (stdcall, 0x7257f0 is the pending push of the original); else import1(v) then return import2([0x7257f4]) (v = the same value)
 static u32 fn_6345bc() {
   u32 v = G(u32, 0x7257f4);
   if (v == 0) {
@@ -13,8 +13,8 @@ static u32 fn_6345bc() {
     u32 x = c ^ G(u32, 0x7257fc);
     u32 n = c & 0x1f;
     u32 f = n ? (x >> n) | (x << (32 - n)) : x;
-    ext_634aae(f, 0x7257f0);
-    return ((u32(*)())f)();
+    ext_634aae(f);
+    return ((u32(__stdcall *)(u32))f)(0x7257f0);
   }
   (*(u32(__stdcall **)(u32))0x67613c)(v);
   return (*(u32(__stdcall **)(u32))0x676140)(G(u32, 0x7257f4));

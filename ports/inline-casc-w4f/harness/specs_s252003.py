@@ -111,7 +111,7 @@ def g64b480(c):
     if __import__('os').environ.get('DBGA'): print('hook', hex(0x63cc50), hex(_h), 4 * 8 * (2 + 1) + 4)
     _h = hook_rec(c, 0x64c240, 1, pop=4, this=True)
     if __import__('os').environ.get('DBGA'): print('hook', hex(0x64c240), hex(_h), 4 * 8 * (1 + 1) + 4)
-    _h = hook_rec(c, 0x63f030, 1, pop=4)
+    _h = hook_rec(c, 0x63f030, 1, pop=4, this=True)     # thiscall: ECX = the owner [esi+0x1005d]
     if __import__('os').environ.get('DBGA'): print('hook', hex(0x63f030), hex(_h), 4 * 8 * (1 + 1) + 4)
     _h = hook_rec(c, 0x63f600, 1, pop=4, this=True)
     if __import__('os').environ.get('DBGA'): print('hook', hex(0x63f600), hex(_h), 4 * 8 * (1 + 1) + 4)

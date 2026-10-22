@@ -6,10 +6,14 @@ extern "C" u32 ext_42abbd(u32 a1, u32 a2, u32 a3, u32 a4, u32 a5);
 // 0x45d1e0: thiscall with two stack arguments (ret 8). Checksum stub in the spec (GUESS).
 extern "C" void THISCALL ext_45d1e0(u8 *self, u32 a1, u32 a2);
 
-// 0x42ac56 (high name not in the map; GUESS): cdecl, three arguments as the function reads them. Calls 0x42abbd(a1, a2, -1, 0,
-// &a3) (the fifth is the address of this function's third argument), cdecl, and returns the callee's eax.
-extern "C" u32 __attribute__((cdecl)) wrap42ac56(u32 a1, u32 a2, u32 *a3) {
-  return ext_42abbd(a1, 0xffffffffu, a2, 0u, (u32)a3);   // the PC pushes &a3, 0, a2, -1, a1: callee args are (a1, -1, a2, 0, &a3)
+// 0x42ac56 = sprintf(buf, fmt, ...): cdecl, variadic. Calls 0x42abbd(a1, -1, a2, 0, va_list) with va_list = the address of the first vararg
+// (lea eax,[ebp+0x10]), cdecl, and returns the callee's eax.
+extern "C" u32 __attribute__((cdecl)) wrap42ac56(u32 a1, u32 a2, ...) {
+  __builtin_va_list ap;
+  __builtin_va_start(ap, a2);
+  u32 r = ext_42abbd(a1, 0xffffffffu, a2, 0u, (u32)ap);
+  __builtin_va_end(ap);
+  return r;
 }
 PCREG(42ac56, wrap42ac56);
 

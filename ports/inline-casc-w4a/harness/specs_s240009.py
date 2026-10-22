@@ -24,7 +24,7 @@ def _g634432(c):
     clear_hooks(c)
     r = c.rng
     e = c.emu
-    fn = pystub(c, 0, ret=lambda em, k: _w(c))
+    fn = pystub(c, 1, ret=lambda em, k: _w(c))       # the looked-up pointer is called stdcall with &0x7257f0
     mode = r.random()
     _cell(c, 0x676060, 1, lambda em: 0 if r.random() < 0.1 else _w(c) | 1)
     seq = {'n': 0}
@@ -37,7 +37,7 @@ def _g634432(c):
     _cell(c, 0x6760b4, 2, gp)
     _cell(c, 0x676064, 4, lambda em: r.choice([0, _w(c) | 1]))
     hook_rec(c, 0x634d46, 3, pop=0, ret=lambda em, k: _w(c))
-    hook_rec(c, 0x634aae, 1, this=True, pop=4, ret=lambda em, k: _w(c))
+    hook_rec(c, 0x634aae, 0, this=True, pop=0, ret=lambda em, k: _w(c))     # guard check: ECX = target, no stack args
     hook_rec(c, 0x6344f2, 1, pop=0, ret=lambda em, k: _w(c))
     hook_rec(c, 0x633f0f, 1, pop=0, ret=lambda em, k: _w(c))
 

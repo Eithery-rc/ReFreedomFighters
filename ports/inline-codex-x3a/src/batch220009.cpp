@@ -77,7 +77,7 @@ extern "C" u32 lifted_621230(u32 a0, u32 a1, u32 a2, u32 a3, u32 a4) {
   STK[12] = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP + 16), sizeof v); (u32)v; });  // @51_621230
   STK[13] = eax;  // @52_621230
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 40), sizeof v); (u32)v; });  // @53_621230
-  eax = ((u32(STDCALL *)(u32, u32, u32, u32))(eax))(STK[13], STK[12], STK[11], STK[10]);  // @54_621230
+  eax = ((u32( *)(u32, u32, u32, u32))(eax))(STK[13], STK[12], STK[11], STK[10]);  // @54_621230: cdecl (the original cleans with add esp,0x10)
   ecx = edx = 0;  // @55_621230
   ecx = eax;  // @56_621230
   { u32 v = (u32)(ecx); __builtin_memcpy((void *)(u32)(EBP - 28), &v, sizeof v); }  // @57_621230
@@ -119,7 +119,7 @@ extern "C" u32 lifted_621230(u32 a0, u32 a1, u32 a2, u32 a3, u32 a4) {
   STK[20] = edi;  // @93_621230
   STK[21] = eax;  // @94_621230
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 32), sizeof v); (u32)v; });  // @95_621230
-  eax = ((u32(STDCALL *)(u32, u32))(eax))(STK[21], STK[20]);  // @96_621230
+  eax = ((u32( *)(u32, u32))(eax))(STK[21], STK[20]);  // @96_621230: cdecl (add esp,8)
   ecx = edx = 0;  // @97_621230
   eax = (eax + edi);  // @98_621230
   STK[22] = eax;  // @99_621230

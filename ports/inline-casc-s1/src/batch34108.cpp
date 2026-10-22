@@ -6,8 +6,8 @@ extern "C" u32 THISCALL ext_469870(void *self);                    // thiscall, 
 extern "C" u32 THISCALL ext_467710(void *self);                    // thiscall, plain ret
 extern "C" u32 THISCALL ext_466220(void *self);                    // thiscall, plain ret
 extern "C" u32 THISCALL ext_5af040(void *self, u32 a);             // thiscall ret 4
-extern "C" u32 *ext_42acaf(u32 a, u32 b, u32 c, u32 d, u32 e);     // cdecl
-extern "C" s32 ext_634d94(u32 a, u32 b);                           // cdecl import thunk
+extern "C" u32 *ext_42acaf();                                      // no arguments: returns the options block 0x6ff948
+extern "C" s32 ext_634d94(u32 optlo, u32 opthi, u32 a, u32 b, u32 c, u32 d, u32 e);   // cdecl, 7 stack args (add esp,0x1c): __stdio_common_vsprintf
 extern "C" u32 THISCALL ext_4654b0(void *self, u32 a, u32 b, u32 c);   // thiscall ret 0xc
 
 static u32 rd32(u8 *p) { return p[0] | p[1] << 8 | p[2] << 16 | (u32)p[3] << 24; }
@@ -70,10 +70,11 @@ static void THISCALL fn5aee20(u8 *self, u32 a, u32 b) {
 }
 PCREG(5aee20, fn5aee20);
 
-// 0x42abbd, cdecl(a, b, c, d, e): p = ext_42acaf(a, b, c, d, e); r = ext_634d94(p[0] | 1, p[1]); returns -1 when r is negative, else r.
+// 0x42abbd, cdecl(a, b, c, d, e): p = ext_42acaf() (no arguments: the five pushes of a..e stay pending on the stack); r = ext_634d94(p[0] | 1, p[1], a, b, c, d, e)
+// (the 64-bit options, then the pending a..e); returns -1 when r is negative, else r.
 static s32 fn42abbd(u32 a, u32 b, u32 c, u32 d, u32 e) {
-  u32 *p = ext_42acaf(a, b, c, d, e);
-  s32 r = ext_634d94(p[0] | 1, p[1]);
+  u32 *p = ext_42acaf();
+  s32 r = ext_634d94(p[0] | 1, p[1], a, b, c, d, e);
   if (r < 0) r = -1;
   return r;
 }

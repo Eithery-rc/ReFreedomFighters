@@ -621,14 +621,16 @@ extern "C" u32 THISCALL ext_5fb980_m3(u32, u32, u32) __asm__("ext_5fb980");
 extern "C" u32 THISCALL ext_602290_m5(u32, u32, u32, u32, u32) __asm__("ext_602290");
 extern "C" u32 THISCALL ext_5f10c0_m2(u32, u32) __asm__("ext_5f10c0");
 extern "C" u32 THISCALL ext_5fb110_m2(u32, u32) __asm__("ext_5fb110");
-extern "C" u32 STDCALL ext_54f870_m2(u32, u32) __asm__("ext_54f870");
-extern "C" u32 THISCALL lifted_602a60(u32 ecx_in, u32 a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7) {
+extern "C" u32 THISCALL ext_54f870_m2(u32, u32, u32) __asm__("ext_54f870");   // thiscall: ECX = the string object, two stack args (ret 8)
+// the first stack argument is a 12-byte basic_string BY VALUE ([ebp+8], whose address goes to the callees); a3..a7 follow it (ret 0x20)
+struct Str12_602a60 { u32 p, n, c; };
+extern "C" u32 THISCALL lifted_602a60(u32 ecx_in, Str12_602a60 str, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7) {
   SEH_ENTER(0x66dbac);  // @h_602a60
-  volatile u32 A0 = a0;
+  volatile u32 *A0p = (volatile u32 *)&str;
   volatile u32 tmp10 = 0;
   u32 self = ecx_in, ebx = self + 1, eax;
   reg.state = 0;
-  ext_5fb980_m3(ebx, (u32)(u32 *)&tmp10, (u32)(u32 *)&A0);  // @h1_602a60
+  ext_5fb980_m3(ebx, (u32)(u32 *)&tmp10, (u32)(u32 *)A0p);  // @h1_602a60
   if (tmp10 == *(u32 *)ebx) {  // @h2_602a60
     u32 esi = a3, edi = 0;
     if (esi) {  // @h3_602a60
@@ -642,7 +644,7 @@ extern "C" u32 THISCALL lifted_602a60(u32 ecx_in, u32 a0, u32 a1, u32 a2, u32 a3
     reg.state = 2;
     if (node) {  // @h7_602a60
       *(u32 *)node = 0x6b98c4;
-      ext_5f10c0_m2(node + 4, (u32)(u32 *)&A0);  // @h8_602a60
+      ext_5f10c0_m2(node + 4, (u32)(u32 *)A0p);  // @h8_602a60
       *(u32 *)(node + 0x14) = a7;  // @h9_602a60
       *(u32 *)(node + 0x18) = a4;  // @h10_602a60
       *(u32 *)(node + 0x1c) = a6;  // @h11_602a60
@@ -652,7 +654,7 @@ extern "C" u32 THISCALL lifted_602a60(u32 ecx_in, u32 a0, u32 a1, u32 a2, u32 a3
       esi = node;
     } else esi = 0;
     reg.state = 0;
-    u32 pp = ext_5fb110_m2(ebx, (u32)(u32 *)&A0);  // @h14_602a60
+    u32 pp = ext_5fb110_m2(ebx, (u32)(u32 *)A0p);  // @h14_602a60
     *(u32 *)pp = esi;  // @h15_602a60
     *(u8 *)self = 0;  // @h16_602a60
   } else {
@@ -662,10 +664,10 @@ extern "C" u32 THISCALL lifted_602a60(u32 ecx_in, u32 a0, u32 a1, u32 a2, u32 a3
     u32 h = G(u32, 0x7003b0);
     if (h) ((u32(*)())h)(); else __builtin_trap();
   }
-  u32 ecx = A0;
-  eax = a2 - ecx;
+  u32 ecx = A0p[0];
+  eax = A0p[2] - ecx;
   reg.state = 3;
-  if (ecx && eax) eax = ext_54f870_m2(ecx, eax);  // @h19_602a60
+  if (ecx && eax) eax = ext_54f870_m2((u32)(u32 *)A0p, ecx, eax);  // @h19_602a60: ECX = &str
   SEH_LEAVE();
   return eax;
 }

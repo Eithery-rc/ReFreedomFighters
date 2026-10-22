@@ -21,9 +21,8 @@ static void THISCALL condIncCounter5ab110(u8 *self) {
 PCREG(5ab110, condIncCounter5ab110);
 
 // 0x438c10: push ebp; mov ebp,esp; mov eax,[ecx]; pop ebp; jmp [eax+0x10]. A tail-jump through vtable slot +0x10 with ecx = this.
-// The callee's arguments are the caller's (this function has none), so the port forwards with no arguments and returns eax.
-static u32 THISCALL forwardVt10_438c10(u8 *self) {
-  typedef u32(THISCALL * f_t)(u8 *);
-  return ((f_t)(*(u32 *)(*(u32 *)self + 0x10)))(self);
+// A pure forwarder: the stack arguments are the slot's (it returns with ret 4), so the port is a plain jmp with ECX kept.
+extern "C" __attribute__((naked)) void forwardVt10_438c10() {
+  asm volatile("movl (%ecx), %eax\n\tjmp *0x10(%eax)");
 }
 PCREG(438c10, forwardVt10_438c10);

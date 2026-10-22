@@ -396,7 +396,7 @@ def g602a60(c):
     def side_find(emu, k, _s=mkside(0)):
         _s(emu, k)
         emu.w32(emu.arg32(0), emu.r32(emu.reg('ecx')) if r.random() < 0.65 else r.getrandbits(32))
-    hook_rec(c, 0x5fb980, 2, ret=r.getrandbits(32), pop=8, this=True, stackmark=(0, 1), side=side_find)
+    hook_rec(c, 0x5fb980, 2, ret=r.getrandbits(32), pop=8, this=True, stackmark=(0,), deref={1: 3}, side=side_find)     # arg 1 = &str (12 bytes by value)
     def alloc(emu, k):
         return 0 if r.random() < 0.2 else rnd(c, 0x40)
     def side_41(emu, k, _s=mkside(1)):
@@ -407,13 +407,13 @@ def g602a60(c):
     hook_rec(c, 0x602290, 4, ret=lambda emu, k: r.getrandbits(32), pop=16, this=True, side=side_6022)
     def side_f10(emu, k, _s=mkside(3)):
         _s(emu, k)
-    hook_rec(c, 0x5f10c0, 1, ret=r.getrandbits(32), pop=4, this=True, stackmark=(0,), side=side_f10)
+    hook_rec(c, 0x5f10c0, 1, ret=r.getrandbits(32), pop=4, this=True, deref={0: 3}, side=side_f10)
     def side_b110(emu, k, _s=mkside(4)):
         _s(emu, k)
-    hook_rec(c, 0x5fb110, 1, ret=lambda emu, k: SL[0], pop=4, this=True, stackmark=(0,), side=side_b110)
+    hook_rec(c, 0x5fb110, 1, ret=lambda emu, k: SL[0], pop=4, this=True, deref={0: 3}, side=side_b110)
     def side_54(emu, k, _s=mkside(5)):
         _s(emu, k)
-    hook_rec(c, 0x54f870, 2, ret=r.getrandbits(32), pop=8, this=False, side=side_54)
+    hook_rec(c, 0x54f870, 2, ret=r.getrandbits(32), pop=8, this='mark', side=side_54)     # thiscall: ECX = &str
     a0 = 0 if r.random() < 0.4 else r.getrandbits(32)
     return [this, a0, r.getrandbits(32), r.getrandbits(32), 0 if r.random() < 0.5 else r.getrandbits(32), r.getrandbits(32), r.getrandbits(32), r.getrandbits(32), r.getrandbits(32)]
 

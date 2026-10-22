@@ -1,6 +1,6 @@
 // batch252003.cpp - Sonnet-w2, mechanically lifted ports (lift.py) with automatically generated specs (autospec.py).
 #include "ff.h"
-extern "C" u32 STDCALL ext_63f030_stdcall1(u32) __asm__("ext_63f030");
+extern "C" u32 THISCALL ext_63f030_thiscall2(u32, u32) __asm__("ext_63f030");   // thiscall: ECX = the owner (passed on to 0x63ef00), one stack argument (ret 4)
 extern "C" u32 THISCALL ext_63cc50_thiscall3(u32, u32, u32) __asm__("ext_63cc50");
 extern "C" u32 THISCALL ext_63ef00_thiscall2(u32, u32) __asm__("ext_63ef00");
 extern "C" u32 THISCALL ext_63f600_thiscall2(u32, u32) __asm__("ext_63f600");
@@ -300,7 +300,7 @@ extern "C" u32 THISCALL lifted_64b480(u32 ecx_in) {
   if (FL[3] != 0) goto L64b718;  // @275_64b480
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi + 65629), sizeof v); (u32)v; });  // @276_64b480
   PV[9] = (u32)(eax);  // @277_64b480
-  eax = ext_63f030_stdcall1(PV[9]);  // @278_64b480
+  eax = ext_63f030_thiscall2(ecx, PV[9]);  // @278_64b480
   ecx = edx = 0;  // @279_64b480
   L64b718:;
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP - 4), sizeof v); (u32)v; });  // @281_64b480

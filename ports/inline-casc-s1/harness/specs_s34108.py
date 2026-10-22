@@ -49,8 +49,8 @@ def _g42abbd(c):
     clear_hooks(c)
     r = c.rng
     blk = rnd(c, 0x10)
-    hook_rec(c, 0x42acaf, 5, pop=0, ret=blk)
-    hook_rec(c, 0x634d94, 2, pop=0, ret=lambda em, k: r.choice([0, 1, 0xffffffff, 0x80000000, 5, r.getrandbits(32)]))
+    hook_rec(c, 0x42acaf, 0, pop=0, ret=blk)       # no arguments: the five pushes stay pending for the next call
+    hook_rec(c, 0x634d94, 7, pop=0, ret=lambda em, k: r.choice([0, 1, 0xffffffff, 0x80000000, 5, r.getrandbits(32)]))
     return [r.getrandbits(32) for _ in range(5)]
 
 

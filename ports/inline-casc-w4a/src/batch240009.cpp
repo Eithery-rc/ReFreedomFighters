@@ -2,7 +2,7 @@
 #include "ff.h"
 
 extern "C" u32 ext_634d46(u32 a, u32 b, u32 c);                 // import thunk, cdecl 3 args
-extern "C" u32 THISCALL ext_634aae(u32 self, u32 a);            // import thunk, ecx = this, callee pops 4
+extern "C" void THISCALL ext_634aae(u32 fn);   // control-flow-guard check thunk (jmp [0x6764ac]): ecx = the call target, no stack args
 extern "C" u32 ext_6344f2(u32 v);                                // cookie-encode (verified)
 extern "C" u32 ext_633f0f(u32 p);                                // cdecl 1 arg
 extern "C" u32 ext_634879(u32 code);                             // fatal handler (does not return)
@@ -19,8 +19,8 @@ static u32 fn_634432() {
   u32 esi = gp(m, 0x6c16f0);
   if (ebx && edi && esi) {
     G(u32, 0x7257f4) = 0;
-    ext_634aae(ebx, 0x7257f0);
-    ((u32(*)())ebx)();
+    ext_634aae(ebx);
+    ((u32(__stdcall *)(u32))ebx)(0x7257f0);
     u32 a = ext_6344f2(edi);
     G(u32, 0x7257f8) = a;
     u32 b = ext_6344f2(esi);

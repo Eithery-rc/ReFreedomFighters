@@ -2,8 +2,8 @@
 
 0x4d8c10 (getter): returns this+0x84 (eax compared). 0x5f0490 (store vtable): writes 0x6b8284 at +0 (heap compared).
 0x5ab110 (conditional counter): +0x300 is 0x10000000 in half the cases; the counter at +0x8b7 is incremented otherwise.
-0x438c10 (tail-jump forwarder): calls vtable slot +0x10 of this with no arguments and returns its eax; the slot is a checksum stub
-with no arguments (GUESS: this function has no stack arguments, so the callee's are assumed none).
+0x438c10 (tail-jump forwarder): jumps to vtable slot +0x10 of this, the stack argument is the slot's, and returns its eax; the slot is a checksum stub
+with one stack argument (the forwarder has none of its own: the callee's are the caller's, ret 4 in the exe).
 Faulting cases must be 0 (JSON)."""
 from pilot import S
 import helper_stubs as hs
@@ -34,11 +34,11 @@ def _cond(c):
 
 def _fwd(c):
     vt = c.emu.alloc(0x40, 4)
-    s, _, _ = hs.stub(c, 0, ecx=True, edx=False, ret=c.rng.getrandbits(32))
+    s, _, _ = hs.stub(c, 1, ecx=True, edx=False, ret=c.rng.getrandbits(32))     # the slot takes one stack argument (ret 4): the caller's
     c.emu.w32(vt + 0x10, s)
     o = _rnd(c, 0x100)
     c.emu.w32(o, vt)
-    return [o]
+    return [o, c.rng.getrandbits(32)]
 
 
 S(0x4d8c10, 'getAddr84 (unknown) thiscall', 'thiscall', None, ret='eax', gen=_getter,

@@ -29,12 +29,12 @@ def _g6345bc(c):
         ck_n = 0
         e.w32(0x6f5630, ck & ~0x1f)
         ck = ck & ~0x1f
-    s = pystub(c, 0, ret=lambda em, k: _w(c))
+    s = pystub(c, 1, ret=lambda em, k: _w(c))       # the decoded pointer is stdcall with the pending push 0x7257f0 as its argument
     n = ck & 0x1f
     rol = ((s << n) | (s >> (32 - n))) & 0xffffffff if n else s
     e.w32(0x7257fc, rol ^ ck)
     e.w32(0x7257f4, 0 if r.random() < 0.5 else _w(c) | 1)
-    hook_rec(c, 0x634aae, 1, this=True, pop=4, ret=lambda em, k: _w(c))
+    hook_rec(c, 0x634aae, 0, this=True, pop=0, ret=lambda em, k: _w(c))     # guard check: ECX = target, no stack args
     _stubcell(c, 0x67613c, 1, lambda: _w(c))
     _stubcell(c, 0x676140, 1, lambda: _w(c))
     return []

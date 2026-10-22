@@ -17,9 +17,14 @@ def _rnd(c, n, align=4):
 
 
 def _wrap42(c):
-    s, _, _ = hs.stub(c, 5, ecx=False, edx=False, mask=[1, 2, 3, 4], cleanup=False)
-    ss.patch(c, 0x42abbd, s)
-    return [c.rng.getrandbits(32), c.rng.getrandbits(32), c.rng.getrandbits(32)]
+    # 0x42abbd(buf, -1, fmt, 0, va_list): the fifth argument is the address of the first vararg in the caller's frame, so the stub
+    # records the two dwords it points to instead of the address (a port that passes the vararg VALUE instead of its address fails)
+    def h(em, rr):
+        va = em.arg32(4)
+        em.calllog.append(('42abbd', em.arg32(0), em.arg32(1), em.arg32(2), em.arg32(3), em.r32(va), em.r32(va + 4)))
+        em.ret(eax=0x1234, argbytes=0)
+    c.emu.hook(0x42abbd, h)
+    return [c.rng.getrandbits(32) for _ in range(4)]
 
 
 def _wrap45(c):
