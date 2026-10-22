@@ -181,14 +181,14 @@ def g48f5e0(c):
     c.emu.w32(O[('load', ('glob', 7340948), 0)] + 0x34, pystub(c, 2, ret=lambda emu, k: (0 if r.random() < 0.6 else r.getrandbits(32)), stackmark=(0,), side=mkside(7)))
     def side_4cc1d0(emu, k, _s=mkside(1)):
         _s(emu, k)
-    hook_rec(c, 0x4cc1d0, 2, ret=r.getrandbits(32), pop=0, this=False, side=side_4cc1d0)
+    hook_rec(c, 0x4cc1d0, 0, ret=r.getrandbits(32), pop=0, this='mark', side=side_4cc1d0, clobber=True)     # MYSTR::c_str: thiscall, no stack argument
     def side_42ac56(emu, k, _s=mkside(2)):
         a = emu.reg('ecx') if False else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))
         else: emu.calllog.append(('L', emu.rbytes(a, 16).hex()))
         FO[0] += 1
         _s(emu, k)
-    hook_rec(c, 0x42ac56, 3, ret=r.getrandbits(32), pop=0, this=False, stackmark=(0,), side=side_42ac56)
+    hook_rec(c, 0x42ac56, 5, ret=r.getrandbits(32), pop=0, this=False, stackmark=(0,), side=side_42ac56)     # cdecl(buf, fmt, c_str, edi, esi)
     def side_4cbec0(emu, k, _s=mkside(3)):
         a = emu.reg('ecx') if True else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))

@@ -221,12 +221,14 @@ extern "C" u32 STDCALL lifted_48f5e0(u32 a0) {
   PS[1] = edi;  // @10_48f5e0
   ecx = eax;  // @11_48f5e0
   reg.state = (s32)((u32)(0));  // @12_48f5e0
-  eax = ext_4cc1d0_cdecl2((u32)(PS[1]), (u32)(PS[0]));  // @13_48f5e0
+  // `push esi; push edi` before the call stay pending on the stack: they are the LAST two arguments of the cdecl call 0x42ac56 below
+  // (add esp,0x14); 0x4cc1d0 (c_str) is thiscall with no stack argument
+  eax = ext_4cc1d0_thiscall1(ecx);  // @13_48f5e0
   ecx = edx = 0;  // @14_48f5e0
   PS[0] = eax;  // @15_48f5e0
   eax = (u32)(EBP - 1040);  // @16_48f5e0
   PS[2] = eax;  // @17_48f5e0
-  eax = ext_42ac56_cdecl3((u32)(PS[2]), (u32)(6871000), (u32)(PS[0]));  // @18_48f5e0
+  eax = ext_42ac56_cdecl3((u32)(PS[2]), (u32)(6871000), (u32)(PS[0]), edi, esi);  // @18_48f5e0: (buf, fmt, c_str, edi, esi), 5 stack args
   ecx = edx = 0;  // @19_48f5e0
   reg.state = (s32)((u32)(4294967295));  // @20_48f5e0
   ecx = (u32)(EBP - 1168);  // @21_48f5e0

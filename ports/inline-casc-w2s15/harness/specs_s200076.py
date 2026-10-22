@@ -168,31 +168,31 @@ def g4c3d30(c):
             emu.calllog.append(('vt', emu.r32(O[('this',)]), zlib.crc32(emu.rbytes(O[('this',)], TSZ))))
             sr[j](emu, k)
         return side
-    c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x58, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(14)))
-    c.emu.w32(O[('load', ('glob', 7340944), 0)] + 0x20, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(14)))
-    c.emu.w32(O[('load', ('load', ('this',), 68), 0)] + 0x1d8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(14)))
-    c.emu.w32(O[('load', ('ret', 5), 0)] + 0x2c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(14)))
+    c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x58, pystub(c, 1, ret=lambda emu, k: (0 if r.random() < 0.6 else r.getrandbits(32)), this=True, side=mkside(14)))     # zero often: the log branch below needs a zero result
+    c.emu.w32(O[('load', ('glob', 7340944), 0)] + 0x20, pystub(c, 2, ret=lambda emu, k: O[('ret', 5)], this=True, side=mkside(14)))     # the logger object (its vtable has the cdecl slot 0x2c), so the log branch runs
+    c.emu.w32(O[('load', ('load', ('this',), 68), 0)] + 0x1d8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(0,), side=mkside(14)))     # arg 0 = the caller's stack temp (the branch below now runs)
+    c.emu.w32(O[('load', ('ret', 5), 0)] + 0x2c, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=False, pop=0, side=mkside(14)))     # [esi+0x2c]: cdecl(logger, fmt, s2, s1), the caller pops (add esp,0x10)
     def side_4cbeb0(emu, k, _s=mkside(0)):
         a = emu.reg('ecx') if True else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))
         else: emu.calllog.append(('L', emu.rbytes(a, 16).hex()))
         FO[0] += 1
         _s(emu, k)
-    hook_rec(c, 0x4cbeb0, 0, ret=r.getrandbits(32), pop=0, this='mark', side=side_4cbeb0)
+    hook_rec(c, 0x4cbeb0, 0, ret=r.getrandbits(32), pop=0, this='mark', side=side_4cbeb0, clobber=True)
     def side_4c4740(emu, k, _s=mkside(1)):
         a = emu.reg('ecx') if False else emu.arg32(2)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))
         else: emu.calllog.append(('L', emu.rbytes(a, 16).hex()))
         FO[0] += 1
         _s(emu, k)
-    hook_rec(c, 0x4c4740, 3, ret=r.getrandbits(32), pop=12, this=True, stackmark=(2,), side=side_4c4740)
+    hook_rec(c, 0x4c4740, 3, ret=r.getrandbits(32), pop=12, this=True, stackmark=(2,), side=side_4c4740, clobber=True)
     def side_4cc5f0(emu, k, _s=mkside(3)):
         a = emu.reg('ecx') if True else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))
         else: emu.calllog.append(('L', emu.rbytes(a, 16).hex()))
         FO[0] += 1
         _s(emu, k)
-    hook_rec(c, 0x4cc5f0, 0, ret=lambda emu, k: (0 if r.random() < 0.3 else r.getrandbits(32)), pop=0, this='mark', side=side_4cc5f0)
+    hook_rec(c, 0x4cc5f0, 0, ret=lambda emu, k: (0 if r.random() < 0.3 else r.getrandbits(32)), pop=0, this='mark', side=side_4cc5f0, clobber=True)
     def side_456ab0(emu, k, _s=mkside(4)):
         a = emu.reg('ecx') if True else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))
@@ -202,14 +202,15 @@ def g4c3d30(c):
     hook_rec(c, 0x456ab0, 0, ret=lambda emu, k: (0 if r.random() < 0.3 else r.getrandbits(32)), pop=0, this='mark', side=side_456ab0)
     def side_4cc1d0(emu, k, _s=mkside(7)):
         _s(emu, k)
-    hook_rec(c, 0x4cc1d0, 0, ret=r.getrandbits(32), pop=0, this=True, side=side_4cc1d0)
+    c1d0 = [r.getrandbits(32) for _ in range(4)]
+    hook_rec(c, 0x4cc1d0, 0, ret=lambda emu, k: c1d0[k % 4], pop=0, this='mark', side=side_4cc1d0, clobber=True)   # MYSTR::c_str: thiscall, no stack argument, a different result per call
     def side_4cbec0(emu, k, _s=mkside(10)):
         a = emu.reg('ecx') if True else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))
         else: emu.calllog.append(('L', emu.rbytes(a, 16).hex()))
         FO[0] += 1
         _s(emu, k)
-    hook_rec(c, 0x4cbec0, 0, ret=r.getrandbits(32), pop=0, this='mark', side=side_4cbec0)
+    hook_rec(c, 0x4cbec0, 0, ret=r.getrandbits(32), pop=0, this='mark', side=side_4cbec0, clobber=True)
     return [O[('this',)], r.getrandbits(32)]
 
 

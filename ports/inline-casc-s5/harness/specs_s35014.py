@@ -8,7 +8,7 @@ def _g5a1ac0(c):
     clear_hooks(c)
     r = c.rng
     e = c.emu
-    me = obj(c, 0xa00, {0x6ec: pystub(c, 3, this=True), 0x684: pystub(c, 2, ret=r.getrandbits(32), this=True, pop=0)}, nslots=0x1c0)
+    me = obj(c, 0xa00, {0x6ec: pystub(c, 3, this=True), 0x684: pystub(c, 2, ret=r.getrandbits(32), this=True, pop=0, clobber=True)}, nslots=0x1c0)
     fx = 0 if r.random() < 0.2 else rnd(c, 0x10)
     e.wbytes(me + 0x93a, fx.to_bytes(4, 'little'))
     tbl = rnd(c, 0x400)

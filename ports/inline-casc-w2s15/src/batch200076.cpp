@@ -272,11 +272,16 @@ extern "C" u32 THISCALL lifted_4c3d30(u32 ecx_in, u32 a0) {
   reg.state = (s32)((u32)(1));  // @40_4c3d30
   eax = ext_4cc1d0_thiscall1(ecx);  // @41_4c3d30
   ecx = edx = 0;  // @42_4c3d30
-  ecx = (u32)(EBP - 144);  // @43_4c3d30
-  eax = ext_4cc1d0_cdecl1((u32)(eax));  // @44_4c3d30
-  ecx = edx = 0;  // @45_4c3d30
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 44)))(ecx, (u32)(edi), (u32)(6897792), (u32)(eax));  // @46_4c3d30
-  ecx = edx = 0;  // @47_4c3d30
+  {
+    // `push eax` after the first c_str stays pending on the stack: it is the LAST argument of the cdecl call [esi+0x2c] below (add esp,0x10),
+    // the second c_str call is thiscall with ECX = &local and no stack argument
+    u32 s1_ = eax;  // @43_4c3d30
+    ecx = (u32)(EBP - 144);  // @43_4c3d30
+    u32 s2_ = ext_4cc1d0_thiscall1(ecx);  // @44_4c3d30
+    ecx = edx = 0;  // @45_4c3d30
+    eax = ((u32( *)(u32, u32, u32, u32))(*(u32 *)(esi + 44)))((u32)(edi), (u32)(6897792), s2_, s1_);  // @46_4c3d30: cdecl(logger, fmt, s2, s1)
+    ecx = edx = 0;  // @47_4c3d30
+  }
   reg.state = (s32)((ebx & 0xff));  // @48_4c3d30
   ecx = (u32)(EBP - 272);  // @49_4c3d30
   eax = ext_4cbec0_thiscall1(ecx);  // @50_4c3d30

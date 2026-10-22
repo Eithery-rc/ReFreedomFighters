@@ -28,7 +28,8 @@ static void THISCALL fn5a1ac0(u8 *self, u32 a, u32 b, u32 c) {
   }
   u32 slot = (*(u32 **)self)[0x684 / 4];
   u32 r;
-  asm volatile("push $1\n\tpush %[b]\n\tcall *%[fn]\n\tadd $8, %%esp" : "=a"(r) : "c"(self), [b] "r"(b), [fn] "r"(slot) : "edx", "memory", "cc");
+  u32 cx = (u32)self;      // ECX is an in/out operand: the callee clobbers it, so the compiler must reload this before 0x467000
+  asm volatile("push $1\n\tpush %[b]\n\tcall *%[fn]\n\tadd $8, %%esp" : "=a"(r), "+c"(cx) : [b] "r"(b), [fn] "r"(slot) : "edx", "memory", "cc");
   u32 tbl = rd32u(self + 0x936);
   ext_467000(self, *(u32 *)(tbl + i * 4), r, b, 1);
 }
