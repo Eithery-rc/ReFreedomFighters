@@ -1274,7 +1274,7 @@ def g63e910(c):
     hook_rec(c, 0x658d50, 0, ret=r.getrandbits(32), pop=0, this=True, side=side_658d50)
     def side_658fb0(emu, k, _s=mkside(8)):
         _s(emu, k)
-    hook_rec(c, 0x658fb0, 1, ret=r.getrandbits(32), pop=4, this=False, side=side_658fb0)
+    hook_rec(c, 0x658fb0, 1, ret=r.getrandbits(32), pop=4, this=True, side=side_658fb0)
     if r.random() < 0.85: c.emu.wbytes(O[('arg', 0)] + 0x3d, int(r.choice([0, 1])).to_bytes(1, "little"))
     if r.random() < 0.5: c.emu.wbytes(O[('arg', 0)] + 0x3c, bytes(1))
     if r.random() < 0.5: c.emu.wbytes(O[('arg', 0)] + 0x3d, bytes(1))

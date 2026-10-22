@@ -15,6 +15,7 @@ extern "C" u32 STDCALL ext_62f5d0_stdcall2(u32, u32) __asm__("ext_62f5d0");
 extern "C" u32 STDCALL ext_62f980_stdcall1(u32) __asm__("ext_62f980");
 extern "C" u32 STDCALL ext_62f9d0_stdcall4(u32, u32, u32, u32) __asm__("ext_62f9d0");
 extern "C" u32 STDCALL ext_63da80_stdcall1(u32) __asm__("ext_63da80");
+extern "C" u32 THISCALL ext_63da80_thiscall1(u32, u32) __asm__("ext_63da80");   // reads ECX (behind a branch): the lifter missed it
 extern "C" u32 STDCALL ext_661b40_stdcall8(u32, u32, u32, u32, u32, u32, u32, u32) __asm__("ext_661b40");
 extern "C" u32 THISCALL ext_42de30_thiscall1(u32) __asm__("ext_42de30");
 extern "C" u32 THISCALL ext_433f30_thiscall1(u32) __asm__("ext_433f30");
@@ -12679,7 +12680,7 @@ extern "C" u32 THISCALL lifted_64d490(u32 ecx_in, u32 a0) {
   __builtin_memcpy((void *)(u32)(EBP - 12), &SENT_EDI, 4);  // @3_64d490
   p0_ = ebx;  // @4_64d490
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi + 65629), sizeof v); (u32)v; });  // @5_64d490
-  eax = ext_63da80_stdcall1((u32)(p0_));  // @6_64d490
+  eax = ext_63da80_thiscall1(ecx, (u32)(p0_));  // @6_64d490
   ecx = edx = 0;  // @7_64d490
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 8), sizeof v); (u32)v; });  // @8_64d490
   edx = (edx & 0xffffff00u) | ((({ u8 v; __builtin_memcpy(&v, (void *)(u32)(edi + 9), sizeof v); (u32)v; })) & 0xff);  // @9_64d490
@@ -12700,7 +12701,7 @@ extern "C" u32 THISCALL lifted_64d490(u32 ecx_in, u32 a0) {
   if (((ecx & 0xffff) & (ecx & 0xffff)) != 0) goto L64d4ed;  // @24_64d490
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi + 65629), sizeof v); (u32)v; });  // @25_64d490
   p2_ = edi;  // @26_64d490
-  eax = ext_63da80_stdcall1((u32)(p2_));  // @27_64d490
+  eax = ext_63da80_thiscall1(ecx, (u32)(p2_));  // @27_64d490
   ecx = edx = 0;  // @28_64d490
   L64d4ed:;
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(edi + 8), sizeof v); (u32)v; });  // @30_64d490

@@ -14,6 +14,7 @@ extern "C" u32 STDCALL ext_62f980_stdcall1(u32) __asm__("ext_62f980");
 extern "C" u32 STDCALL ext_62f9d0_stdcall4(u32, u32, u32, u32) __asm__("ext_62f9d0");
 extern "C" u32 STDCALL ext_63da80_stdcall1(u32) __asm__("ext_63da80");
 extern "C" u32 STDCALL ext_658fb0_stdcall1(u32) __asm__("ext_658fb0");
+extern "C" u32 THISCALL ext_658fb0_thiscall1(u32, u32) __asm__("ext_658fb0");   // writes [ecx+0x44] and [ecx+0x3c]
 extern "C" u32 STDCALL ext_661b40_stdcall8(u32, u32, u32, u32, u32, u32, u32, u32) __asm__("ext_661b40");
 extern "C" u32 THISCALL ext_42de30_thiscall1(u32) __asm__("ext_42de30");
 extern "C" u32 THISCALL ext_433f30_thiscall1(u32) __asm__("ext_433f30");
@@ -2087,7 +2088,7 @@ extern "C" u32 THISCALL lifted_63e910(u32 ecx_in, u32 a0) {
   ecx = (u32)(65535);  // @70_63e910
   { u16 v = (u16)((({ u16 v; __builtin_memcpy(&v, (void *)(u32)(eax + 62), sizeof v); (u32)v; }) + (ecx & 0xffff))); __builtin_memcpy((void *)(u32)(eax + 62), &v, sizeof v); }  // @71_63e910
   ecx = esi;  // @72_63e910
-  eax = ext_658fb0_stdcall1((u32)(0));  // @73_63e910
+  eax = ext_658fb0_thiscall1(ecx, (u32)(0));  // @73_63e910
   ecx = edx = 0;  // @74_63e910
   L63e9ea:;
   return eax;  // @76_63e910

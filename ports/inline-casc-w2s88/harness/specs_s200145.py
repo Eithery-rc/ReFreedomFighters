@@ -3923,7 +3923,7 @@ def g64d490(c):
     c.emu.w32(0x7003b0, pystub(c, 0, ret=lambda emu, k: r.getrandbits(32), side=mkside(7, na=0)))
     def side_63da80(emu, k, _s=mkside(0, na=1)):
         _s(emu, k)
-    hook_rec(c, 0x63da80, 1, ret=r.getrandbits(32), pop=4, this=False, side=side_63da80)
+    hook_rec(c, 0x63da80, 1, ret=r.getrandbits(32), pop=4, this=True, side=side_63da80)
     def side_658f50(emu, k, _s=mkside(5, na=0)):
         _s(emu, k)
     hook_rec(c, 0x658f50, 0, ret=r.getrandbits(32), pop=0, this=True, side=side_658f50)
