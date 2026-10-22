@@ -88,13 +88,13 @@ def _g5769c0(c):
     clear_hooks(c)
     r = c.rng
     e = c.emu
-    sa = pystub(c, 2, this=True, ret=lambda em, k: _w(c))
-    sb = pystub(c, 2, this=True, ret=lambda em, k: _w(c))
+    sa = pystub(c, 3, this=True, ret=lambda em, k: _w(c))      # slot 0x12c takes (value, id, this+0x206): the pointer pushed before 0x114 stays on the stack
+    sb = pystub(c, 3, this=True, ret=lambda em, k: _w(c))
     vt2 = e.alloc(0x200, 4)
     e.w32(vt2 + 0x12c, sb)
     c1 = obj(c, 0x200, {0x12c: sa})
     c2 = obj(c, 0x200, {0x12c: sb})
-    s114 = pystub(c, 5, this=True, side=lambda em, k: e.w32(me + 0x44, c2), ret=lambda em, k: _w(c))
+    s114 = pystub(c, 4, this=True, side=lambda em, k: e.w32(me + 0x44, c2), ret=lambda em, k: _w(c))     # slot 0x114 pops four arguments
     sysobj(c, table_slots={0x114: s114})
     s2f8 = pystub(c, 1, this=True, ret=lambda em, k: _w(c))
     rr = obj(c, 0x300, {0x2f8: s2f8})

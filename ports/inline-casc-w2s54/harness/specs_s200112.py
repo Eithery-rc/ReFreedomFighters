@@ -87,10 +87,10 @@ def g4fa390(c):
             emu.calllog.append(('vt', emu.r32(O[('this',)]), zlib.crc32(emu.rbytes(O[('this',)], TSZ))))
             sr[j](emu, k)
         return side
-    c.emu.w32(O[('load', ('this',), 0)] + 0x318, pystub(c, 5, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(4)))
+    c.emu.w32(O[('load', ('this',), 0)] + 0x318, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(4)))     # ONE stack argument: the value the switch case pushes (4 / 3 / 1 / 2)
     c.emu.w32(O[('load', ('this',), 0)] + 0x2c4, pystub(c, 0, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(4)))
     c.emu.w32(O[('load', ('ret', 1), 0)] + 0x2ec, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(4)))
-    return [O[('this',)], r.getrandbits(32)]
+    return [O[('this',)], r.choice([0x100, 0x101, 0x102, 0x103, 0x100, 0x101, 0x102, 0x103, r.getrandbits(32)])]     # the switch index is a0 - 0x100 (0..3)
 
 
 def g656fe0(c):

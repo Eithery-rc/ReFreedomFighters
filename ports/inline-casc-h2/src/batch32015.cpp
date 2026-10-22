@@ -1,16 +1,14 @@
 #include "ff.h"
 
-// 0x505de0: thunk to 0x50a410
-extern "C" int __thiscall ext_50a410(int*);
-int __thiscall sub_505de0(int* ecx) {
-    return ext_50a410(ecx);
+// 0x505de0: tail jump to 0x50a410 (a pure forwarder: the stack argument and the `ret N` are the callee's), so a plain jmp with ECX kept
+extern "C" __attribute__((naked)) void sub_505de0() {
+    asm volatile("jmp ext_50a410");
 }
 PCREG(505de0, sub_505de0);
 
-// 0x57f350: thunk to 0x610100
-extern "C" int __stdcall ext_610100(void);
-int __stdcall sub_57f350() {
-    return ext_610100();
+// 0x57f350: tail jump to 0x610100 (`ret 4`): a pure forwarder, so a plain jmp (the stack argument is the callee's)
+extern "C" __attribute__((naked)) void sub_57f350() {
+    asm volatile("jmp ext_610100");
 }
 PCREG(57f350, sub_57f350);
 

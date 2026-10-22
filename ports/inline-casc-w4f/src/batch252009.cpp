@@ -337,11 +337,15 @@ extern "C" u32 THISCALL lifted_4f6f10(u32 ecx_in) {
 }
 PCREG(4f6f10, lifted_4f6f10);
 
-extern "C" u32 lifted_4260a0(u32 a0, u32 a1, u32 a2, u32 a3) {
+// cdecl and variadic (the original passes `lea eax,[ebp+0x10]` as the va_list of the formatter 0x42abee): every stack argument from a2 on is a vararg, so the
+// port takes ten argument words and copies all of them into its frame image (callers may pass more than the two the lifter saw read by name)
+extern "C" u32 lifted_4260a0(u32 a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7, u32 a8, u32 a9) {
   SEH_ENTER(0x664592);  // @h_4260a0
   u8 F[0x1160] __attribute__((aligned(4)));
   u32 EBP = (u32)(F + 0x1060);
   __builtin_memcpy(F + 0x1060 + 8, &a0, 4); __builtin_memcpy(F + 0x1060 + 12, &a1, 4); __builtin_memcpy(F + 0x1060 + 16, &a2, 4); __builtin_memcpy(F + 0x1060 + 20, &a3, 4);
+  __builtin_memcpy(F + 0x1060 + 24, &a4, 4); __builtin_memcpy(F + 0x1060 + 28, &a5, 4); __builtin_memcpy(F + 0x1060 + 32, &a6, 4); __builtin_memcpy(F + 0x1060 + 36, &a7, 4);
+  __builtin_memcpy(F + 0x1060 + 40, &a8, 4); __builtin_memcpy(F + 0x1060 + 44, &a9, 4);
   u32 PV[64], FL[4] = {0, 0, 0, 0}; u32 ecx_zero = 0, edx_zero = 0;
   u32 eax = 0, ecx = 0, edx = 0, ebx = 0x0b0b0b0b, esi = 0x0d0d0d0d, edi = 0x05151515;
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP + 8), sizeof v); (u32)v; });  // @0_4260a0

@@ -40,9 +40,9 @@ def _g486900(c):
     holder = obj(c, 0x20, {0x10: s10})
     s24 = pystub(c, 1, this=True, ret=lambda em, k: _w(c))
     me = obj(c, 0x60, {0x24: s24})
-    s128 = pystub(c, 1, this=True)
+    s128 = pystub(c, 3, this=True)       # slot 0x128 takes (id, 0, 0): the two `push 0` before 0x114 stay on the stack
     sub = obj(c, 0x20, {0x128: s128})
-    s114 = pystub(c, 6, this=True, ret=lambda em, k: r.choice([0, 1, 0x12345, 0xffff, 0x10000, _w(c)]))
+    s114 = pystub(c, 4, this=True, ret=lambda em, k: r.choice([0, 1, 0x12345, 0xffff, 0x10000, _w(c)]))
     so = sysobj(c, table_slots={0x114: s114})
     e.w32(so + 0x40, r.choice([0, 1, 0x7fffffff, 0xffffff00, _w(c), 1000]))
     e.w32(me + 0xc, holder)

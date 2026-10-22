@@ -2,7 +2,7 @@
 // vtable call each (the callee is looked up in the object's vtable at a fixed slot).
 #include "ff.h"
 
-extern "C" void THISCALL ext_4f21f0(u8 *self);   // original code, thiscall, no stack args (called on a returned object)
+extern "C" void THISCALL ext_4f21f0(u8 *self, u32 a);   // original code, thiscall ret 4: reads its stack byte [ebp+8] (called on a returned object)
 
 typedef u32(THISCALL *SlotU32)(u8 *, u32);
 typedef void(THISCALL *SlotFloat)(u8 *, float);
@@ -32,11 +32,13 @@ static void THISCALL storeVtSlot58_5eb770(u8 *self, u32 a) {
 }
 PCREG(5eb770, storeVtSlot58_5eb770);
 
-// 0x5630f0, thiscall(): r = this->slot 0x84(this, 1); call original 0x4f21f0 with ecx = r; [this+0x85] = 0. Name GUESS.
+// 0x5630f0, thiscall(): r = this->slot 0x84(this) (the slot pops nothing: the `push 1` before it is the stack argument of 0x4f21f0); call original 0x4f21f0(r, 1);
+// [this+0x85] = 0. Name GUESS.
+typedef u32(THISCALL *SlotNone)(u8 *);
 static void THISCALL callSlot84Reset_5630f0(u8 *self) {
-  SlotU32 fn = (SlotU32)(*(u32 *)(*(u32 *)self + 0x84));
-  u32 r = fn(self, 1);
-  ext_4f21f0((u8 *)r);
+  SlotNone fn = (SlotNone)(*(u32 *)(*(u32 *)self + 0x84));
+  u32 r = fn(self);
+  ext_4f21f0((u8 *)r, 1);
   self[0x85] = 0;
 }
 PCREG(5630f0, callSlot84Reset_5630f0);

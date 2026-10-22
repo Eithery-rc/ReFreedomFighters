@@ -188,12 +188,12 @@ def g4260a0(c):
     for f in FM: em.wbytes(f, b'v%d:%d\x00')
     def vsp(emu, k):
         dst, fmt, va = emu.arg32(0), emu.arg32(1), emu.arg32(2)
-        v0, v1 = emu.r32(va), emu.r32(va + 4)
-        body = r.choice([b'(' , b'', b'z', b'(q']) + (b'%d:%d' % (v0, v1))
+        v0, v1, v2, v3 = (emu.r32(va + 4 * i) for i in range(4))     # the original's va_list is &a2: every word from a2 on is a vararg, also past a3
+        body = r.choice([b'(' , b'', b'z', b'(q']) + (b'%d:%d:%d:%d' % (v0, v1, v2, v3))
         emu.wbytes(dst, body + bytes(1))
-        emu.calllog.append(('vsp', rdstr(emu, fmt), v0, v1)); sr[4](emu, k)
+        emu.calllog.append(('vsp', rdstr(emu, fmt), v0, v1, v2, v3)); sr[4](emu, k)
     hook_rec(c, 0x42abee, 0, ret=R32, pop=0, side=vsp)
-    return [O, r.choice(FM), r.getrandbits(32), r.getrandbits(32)]
+    return [O, r.choice(FM)] + [r.getrandbits(32) for _ in range(6)]     # a2.. a7: varargs of the formatter
 
 
 

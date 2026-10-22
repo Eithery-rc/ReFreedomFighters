@@ -4216,7 +4216,8 @@ extern "C" u32 THISCALL hand_4402a0(u32 ecx_in, u32 a0, u32 a1, u32 pA, u32 pB, 
   SEH_ENTER(0x66c60b);  // @h_4402a0
   u32 ebx = ecx_in;
   u32 C[48] __attribute__((aligned(16)));
-  volatile u32 L = 0;
+  volatile u32 L_it[4] = {0, 0, 0, 0};   // 12-byte iterator state (slots 0x4c / 0x5c fill three dwords)
+  volatile u32 &L = L_it[0];
   volatile u32 X = 0;
 #define MGR (F32(G(u32, 0x70039c), 0x9b))
 #define F32(base, off) (*(volatile u32 *)((base) + (off)))
@@ -4850,7 +4851,8 @@ extern "C" u32 THISCALL hand_444530(u32 ecx_in) {
   SEH_ENTER(0x665f5b);  // @h_444530
   u32 esi = ecx_in;
   u32 C[48] __attribute__((aligned(16)));
-  volatile u32 L = 0;
+  volatile u32 L_it[4] = {0, 0, 0, 0};   // 12-byte iterator state: the slots 0x4c / 0x5c write three dwords (a 4-byte L overwrote the SEH record)
+  volatile u32 &L = L_it[0];
   ext_4444a0_t0(esi);  // @h1_444530
   ext_4ccba0_t0((u32)C);  // @h2_444530
   reg.state = 0;
@@ -6238,7 +6240,8 @@ extern "C" u32 THISCALL hand_4d3200(u32 ecx_in) {
   u8 b418[0x400] __attribute__((aligned(16)));
   u8 X18[8];
   u8 S2ba8[0x80] __attribute__((aligned(16)));
-  volatile u32 X2bbc = 0;
+  volatile u32 X2bbc_it[4] = {0, 0, 0, 0};   // 12-byte iterator state (slots 0x4c / 0x5c fill three dwords)
+  volatile u32 &X2bbc = X2bbc_it[0];
 #define F32(base, off) (*(volatile u32 *)((base) + (off)))
 #define OBJLOG(LINE) ({ u32 c_ = G(u32, 0x700390); ((u32(THISCALL *)(u32, u32, u32))VSLOT(c_, 0x20))(c_, 0x696418, (LINE)); })
 #define CALL2C(o_, ...) ((u32(*)(u32, ...))VSLOT((o_), 0x2c))((o_), __VA_ARGS__)
@@ -8295,7 +8298,7 @@ extern "C" u32 THISCALL hand_5afef0(u32 ecx_in, u32 A1) {
 #define F32(base, off) (*(volatile u32 *)((base) + (off)))
   u32 edi = ecx_in;
   volatile u32 L[4];
-  volatile u32 it[2];
+  volatile u32 it[4];   // 12-byte iterator state (slots 0x4c / 0x5c fill three dwords)
   u32 Lp = (u32)(u32 *)L;
   ext_4ccba0_t0(Lp);  // @h1_5afef0
   reg.state = 0;

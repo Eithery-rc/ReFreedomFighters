@@ -2,6 +2,18 @@
 from pilot import S, F
 from recruits_util import rnd, obj, clear_hooks, hook_rec, pystub, seh_record, seh_chain
 
+def _it(side=None):
+    """Slots 0x4c / 0x5c fill a 12-byte iterator state: write the 2nd and 3rd dword too, so a port whose local is smaller overflows."""
+    def f(emu, k):
+        a = emu.arg32(0)
+        if side:
+            side(emu, k)
+        emu.w32(a + 4, 0x7e570001)
+        emu.w32(a + 8, 0x7e570002)
+    return f
+
+
+
 
 def g448a30(c):
     clear_hooks(c)
@@ -4050,8 +4062,8 @@ def g4402a0(c):
         emu.w32(emu.arg32(0), cnt[0])
         if cnt[0] > 0: cnt[0] -= 1
         _s(emu, k)
-    c.emu.w32(CV + 0x4c, pystub(c, 1, ret=rnd32, this='mark', stackmark=(0,), side=a4c))
-    c.emu.w32(CV + 0x5c, pystub(c, 1, ret=rnd32, this='mark', stackmark=(0,), side=a5c))
+    c.emu.w32(CV + 0x4c, pystub(c, 1, ret=rnd32, this='mark', stackmark=(0,), side=_it(a4c)))
+    c.emu.w32(CV + 0x5c, pystub(c, 1, ret=rnd32, this='mark', stackmark=(0,), side=_it(a5c)))
     def a_ctor(emu, k, _s=mkside(8)):
         emu.w32(emu.reg('ecx'), CV)
         _s(emu, k)
@@ -4542,8 +4554,8 @@ def g444530(c):
         emu.w32(emu.arg32(0), cnt[0])
         if cnt[0] > 0: cnt[0] -= 1
         _s(emu, k)
-    c.emu.w32(CV + 0x4c, pystub(c, 1, ret=rnd32, this='mark', stackmark=(0,), side=a4c))
-    c.emu.w32(CV + 0x5c, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32) & 0xfffffff0 | 0x20000000, this='mark', stackmark=(0,), side=a5c))
+    c.emu.w32(CV + 0x4c, pystub(c, 1, ret=rnd32, this='mark', stackmark=(0,), side=_it(a4c)))
+    c.emu.w32(CV + 0x5c, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32) & 0xfffffff0 | 0x20000000, this='mark', stackmark=(0,), side=_it(a5c)))
     return [this]
 
 
@@ -6599,7 +6611,7 @@ def g5afef0(c):
         return side
     rnd32 = lambda emu, k: r.getrandbits(32)
     elems = [rnd(c, 0x10) for _ in range(r.choice([0, 1, 2, 4, 6]))]
-    LV = reftab_vt(c, list(elems))
+    LV = reftab_vt(c, list(elems), iter_words=3)
     lastc = [0]
     def ctorL(emu, k, _s=mkside(0)):
         lastc[0] = emu.reg('ecx')
@@ -8338,8 +8350,8 @@ def g4d3200(c):
         i = ci[0]; ci[0] += 1
         emu.w32(p, 1 if i < len(ELS) else 0)
         return ELS[i] if i < len(ELS) else 0
-    c.emu.w32(LV + 0x4c, pystub(c, 1, ret=rnd32, this=True, stackmark=(0,), side=a4c))
-    c.emu.w32(LV + 0x5c, pystub(c, 1, ret=r5c, this=True, stackmark=(0,), side=mkside(1)))
+    c.emu.w32(LV + 0x4c, pystub(c, 1, ret=rnd32, this=True, stackmark=(0,), side=_it(a4c)))
+    c.emu.w32(LV + 0x5c, pystub(c, 1, ret=r5c, this=True, stackmark=(0,), side=_it(mkside(1))))
     c.emu.w32(ZV + 0x20, pystub(c, 2, ret=lambda emu, k_: LG, this=True, side=mkside(2)))
     KINDS = {0x69643c: '', 0x696450: 'vv', 0x696470: 'ss', 0x696480: 'vd', 0x69649c: 'ss', 0x6964ac: 'vvs', 0x6964cc: 'vs', 0x6964f0: 'vvs', 0x69651c: 'vs', 0x69650c: 'vv'}
     def a2c(emu, k_, _s=mkside(3)):

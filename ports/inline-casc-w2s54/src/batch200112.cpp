@@ -168,7 +168,7 @@ PCREG(4f90c0, lifted_4f90c0);
 extern "C" u32 THISCALL lifted_4fa390(u32 ecx_in, u32 a0) {
   u8 F[0x400] __attribute__((aligned(16)));
   u32 EBP = (u32)(F + 0x300);
-  u32 p0_, p1_;
+  u32 p0_, p1_, pa_ = 0;   // pa_ = the one value the switch case pushes (4 / 3 / 1 / 2) before the common call of slot 0x318
   u32 eax = 0, ecx = ecx_in, edx = 0, ebx = 0, esi = 0, edi = 0;
   __builtin_memcpy(F + 0x300 + 8, &a0, 4);
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP + 8), sizeof v); (u32)v; });  // @0_4fa390
@@ -178,15 +178,19 @@ extern "C" u32 THISCALL lifted_4fa390(u32 ecx_in, u32 a0) {
   if (eax > (u32)(3)) goto L4fa3dc;  // @4_4fa390
   switch (eax) { case 0: goto L4fa3b7; case 1: goto L4fa3b3; case 2: goto L4fa3ab; case 3: goto L4fa3af; default: __builtin_trap(); }  // @5_4fa390
   L4fa3ab:;
+  pa_ = 1;  // push 1
   goto L4fa3b9;  // @7_4fa390
   L4fa3af:;
+  pa_ = 2;  // push 2
   goto L4fa3b9;  // @9_4fa390
   L4fa3b3:;
+  pa_ = 3;  // push 3
   goto L4fa3b9;  // @11_4fa390
   L4fa3b7:;
+  pa_ = 4;  // push 4
   L4fa3b9:;
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi), sizeof v); (u32)v; });  // @14_4fa390
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 792)))(ecx, (u32)(4), (u32)(3), (u32)(2), (u32)(1), (u32)(p0_));  // @15_4fa390
+  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 792)))(ecx, pa_);  // @15_4fa390: ONE stack argument (the pushed case value)
   ecx = edx = 0;  // @16_4fa390
   edi = eax;  // @17_4fa390
   if ((edi & edi) == 0) goto L4fa3dc;  // @18_4fa390

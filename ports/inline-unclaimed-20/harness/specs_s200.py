@@ -205,12 +205,14 @@ def _slot84(c):
     import serial_stubs as ss
     obj = _rnd(c, 0x100)
     buf = _rnd(c, 0x10)
-    vt = _vt_obj_with(c, {0x84: lambda em, a, b=buf: (b, None)}, {0x84: 1})
+    vt = _vt_obj_with(c, {0x84: lambda em, a, b=buf: (b, None)}, {0x84: 0})     # the slot takes no stack argument
     c.emu.w32(obj, vt)
     slot = c.emu.alloc(4, 4)
     c.emu.w32(slot, 0)
-    # 0x4f21f0 stub: stores ecx (the returned object) in a heap slot, so the value is compared
-    ss.patch(c, 0x4f21f0, ss.code(c, b'\x89\x0d' + ss.P(slot) + b'\xc3'))
+    slot2 = c.emu.alloc(4, 4)
+    c.emu.w32(slot2, 0)
+    # 0x4f21f0 stub (ret 4): stores ecx (the returned object) and its stack argument (the `push 1` the slot call leaves behind) in heap slots, so both are compared
+    ss.patch(c, 0x4f21f0, ss.code(c, b'\x89\x0d' + ss.P(slot) + b'\x8b\x54\x24\x04\x89\x15' + ss.P(slot2) + b'\xc2\x04\x00'))
     return [obj]
 
 

@@ -3,6 +3,18 @@ import struct
 from pilot import S
 from recruits_util import rnd, obj, sysobj, clear_hooks, hook_rec, pystub, seh_record, seh_chain
 
+def _it(side=None):
+    """Slots 0x4c / 0x5c fill a 12-byte iterator state: write the 2nd and 3rd dword too, so a port whose local is smaller overflows."""
+    def f(emu, k):
+        a = emu.arg32(0)
+        if side:
+            side(emu, k)
+        emu.w32(a + 4, 0x7e570001)
+        emu.w32(a + 8, 0x7e570002)
+    return f
+
+
+
 
 def g4b73f0(c):
     from unicorn.x86_const import UC_X86_REG_EDX
@@ -432,8 +444,8 @@ def g4b3a70(c):
     def s5c(emu, k):
         emu.w32(emu.arg32(0), sts[min(k, len(sts) - 1)]); emu.mu.reg_write(UC_X86_REG_EDX, 0)
     vtB = em.alloc(0x80, 4)
-    em.w32(vtB + 0x4c, pystub(c, 1, ret=R, this=True, nullflag=(0,), side=zed(lambda emu, k: emu.w32(emu.arg32(0), 0))))
-    em.w32(vtB + 0x5c, pystub(c, 1, ret=lambda emu, k: 0x301 + 2 * k, this=True, nullflag=(0,), side=s5c))
+    em.w32(vtB + 0x4c, pystub(c, 1, ret=R, this=True, nullflag=(0,), side=_it(zed(lambda emu, k: emu.w32(emu.arg32(0), 0)))))
+    em.w32(vtB + 0x5c, pystub(c, 1, ret=lambda emu, k: 0x301 + 2 * k, this=True, nullflag=(0,), side=_it(s5c)))
     Bobj = rnd(c, 0x20); em.w32(Bobj, vtB)
     Kobj = obj(c, 0x200, {0xb8: ST(1, tag='kb8'), 0x98: ST(0, ret=(Bobj if r.random() < 0.8 else 0), tag='k98')})
     em.w32(Kobj + 0xfd, r.choice([0, 1, 4]))

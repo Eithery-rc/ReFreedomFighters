@@ -990,7 +990,7 @@ def g453390(c):
     c.emu.w32(T + 0x52, r.choice([0, EO, EO]))
     for e in ee:
         if e not in omap: omap[e] = newo()
-    LV = reftab_vt(c, list(elems))
+    LV = reftab_vt(c, list(elems), iter_words=3)
     lastc = [0]
     hook_rec(c, 0x4ccba0, 0, ret=rnd32, pop=0, this='mark', side=lambda emu, k, _s=mkside(7): (lastc.__setitem__(0, emu.reg('ecx')), emu.w32(emu.reg('ecx'), LV), _s(emu, k)))
     hook_rec(c, 0x4ccf60, 0, ret=rnd32, pop=0, this='mark', side=lambda emu, k, _s=mkside(8): (emu.calllog.append(('dtR', emu.reg('ecx') - lastc[0])), _s(emu, k)))

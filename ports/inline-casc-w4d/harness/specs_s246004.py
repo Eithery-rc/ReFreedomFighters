@@ -3,6 +3,18 @@ import pe_emu
 from pilot import S
 from recruits_util import rnd, clear_hooks, hook_rec, pystub, seh_record, seh_chain
 
+def _it(side=None):
+    """Slots 0x4c / 0x5c fill a 12-byte iterator state: write the 2nd and 3rd dword too, so a port whose local is smaller overflows."""
+    def f(emu, k):
+        a = emu.arg32(0)
+        if side:
+            side(emu, k)
+        emu.w32(a + 4, 0x7e570001)
+        emu.w32(a + 8, 0x7e570002)
+    return f
+
+
+
 
 def g53aae0(c):
     clear_hooks(c)
@@ -109,8 +121,8 @@ def g53aae0(c):
         emu.w32(emu.arg32(0), 0)
         log(emu, k, 'i5c', 5, -1)
         return r.getrandbits(32)
-    em.w32(IVT + 0x4c, pystub(c, 1, ret=0, pop=4, this='mark', stackmark=(0,), side=i4c))
-    em.w32(IVT + 0x5c, pystub(c, 1, ret=i5c, pop=4, this='mark', stackmark=(0,)))
+    em.w32(IVT + 0x4c, pystub(c, 1, ret=0, pop=4, this='mark', stackmark=(0,), side=_it(i4c)))
+    em.w32(IVT + 0x5c, pystub(c, 1, ret=i5c, pop=4, this='mark', stackmark=(0,), side=_it()))
 
     def ctor(emu, k):
         emu.w32(emu.reg('ecx'), IVT)

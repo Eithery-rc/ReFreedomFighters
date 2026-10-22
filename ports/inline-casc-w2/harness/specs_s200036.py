@@ -27,7 +27,7 @@ def _gen(c):
         a = emu.reg('ecx')
         emu.calllog.append(('L', emu.rbytes(a, 16).hex()))
         sr3(emu, k)
-    hook_rec(c, 0x48c4b0, 2, ret=r.getrandbits(32), pop=8, stackmark=(0,), side=fill)
+    hook_rec(c, 0x48c4b0, 2, ret=r.getrandbits(32), pop=8, this=True, stackmark=(0,), side=fill)     # thiscall: ECX = the object, it reads [ecx+0xbcd]
     hook_rec(c, 0x4cc1d0, 0, ret=lambda emu, k: emu.r32(emu.reg('ecx')), this='mark')
     hook_rec(c, 0x4cbec0, 0, ret=r.getrandbits(32), this='mark', side=dtor_side)
     hook_rec(c, 0x633654, 0, ret=lambda emu, k: emu.reg('eax'), pop=0, this=True)

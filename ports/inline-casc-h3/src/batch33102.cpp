@@ -11,7 +11,7 @@ static inline void W32(u8 *p, u32 v) { __builtin_memcpy(p, &v, 4); }
 
 extern "C" u8 *THISCALL ext_5003d0(u8 *self, u32 which);             // ret 4
 
-// 0x486900: thiscall no args, returns true: o=[this+0xc]->slot 0x10(); o->slot 0x2d0(0, 0); vt=[this]; [this+0x34]=0; [this+0x30]=(float)([sys+0x40]+0x133)/1024; [this+0x2c] = vt slot 0x24(this, o->slot 0x350()); t=table slot 0x114(0x686794, 0, 0x68cdc4, 0x2b6, 0, 0); [this+8]->slot 0x128((u16)t)
+// 0x486900: thiscall no args, returns true: o=[this+0xc]->slot 0x10(); o->slot 0x2d0(0, 0); vt=[this]; [this+0x34]=0; [this+0x30]=(float)([sys+0x40]+0x133)/1024; [this+0x2c] = vt slot 0x24(this, o->slot 0x350()); t=table slot 0x114(0x686794, 0, 0x68cdc4, 0x2b6); [this+8]->slot 0x128((u16)t, 0, 0)
 static u8 THISCALL fn486900(u8 *self) {
   u8 *o = vcall<u8 *>(*(u8 **)(self + 0xc), 0x10);
   vcall<u32>(o, 0x2d0, 0u, 0u);
@@ -27,9 +27,10 @@ static u8 THISCALL fn486900(u8 *self) {
   u8 *sub = *(u8 **)(self + 8);
   u8 *svt = *(u8 **)sub;
   u8 *tab = *(u8 **)(SYS + 0x9b);
-  u32 id = vcall<u32>(tab, 0x114, 0x686794u, 0u, 0x68cdc4u, 0x2b6u, 0u, 0u);
-  typedef u32(THISCALL * fn2_t)(u8 *, u32);
-  (*(fn2_t *)(svt + 0x128))(*(u8 **)(self + 8), (u32)(u16)id);
+  // slot 0x114 pops FOUR arguments; the two `push 0` before it stay: slot 0x128 takes (id, 0, 0)
+  u32 id = vcall<u32>(tab, 0x114, 0x686794u, 0u, 0x68cdc4u, 0x2b6u);
+  typedef u32(THISCALL * fn2_t)(u8 *, u32, u32, u32);
+  (*(fn2_t *)(svt + 0x128))(*(u8 **)(self + 8), (u32)(u16)id, 0u, 0u);
   return 1;
 }
 PCREG(486900, fn486900);

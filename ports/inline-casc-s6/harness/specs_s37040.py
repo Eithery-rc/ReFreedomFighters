@@ -13,12 +13,18 @@ def _g5355a0(c):
     def mkslots(items):
         st = [0]
 
+        def junk(em):          # the real iterator state is 12 bytes: the slots write all three dwords
+            em.w32(em.arg32(0) + 4, 0x5eed0001)
+            em.w32(em.arg32(0) + 8, 0x5eed0002)
+
         def begin(em, k):
             st[0] = 0
             em.w32(em.arg32(0), 1)
+            junk(em)
 
         def side(em, k):
             em.w32(em.arg32(0), 1 if st[0] < len(items) else 0)
+            junk(em)
 
         def nxt(em, k):
             i = st[0]

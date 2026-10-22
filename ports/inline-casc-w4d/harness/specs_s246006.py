@@ -1802,7 +1802,7 @@ def g63d4a0(c):
     # container hooks
     hook_rec(c, 0x65ca30, 2, ret=0, pop=8, this='mark', stackmark=(0,), side=lambda emu, k: emu.calllog.append(('c65ca30', emu.arg32(1))))
     hook_rec(c, 0x65d070, 2, ret=0, pop=8, this='mark', side=lambda emu, k: emu.calllog.append(('c65d070', emu.arg32(0), emu.arg32(1) in [em.r32(i + 0x38) for i in items] or emu.arg32(1))))
-    hook_rec(c, 0x65cc70, 0, ret=0, pop=0, this='mark', side=lambda emu, k: emu.calllog.append(('c65cc70',)))
+    hook_rec(c, 0x65cc70, 0, ret=0, pop=0, this='mark', side=lambda emu, k: emu.calllog.append(('c65cc70', emu.r32(emu.reg('ecx') + 0x424))))   # the container's owner field (+0x424) is set by the caller
     hook_rec(c, 0x65c9d0, 0, ret=0, pop=0, this='mark', side=lambda emu, k: emu.calllog.append(('c65c9d0',)))
     hook_rec(c, 0x65ca60, 1, ret=0, pop=4, this='mark', stackmark=(0,), side=lambda emu, k: emu.calllog.append(('c65ca60',)))
     ncnt = r.choice([-1, 0, 1, 2])
@@ -2535,10 +2535,15 @@ def g4dd0c0(c):
 
     def s3c(emu, k):
         a = [emu.arg32(i) for i in range(11)]
-        for i, cd in enumerate(cands):
+        # a[0] = the result array, a[1] = its END (the original keeps the 0x400-entry array and the scratch block back to back): the real code stores
+        # at most (a[1] - a[0]) / 4 entries
+        span = (a[1] - a[0]) & 0xffffffff
+        cap = span // 4 if span < 0x80000000 else 0
+        n = min(len(cands), cap)
+        for i, cd in enumerate(cands[:n]):
             emu.w32(a[0] + 4 * i, cd)
-        emu.calllog.append(('q3c', nm(a[2]), a[3], emu.rbytes(a[4], 36).hex(), emu.rbytes(a[5], 12).hex(), a[6] - THIS, a[7], a[8], a[9], a[10]))
-        return len(cands)
+        emu.calllog.append(('q3c', nm(a[2]), a[3], emu.rbytes(a[4], 36).hex(), emu.rbytes(a[5], 12).hex(), a[6] - THIS, a[7], a[8], a[9], a[10], span))
+        return n
     em.w32(QVT + 0x3c, pystub(c, 11, ret=s3c, pop=44, this=True, stackmark=(0, 1, 4, 5), side=lambda emu, k: None))
     hook_rec(c, 0x4dac50, 0, ret=lambda emu, k: 0x7000 + emu.reg('ecx') % 0x100, pop=0, side=lambda emu, k: emu.calllog.append(('c4dac50', nm(emu.reg('ecx')))))
     hook_rec(c, 0x4dba00, 1, ret=lambda emu, k: (r.choice([0, 1, 0x100, 0x101]) if not allgood else 1), pop=4, stackmark=(0,),

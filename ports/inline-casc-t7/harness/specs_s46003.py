@@ -45,12 +45,18 @@ def g53b8d0(c):
 
     state = {'pos': 0}
 
+    def junk(em):        # the iterator state is 12 bytes: the real slots write all three dwords
+        em.w32(em.arg32(0) + 4, 0x5eed0001)
+        em.w32(em.arg32(0) + 8, 0x5eed0002)
+
     def s4c(em, k):
         state['pos'] = 0
         em.w32(em.arg32(0), 1 if nitems > 0 else 0)
+        junk(em)
 
     def s5c(em, k):
         em.w32(em.arg32(0), 1 if state['pos'] < nitems else 0)
+        junk(em)
 
     def r5c(em, k):
         return keys[min(state['pos'], nitems - 1)] if nitems else 0

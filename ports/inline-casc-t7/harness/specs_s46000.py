@@ -58,20 +58,20 @@ def g56a220(c):
     newids = [r.randrange(0, 8) for _ in range(8)]
     flips = [r.random() < 0.5 for _ in range(8)]
 
-    def s114(em, k):
-        v = em.arg32(4)
+    def s12c(em, k):    # slot 0x12c(a, id, c): c is &idv (the original's pending push) on the first site
+        v = em.arg32(2)
         if 0x0fe00000 <= v < 0x0ff00000:
             em.calllog.append(('idloc', em.r32(v)))
             if flips[min(k, 7)]:
                 em.w32(v, newids[min(k, 7)])
     rets = [r.getrandbits(32) for _ in range(8)]
     p = obj(c, 0x40, {0x68: pystub(c, 3, this=True), 0x5c: pystub(c, 3, this=True)})
-    t_slots = {0x114: pystub(c, 5, this=True, ret=lambda em, k: rets[min(k, 7)], stackmark=(4,), side=s114),
+    t_slots = {0x114: pystub(c, 4, this=True, ret=lambda em, k: rets[min(k, 7)]),
                0x138: pystub(c, 0, this=True, ret=lambda em, k: r.getrandbits(32)),
                0xa8: pystub(c, 0, this=True),
                0x134: pystub(c, 0, this=True, ret=p)}
     sysobj(c, table_slots=t_slots)
-    w = obj(c, 0x40, {0x12c: pystub(c, 2, this=True)})
+    w = obj(c, 0x40, {0x12c: pystub(c, 3, this=True, stackmark=(2,), side=s12c)})
     w90 = obj(c, 0x40, {0x658: pystub(c, 0, this=True)}) if r.random() < 0.7 else 0
     me = obj(c, 0x400, {0xd0: pystub(c, 1, this=True)})
     e.w32(me + 0x44, w)

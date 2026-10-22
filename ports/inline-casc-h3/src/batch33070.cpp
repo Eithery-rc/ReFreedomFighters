@@ -99,13 +99,13 @@ static void THISCALL fn566fd0(u8 *self) {
 }
 PCREG(566fd0, fn566fd0);
 
-// 0x5f0db0: fastcall(a=ecx, b=edx): r=table->slot 0x58(a); vtable of r read first; w=(u16)table->slot 0x114(str,0,str,0x33,&local=b); r->vtable[0x130](r, w)
+// 0x5f0db0: fastcall(a=ecx, b=edx): r=table->slot 0x58(a); vtable of r read first; w=(u16)table->slot 0x114(str,0,str,0x33) (pops FOUR arguments; &local=b was pushed before it and stays); r->vtable[0x130](r, w, &local)
 static void __attribute__((fastcall)) fn5f0db0(u32 a, u32 b) {
   u32 local = b;
   u8 *r = vcall<u8 *>(SYS_TABLE, 0x58, a);
   u8 *vt = *(u8 **)r;
-  u32 x = vcall<u32>(SYS_TABLE, 0x114, 0x6a6ffcu, 0u, 0x6b82f4u, 0x33u, (u32)&local);
-  ((u32(THISCALL *)(u8 *, u32, u32)) * (u32 *)(vt + 0x130))(r, (u32)r, (u32)(u16)x);
+  u32 x = vcall<u32>(SYS_TABLE, 0x114, 0x6a6ffcu, 0u, 0x6b82f4u, 0x33u);
+  ((u32(THISCALL *)(u8 *, u32, u32, u32)) * (u32 *)(vt + 0x130))(r, (u32)r, (u32)(u16)x, (u32)&local);
 }
 PCREG(5f0db0, fn5f0db0);
 

@@ -1,9 +1,9 @@
 #include "ff.h"
 
-// 0x565a30: 4 insns, 9 bytes, frame setup + tail-jump to 0x57f350
-void fn_565a30() {
-  typedef void (*fn_type)();
-  ((fn_type)(void *)0x57f350)();
+// 0x565a30: 4 insns, 9 bytes, frame setup + tail-jump to 0x57f350. A pure forwarder: the stack arguments belong to the callee chain (0x57f350 -> 0x610100 is
+// `ret 4`), so the port must be a plain jmp, not a call with no arguments.
+extern "C" __attribute__((naked)) void fn_565a30() {
+  asm volatile("jmp ext_57f350");
 }
 PCREG(565a30, fn_565a30);
 

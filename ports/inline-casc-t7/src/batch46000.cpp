@@ -14,12 +14,13 @@ extern "C" u32 THISCALL ext_48aad0(void *pair);                      // plain re
 
 static inline u8 *rd(u8 *p, u32 off) { return *(u8 **)(p + off); }
 static inline u8 *table() { return *(u8 **)(*(u8 **)0x70039c + 0x9b); }
-// object-table slot 0x114: (a, b, file, line, c) -> u16 (thiscall, callee pops 20)
-static inline u32 log114(u32 a, u32 b, u32 line, u32 c) {
+// object-table slot 0x114: (a, b, file, line) -> u16 (thiscall, callee pops 16). The original pushes one more value BEFORE the call; it stays on the stack
+// and is the third argument of the slot 0x12c call that follows (emit12c(self, a, b, c)).
+static inline u32 log114(u32 a, u32 b, u32 line) {
   u8 *t = table();
-  return (u16)vcall<u32>(t, 0x114, a, b, (u32)0x6a771c, line, c);
+  return (u16)vcall<u32>(t, 0x114, a, b, (u32)0x6a771c, line);
 }
-static inline void emit12c(u8 *self, u32 a, u32 b) { vcall<void>(rd(self, 0x44), 0x12c, a, b); }
+static inline void emit12c(u8 *self, u32 a, u32 b, u32 c) { vcall<void>(rd(self, 0x44), 0x12c, a, b, c); }
 static inline void cmd(u8 *self, u32 v) { vcall<void>(self, 0xd0, v); }
 
 static u32 THISCALL fn56a220(u8 *self, u32 id) {
@@ -28,8 +29,8 @@ static u32 THISCALL fn56a220(u8 *self, u32 id) {
   if (idv < 6) {
     if (*(u32 *)(self + 0x198) != 0) {
       u8 *w = rd(self, 0x44);
-      u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a6ffc, (u32)0, (u32)0x6a771c, (u32)0xe1, (u32)&idv);
-      vcall<void>(w, 0x12c, *(u32 *)(self + 0x198), ax);
+      u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a6ffc, (u32)0, (u32)0x6a771c, (u32)0xe1);
+      vcall<void>(w, 0x12c, *(u32 *)(self + 0x198), ax, (u32)&idv);
     }
     if (*(u32 *)(self + 0x1c5) == 4) {
       cmd(self, 0);
@@ -106,9 +107,9 @@ static u32 THISCALL fn56a220(u8 *self, u32 id) {
     pair[0] = vcall<u32>(table(), 0x138);
     u8 *w = rd(self, 0x44);
     pair[1] = 0x6a5c48;
-    u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a4fb0, (u32)0, (u32)0x6a771c, (u32)0x149, (u32)0);
+    u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a4fb0, (u32)0, (u32)0x6a771c, (u32)0x149);
     u32 r = ext_48aad0(pair);
-    vcall<void>(rd(self, 0x44), 0x12c, r, ax);
+    vcall<void>(rd(self, 0x44), 0x12c, r, ax, (u32)0);
     (void)w;
     u8 *o = rd(self, 0x90);
     if (o) vcall<void>(o, 0x658);
@@ -148,21 +149,21 @@ static u32 THISCALL fn56a220(u8 *self, u32 id) {
       pair[1] = 0x6a778c;
       ebx = ext_48aad0(pair);
       u8 *w = rd(self, 0x44);
-      u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a77a0, (u32)0, (u32)0x6a771c, (u32)0x166, (u32)0x6a7798);
+      u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a77a0, (u32)0, (u32)0x6a771c, (u32)0x166);
       (void)w;
-      emit12c(self, ebx, ax);
+      emit12c(self, ebx, ax, (u32)0x6a7798);
       line2 = 0x167;
     } else {
       u32 pair[2];
       pair[0] = vcall<u32>(table(), 0x138);
       pair[1] = 0x6a778c;
       ebx = ext_48aad0(pair);
-      u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a77a0, (u32)0, (u32)0x6a771c, (u32)0x177, (u32)(rd(self, 0x94) + 0x48));
-      emit12c(self, ebx, ax);
+      u32 ax = (u16)vcall<u32>(table(), 0x114, (u32)0x6a77a0, (u32)0, (u32)0x6a771c, (u32)0x177);
+      emit12c(self, ebx, ax, (u32)(rd(self, 0x94) + 0x48));
       line2 = 0x178;
     }
-    u32 ax2 = (u16)vcall<u32>(table(), 0x114, (u32)0x6a77ac, (u32)0, (u32)0x6a771c, line2, (u32)0);
-    emit12c(self, ebx, ax2);
+    u32 ax2 = (u16)vcall<u32>(table(), 0x114, (u32)0x6a77ac, (u32)0, (u32)0x6a771c, line2);
+    emit12c(self, ebx, ax2, (u32)0);
     cmd(self, ebx);
     return 0;
   }

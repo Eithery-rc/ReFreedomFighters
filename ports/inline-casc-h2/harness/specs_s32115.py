@@ -35,8 +35,8 @@ def g5b87f0(c):
     r = c.rng
     e = c.emu
     hook_rec(c, 0x5b8d80, 0, this=True, pop=0, ret=r.getrandbits(32), side=_log('tail'))
-    s = obj(c, 0x20, {0x128: pystub(c, 1, this=True, side=_log('s128'))}, nslots=0x128 // 4 + 1)
-    so = sysobj(c, table_slots={0x114: pystub(c, 6, ret=r.getrandbits(32), this=True, side=_log('t114'))})
+    s = obj(c, 0x20, {0x128: pystub(c, 3, this=True, side=_log('s128'))}, nslots=0x128 // 4 + 1)
+    so = sysobj(c, table_slots={0x114: pystub(c, 4, ret=r.getrandbits(32), this=True, side=_log('t114'))})
     t40, t44 = r.randrange(0, 100000), r.randrange(0, 100000)
     e.w32(so + 0x40, t40)
     e.w32(so + 0x44, t44)

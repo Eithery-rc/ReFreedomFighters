@@ -102,7 +102,8 @@ def _gen(c):
     rm = _rnd(c, 0x100)
     c.emu.w32(rm + 0x30, c.rng.getrandbits(32))
     c.emu.w32(0x70039c, rm)
-    ss.patch(c, 0x4f21f0, ss.code(c, b'\x89\x0d' + struct.pack('<I', _cell(c)) + b'\xc2\x04\x00'))   # ret 4 (checked): stores ecx
+    ss.patch(c, 0x4f21f0, ss.code(c, b'\x89\x0d' + struct.pack('<I', _cell(c))                    # ret 4 (checked): stores ecx and its stack argument
+                                + b'\x8b\x54\x24\x04' + b'\x89\x15' + struct.pack('<I', _cell(c)) + b'\xc2\x04\x00'))
     _flush(c)
     return [self_, a1]
 

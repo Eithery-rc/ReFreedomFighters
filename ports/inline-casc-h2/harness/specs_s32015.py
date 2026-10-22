@@ -2,15 +2,15 @@ from pilot import S
 from recruits_util import rnd, obj, sysobj, clear_hooks, hook_rec
 
 def gen_505de0(c):
-    # thiscall to ext_50a410: hook the callee (1 arg: ecx=this)
+    # tail jump to ext_50a410 (thiscall, ONE stack argument, ret 4): the forwarder's caller pushes it, the callee pops it
     hook_rec(c, 0x50a410, 1, ret=c.rng.getrandbits(32), this=True)
     o = obj(c, 0x100, {})
-    return [o]
+    return [o, c.rng.getrandbits(32)]
 
 def gen_57f350(c):
-    # stdcall to ext_610100: hook the callee (0 args)
-    hook_rec(c, 0x610100, 0, ret=c.rng.getrandbits(32))
-    return []
+    # tail jump to 0x610100 (`ret 4`): no hook, the real callee runs, so the stack argument and the callee pop are compared
+    clear_hooks(c)
+    return [c.rng.getrandbits(32)]
 
 def gen_5ab090(c):
     # thiscall with conditional increment at offsets 0x300 and 0x8c7

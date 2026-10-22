@@ -27,7 +27,7 @@ static u32 THISCALL fn6581c0(u8 *self, u32 p) {
 PCREG(6581c0, fn6581c0);
 
 // 0x5b87f0, thiscall no args: byte [this+0xdd] set -> return; x = unaligned float [this+0xb3] + (float)([[0x70039c]+0x40] - [[0x70039c]+0x44]) * K(0x6785e4), stored; byte [this+0xb2] set -> tail jump to 0x5b8d80(this);
-// else x > [this+0x5c] -> [this+0xb3] = 0, byte [this+0xb2] = 1 and, when s = unaligned [this+0xe2] is set: ax = slot 0x114 of the engine table with (0x6b2718, 0, 0x6b2690, 0x158, 0, 0); slot 0x128 of s (vtable read first) with (word ax).
+// else x > [this+0x5c] -> [this+0xb3] = 0, byte [this+0xb2] = 1 and, when s = unaligned [this+0xe2] is set: ax = slot 0x114 of the engine table with (0x6b2718, 0, 0x6b2690, 0x158); slot 0x128 of s (vtable read first) with (word ax, 0, 0).
 static u32 THISCALL fn5b87f0(u8 *self) {
   if (self[0xdd]) return 0;
   u8 *eng = G(u8 *, 0x70039c);
@@ -44,8 +44,9 @@ static u32 THISCALL fn5b87f0(u8 *self) {
   if (!s) return 0;
   u32 vt = *(u32 *)s;
   u8 *tbl = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 r = vcall<u32>(tbl, 0x114, 0x6b2718u, 0u, 0x6b2690u, 0x158u, 0u, 0u);
-  (*(void (THISCALL **)(void *, u32))(vt + 0x128))((void *)rd32(self + 0xe2), r & 0xffff);
+  // slot 0x114 pops FOUR arguments (name, 0, file, line); the two `push 0` made before it stay on the stack: slot 0x128 takes (id, 0, 0)
+  u32 r = vcall<u32>(tbl, 0x114, 0x6b2718u, 0u, 0x6b2690u, 0x158u);
+  (*(void (THISCALL **)(void *, u32, u32, u32))(vt + 0x128))((void *)rd32(self + 0xe2), r & 0xffff, 0u, 0u);
   return 0;
 }
 PCREG(5b87f0, fn5b87f0);

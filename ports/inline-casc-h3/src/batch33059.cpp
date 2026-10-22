@@ -45,12 +45,12 @@ static u32 THISCALL fn463940(u8 *self) {
 }
 PCREG(463940, fn463940);
 
-// 0x4870c0: thiscall: vt of o=[this+8] read first; r=table->slot 0x114(str,0,str,0x307,0,0); o'->vtable[0x128]((u16)r)
+// 0x4870c0: thiscall: vt of o=[this+8] read first; r=table->slot 0x114(str,0,str,0x307) (pops FOUR arguments, the two `push 0` before it stay); o'->vtable[0x128]((u16)r, 0, 0)
 static u32 THISCALL fn4870c0(u8 *self) {
   u8 *vto = *(u8 **)(*(u8 **)(self + 8));
-  u32 r = vcall<u32>(SYS_TABLE, 0x114, 0x68ce84u, 0u, 0x68cdc4u, 0x307u, 0u, 0u);
+  u32 r = vcall<u32>(SYS_TABLE, 0x114, 0x68ce84u, 0u, 0x68cdc4u, 0x307u);
   u8 *o2 = *(u8 **)(self + 8);
-  return ((u32(THISCALL *)(u8 *, u32)) * (u32 *)(vto + 0x128))(o2, (u32)(u16)r);
+  return ((u32(THISCALL *)(u8 *, u32, u32, u32)) * (u32 *)(vto + 0x128))(o2, (u32)(u16)r, 0u, 0u);
 }
 PCREG(4870c0, fn4870c0);
 

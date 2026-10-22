@@ -6,7 +6,7 @@ typedef u32(THISCALL *v1_t)(void *, u32);
 #define CUR(self) (*(u32 **)((self) + 0x51a9))
 
 static void emitList(u8 *self, void *l) {
-  u32 v;
+  u32 v__it[4]; u32 &v = v__it[0];  // 12-byte iterator state: the slots 0x4c / 0x5c write up to 3 dwords
   (*(v1_t **)l)[0x4c / 4](l, (u32)&v);
   u32 item = (*(v1_t **)l)[0x5c / 4](l, (u32)&v);
   while (v != 0) {
@@ -39,7 +39,7 @@ static void THISCALL fn5355a0(u8 *self, u32 a8, void *list2, void *list1) {
       u32 *rec2 = CUR(self);
       rec2[2] = (*(v0_t **)sub)[0x14 / 4](sub);
       u32 *d = rec2 + 3;
-      u32 v;
+      u32 v__it[4]; u32 &v = v__it[0];  // 12-byte iterator state
       (*(v1_t **)sub)[0x4c / 4](sub, (u32)&v);
       u32 item = (*(v1_t **)sub)[0x5c / 4](sub, (u32)&v);
       if (v != 0) {

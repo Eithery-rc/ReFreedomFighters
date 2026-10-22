@@ -23,7 +23,8 @@ static void THISCALL fn53b8d0(u8 *self, u8 *a1, u8 *it, u8 *sink) {
   for (u32 i = 0; i < sizeof(E); i++) E[i] = 0xcc;
   for (u32 i = 0; i < sizeof(rec); i++) rec[i] = 0xcc;
   u32 L10[3] = {0, 0, 0};
-  u32 L11e8 = 0, L11f0 = 0, L11f4 = 0;
+  u32 L11e8__it[4] = {0, 0, 0, 0}; u32 &L11e8 = L11e8__it[0];   // 12-byte iterator state (slots 0x4c / 0x5c write 3 dwords)
+  u32 L11f0 = 0, L11f4 = 0;
   u8 *lq = *(u8 **)(eng() + 0x1a9f);
   u8 *lbase = lq + 0x109f;
   u8 *o = vcall<u8 *>(lq, 0xc0);

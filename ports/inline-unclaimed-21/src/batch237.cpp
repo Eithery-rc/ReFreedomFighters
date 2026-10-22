@@ -4,11 +4,11 @@
 // ->vt[0x14](); if [this+0x48] == 0 and r3 <= 1: [this+0xdc] = 1; r4 = vt[0x84](this, 0) (one argument); ext 0x4f21f0(r4); return.
 // Else: [this+0xdc] = 4; r5 = vt[0x84](this, 0); ext 0x4f21f0(r5); if [this+0x48] == 0: return; a1 = 5; obj = [this+0x44];
 // obj->vt[0x12c]([this+0x48], (u16)[this+0x74], &a1) (three words). K1 = [0x6785e4]. rm = [0x70039c].
-// vt[0x84] is called twice: the first call pushes nothing and the second pushes one word; the stub that serves it pops by
-// its call count (see specs_s237.py). The port reproduces the two prototypes.
+// vt[0x84] pops nothing in both calls (it is called with no stack words); the `push 0` before the second and third call is the stack argument of
+// 0x4f21f0 (ret 4), which reads it as a byte (4f21f3: mov al,[ebp+8]).
 #include "ff.h"
 
-extern "C" void THISCALL ext_4f21f0(u8 *self);   // original (stored ecx in the harness)
+extern "C" void THISCALL ext_4f21f0(u8 *self, u32 a);   // original: thiscall ret 4, reads its stack byte [ebp+8] (the `push 0` the slot call leaves behind)
 
 typedef u32(THISCALL *SlotNone)(u8 *);             // vtable slot, no stack words, eax result
 typedef u32(THISCALL *SlotOne)(u8 *, u32);         // vtable slot, one stack word, eax result
@@ -35,13 +35,13 @@ static void THISCALL path_5625c0(u8 *self, u32 a1) {
   u32 r3 = ((SlotNone)vslot17(sub, 0x14))(sub);
   if (*(u32 *)(self + 0x48) == 0 && (s32)r3 <= 1) {
     *(u32 *)(self + 0xdc) = 1;
-    u8 *r4 = (u8 *)(u32)((SlotOne)vslot17(self, 0x84))(self, 0);
-    ext_4f21f0(r4);
+    u8 *r4 = (u8 *)(u32)((SlotNone)vslot17(self, 0x84))(self);   // the slot pops nothing: the pushed 0 is the argument of 0x4f21f0
+    ext_4f21f0(r4, 0);
     return;
   }
   *(u32 *)(self + 0xdc) = 4;
-  u8 *r5 = (u8 *)(u32)((SlotOne)vslot17(self, 0x84))(self, 0);
-  ext_4f21f0(r5);
+  u8 *r5 = (u8 *)(u32)((SlotNone)vslot17(self, 0x84))(self);   // (same: `push 0` before the slot call, consumed by 0x4f21f0)
+  ext_4f21f0(r5, 0);
   if (*(u32 *)(self + 0x48) == 0) return;
   a1 = 5;
   u8 *obj = *(u8 **)(self + 0x44);

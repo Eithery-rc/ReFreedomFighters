@@ -6,7 +6,9 @@ static void STDCALL fn50bef0(u8 *param) {
   u8 *resource = (u8 *)vcall<u32>(factory, 0x25c, 0x685f44, 0);
   u8 *cursor = (u8 *)*(u32 *)(param + 4);
   u32 *entry = (u32 *)ext_5003d0(cursor, 0);
-  u32 id = (u16)vcall<u32>(table, 0x114, 0x690464, 0, 0x69d420, 0x93, *entry);
-  vcall<void>(resource, 0x130, resource, id);
+  // slot 0x114 pops FOUR arguments; the pushed *entry stays on the stack as the third argument of slot 0x130(this, id, *entry)
+  u32 pending = *entry;
+  u32 id = (u16)vcall<u32>(table, 0x114, 0x690464, 0, 0x69d420, 0x93);
+  vcall<void>(resource, 0x130, resource, id, pending);
 }
 PCREG(50bef0, fn50bef0);

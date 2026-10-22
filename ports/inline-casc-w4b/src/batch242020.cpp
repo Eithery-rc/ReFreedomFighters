@@ -713,7 +713,8 @@ extern "C" void THISCALL port_4b3a70(u32 self) {
   volatile SehRecord reg; reg.next = seh_head(); reg.handler = (0x668afb); reg.state = -1; seh_set_head(&reg);
   u32 G, tab, C, v, X, N, K, esi, edi, J;
   u32 strobj[8];
-  u32 st;
+  u32 st_it[4] = {0, 0, 0, 0};   // 12-byte iterator state for the slots 0x4c / 0x5c (a 4-byte st overwrote the SEH record)
+  u32 &st = st_it[0];
   if (R32(self + 0x84) == 0) goto Lexit;
   if (R8(self + 0x9f) == 0) {
     static const u32 names[4] = {0x6914e0, 0x6914f0, 0x691504, 0x69152c};

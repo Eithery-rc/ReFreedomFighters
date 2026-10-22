@@ -1737,6 +1737,7 @@ extern "C" void THISCALL GUESS_63d4a0(u32 self, u32 arr, u32 n) {
         u32 e2 = w6ld(w6ld(g + 0x9b) + 0x5d35);
         if (e2 != 0) {
           w6dbg(g, 0x259, 0x178, 0x6c27f0);
+          w6st((u32)O1 + 0x424, self);   // the original stores this into the container's owner field (+0x424) before its constructor; 0x65cc70 reads [owner+0x1c8]
           ext_65ca30_w6((u32)O1, (u32)BUF, 0x1000);
           u32 obj204 = self + 0x204;
           u32 P = ((W6T1)*(u32 *)(*(u32 *)obj204 + 0xc))(obj204, (u32)tmp);
@@ -2598,8 +2599,11 @@ typedef u32(*W6C5b)(u32, u32, u32, u32, u32);
 // 0x4dba00(this, r, A2) true -> R[n++] = c; else with c[0x3c] & 0x40000 and kind & 0x100000 and (c[0x54] vslot 0x2a8() & 0x10000): n = 0x4db070(n, R, this, c). n > 12: logger
 // [0x700390] vslot 0x20(0x696e24, 0xd0d) then its vslot 0x30(0x697050, name or "", n, 12), n = 12. H vslot 0(n, this); 0x4dc630(this, 0, 0x2000000).
 extern "C" void THISCALL GUESS_4dd0c0(u32 self) {
-  u8 A1[0x1010] __attribute__((aligned(16)));
-  u8 A2[0x210] __attribute__((aligned(16)));
+  // the original keeps the 0x400-entry result array (ebp-0x1234) and the 0x200-byte scratch block (ebp-0x234) back to back: the slot-0x3c call gets
+  // the array start and the array END (= the scratch block) as its capacity limit, so the two must be one contiguous object
+  u8 AB[0x1000 + 0x210] __attribute__((aligned(16)));
+  u8 *A1 = AB;
+  u8 *A2 = AB + 0x1000;
   float V[4] = {0, 0, 0, 0};
   float M[10];
   for (int q = 0; q < 10; q++) M[q] = 0.0f;

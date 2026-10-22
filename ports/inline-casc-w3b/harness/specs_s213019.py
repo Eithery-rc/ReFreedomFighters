@@ -12,13 +12,14 @@ def g562c90(c):
     def outw(emu, k):
         emu.w32(emu.arg32(1), r.getrandbits(32))
     o88 = obj(c, 0x20, {0x88: pystub(c, 2, ret=r.getrandbits(32), this=True, nullflag=(1,), side=outw)}, nslots=0x24)
-    o44 = obj(c, 0x20, {0x12c: pystub(c, 2, ret=r.getrandbits(32), this=True)}, nslots=0x4c)
+    # slot 0x12c (0x45fa70, ret 0xc): three stack arguments; the third is the `push &code` that slot 0x114 (ret 0x10) leaves behind
+    o44 = obj(c, 0x20, {0x12c: pystub(c, 3, ret=r.getrandbits(32), this=True, deref={2: 1})}, nslots=0x4c)
     slots = {0xd8: pystub(c, 0, ret=busy, this=True),
              0xd0: pystub(c, 1, ret=r.getrandbits(32), this=True)}
     this = obj(c, 0x60, slots, nslots=0x38)
     e.w32(this + 0x44, o44)
     tab = obj(c, 0x40, {0x138: pystub(c, 0, ret=o88, this=True),
-                        0x114: pystub(c, 5, ret=r.getrandbits(32), this=True, deref={4: 1})}, nslots=0x46)
+                        0x114: pystub(c, 4, ret=r.getrandbits(32), this=True)}, nslots=0x46)     # the engine slot 0x114 (0x493980) takes FOUR stack arguments (ret 0x10)
     eng = rnd(c, 0x1b00)
     e.w32(0x70039c, eng)
     e.w32(eng + 0x9b, tab)

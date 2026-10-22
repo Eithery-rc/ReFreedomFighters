@@ -15,7 +15,9 @@ extern "C" u32 THISCALL ext_4ccf60_w4(u32) __asm__("ext_4ccf60");
 extern "C" u32 THISCALL GUESS_53aae0(u32 self, u32 obj) {
   SEH_ENTER(0x66c60b);
   u8 It[0x40] __attribute__((aligned(4)));
-  u32 F, H;
+  u32 F_it[4] = {0, 0, 0, 0};   // 12-byte iterator state (slots 0x4c / 0x5c fill three dwords)
+  u32 &F = F_it[0];
+  u32 H;
   u32 itp = (u32)It;
   ext_4ccba0_w4(itp);
   reg.state = 0;

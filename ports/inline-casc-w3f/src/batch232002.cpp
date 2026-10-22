@@ -987,7 +987,7 @@ extern "C" u32 THISCALL hand_453390(u32 T) {
   SEH_ENTER(0x66635b);
 #define F32(base, off) (*(volatile u32 *)((base) + (off)))
 #define FLT(a) (*(volatile float *)(a))
-  volatile u32 R218[8], it238[2];
+  volatile u32 R218[8], it238[4];   // 12-byte iterator state (slots 0x4c / 0x5c fill three dwords)
   // the exe's locals from ebp-0xe8 to ebp-0x10 form ONE area (vslot 0x80 writes 48 bytes into both Ve8 and Vc4, which overlap): keep that layout
   volatile float L[54], V250[4], V25c[4], V268[4], V10c[16], V244[4], V16c[16];
 #define Ve8 (L + 0)

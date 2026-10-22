@@ -199,12 +199,13 @@ def sysobj(c, slots=None, table_slots=None, rand=None, table_size=0x20):
     return so
 
 
-def reftab_vt(c, elems, find=None, count=0, end_value=0):
+def reftab_vt(c, elems, find=None, count=0, end_value=0, iter_words=2):
     """Fake REFTAB vtable. elems: list of dwords for iteration. Slots: 0 scalar deleting dtor (recorder), 0x14 count,
     0x2c find(id) -> find.get(id, 0), 0x3c remove(id) (recorder), 0x4c begin(iter), 0x5c next(iter) -> element with
     iter[0] = 1 while valid (0 and end_value after the end), 0x64 next(iter) -> element or 0, 0x44 remove the
     element the iterator last returned (recorded).
-    The iterator index lives in iter[1] (on the caller's stack, so both runs see their own copy)."""
+    The iterator index lives in iter[1] (on the caller's stack, so both runs see their own copy).
+    iter_words=3: the stubs also write iter[2] (the real iterator state is 12 bytes)."""
     find = find or {}
     e = c.emu
 
@@ -212,12 +213,16 @@ def reftab_vt(c, elems, find=None, count=0, end_value=0):
         it = emu.arg32(0)
         emu.w32(it, 0)
         emu.w32(it + 4, 0)
+        if iter_words > 2:
+            emu.w32(it + 8, 0x7e570002)
         emu.ret(0, 4)
 
     def nxt5c(emu, r):
         it = emu.arg32(0)
         i = emu.r32(it + 4)
         emu.w32(it + 4, i + 1)
+        if iter_words > 2:
+            emu.w32(it + 8, 0x7e570002)
         if i < len(elems):
             emu.w32(it, 1)
             emu.ret(elems[i], 4)
@@ -229,6 +234,8 @@ def reftab_vt(c, elems, find=None, count=0, end_value=0):
         it = emu.arg32(0)
         i = emu.r32(it + 4)
         emu.w32(it + 4, i + 1)
+        if iter_words > 2:
+            emu.w32(it + 8, 0x7e570002)
         emu.ret(elems[i] if i < len(elems) else 0, 4)
 
     rem = e.alloc(4 * 9, 4)   # removed elements (8 rows) and a count

@@ -87,13 +87,13 @@ static u8 *THISCALL fn5eec70(u8 *self, u32 a) {
 }
 PCREG(5eec70, fn5eec70);
 
-// 0x5f0ff0: thiscall(a) bool: flag=1; r=table->slot 0x58(a); r's vtable read first; w=(u16)table->slot 0x114(str,0,str,0x22,&flag); r->vtable[0x130](r,w); return flag
+// 0x5f0ff0: thiscall(a) bool: flag=1; r=table->slot 0x58(a); r's vtable read first; w=(u16)table->slot 0x114(str,0,str,0x22) (pops FOUR arguments; &flag was pushed before it and stays); r->vtable[0x130](r,w,&flag); return flag
 static u32 THISCALL fn5f0ff0(u8 *self) {
   u8 flag = 1;
   u8 *r = vcall<u8 *>(SYS_TABLE, 0x58, (u32)self);
   u8 *vt = *(u8 **)r;
-  u32 x = vcall<u32>(SYS_TABLE, 0x114, 0x6a66a8u, 0u, 0x6b82f4u, 0x22u, (u32)&flag);
-  ((u32(THISCALL *)(u8 *, u32, u32)) * (u32 *)(vt + 0x130))(r, (u32)r, (u32)(u16)x);
+  u32 x = vcall<u32>(SYS_TABLE, 0x114, 0x6a66a8u, 0u, 0x6b82f4u, 0x22u);
+  ((u32(THISCALL *)(u8 *, u32, u32, u32)) * (u32 *)(vt + 0x130))(r, (u32)r, (u32)(u16)x, (u32)&flag);
   return flag;
 }
 PCREG(5f0ff0, fn5f0ff0);

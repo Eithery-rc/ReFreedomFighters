@@ -4,7 +4,8 @@ typedef u32(THISCALL *V0)(void *);
 typedef u32(THISCALL *V1)(void *, u32);
 typedef u32(THISCALL *V2)(void *, u32, u32);
 typedef u32(THISCALL *V2p)(void *, const char *, volatile u32 *);
-typedef u32(THISCALL *V5)(void *, u32, u32, u32, u32, volatile u32 *);
+typedef u32(THISCALL *V4)(void *, u32, u32, u32, u32);                  // engine slot 0x114 (0x493980): FOUR stack arguments (ret 0x10)
+typedef u32(THISCALL *V3)(void *, u32, u32, volatile u32 *);              // child slot 0x12c: three stack arguments (the pending `push &code` is the last)
 extern "C" u32 THISCALL ext_562c20(void *self, u32 sel);
 extern "C" u32 THISCALL ext_5f5620(void *self, u32 a);
 extern "C" u32 THISCALL ext_5fa1e0(void *self, u32 a);
@@ -26,8 +27,10 @@ u32 THISCALL fn_562c90(u8 *self, u32 sel) {
   u8 *ovt = *(u8 **)o44;
   u8 *eng2 = G(u8 *, 0x70039c);
   void *tab2 = *(void **)(eng2 + 0x9b);
-  u32 r = (*(V5 *)(*(u8 **)tab2 + 0x114))(tab2, 0x6a6868, 0, 0x6a64b4, 0x731, &code);
-  (*(V2 *)(ovt + 0x12c))(o44, out, (u16)r);
+  // `push &code` comes first of the five pushes and stays on the stack: slot 0x114 (ret 0x10) pops only (name, 0, file, line), and &code is the third
+  // argument of the slot 0x12c call below (ret 0xc)
+  u32 r = (*(V4 *)(*(u8 **)tab2 + 0x114))(tab2, 0x6a6868, 0, 0x6a64b4, 0x731);
+  (*(V3 *)(ovt + 0x12c))(o44, out, (u16)r, &code);
   u32 d = (*(V1 *)(*(u8 **)self + 0xd0))(self, out);
   return (d & ~0xffu) | 1;
 }

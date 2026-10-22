@@ -93,13 +93,13 @@ def _g5f0db0(c):
     clear_hooks(c)
     r = c.rng
     e = c.emu
-    sa = pystub(c, 2, this=True, ret=lambda em, k: _w(c))
-    sb = pystub(c, 2, this=True, ret=lambda em, k: _w(c))
+    sa = pystub(c, 3, this=True, deref={2: 1}, ret=lambda em, k: _w(c))     # slot 0x130 takes (this, id, &local): the pointer pushed before 0x114 stays on the stack
+    sb = pystub(c, 3, this=True, deref={2: 1}, ret=lambda em, k: _w(c))
     vt2 = e.alloc(0x200, 4)
     e.w32(vt2 + 0x130, sb)
     rr = obj(c, 0x200, {0x130: sa})
     s58 = pystub(c, 1, this=True, ret=lambda em, k: rr)
-    s114 = pystub(c, 5, this=True, deref={4: 1}, side=lambda em, k: e.w32(rr, vt2), ret=lambda em, k: _w(c))
+    s114 = pystub(c, 4, this=True, side=lambda em, k: e.w32(rr, vt2), ret=lambda em, k: _w(c))     # slot 0x114 pops four arguments
     sysobj(c, table_slots={0x58: s58, 0x114: s114})
     return [_w(c), _w(c)]
 
