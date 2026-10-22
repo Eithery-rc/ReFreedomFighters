@@ -1,7 +1,7 @@
 #include "ff.h"
 
 // 0x465850: 7 insns, 19 bytes, stdcall: compare param with constant, return bool, ret 4
-u8 STDCALL fn_465850(u32 val) {
+u32 STDCALL fn_465850(u32 val) {
   return (val == 0x465710) ? 1 : 0;
 }
 PCREG(465850, fn_465850);

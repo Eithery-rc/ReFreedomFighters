@@ -33,7 +33,7 @@ static u8 *fn6200d0(u8 *s) {
 PCREG(6200d0, fn6200d0);
 
 // 0x52d4a0, thiscall(a, b, c, d, e) ret 0x14, bool: k = [a+0x38] - e - 1 must equal [this+8]. Then o = [this+4]: byte [o+0xa] = 2, word [o] = word [b], byte [o+9] = k, words [o+2], [o+4], [o+6] = words c[0], c[2], c[4] (byte offsets 0, 4, 8).
-static bool THISCALL fn52d4a0(u8 *self, u8 *a, u16 *b, u16 *c, u32 d, u32 e) {
+static u32 THISCALL fn52d4a0(u8 *self, u8 *a, u16 *b, u16 *c, u32 d, u32 e) {
   (void)d;
   u32 k = *(u32 *)(a + 0x38) - e - 1;
   if (k != *(u32 *)(self + 8)) return false;
