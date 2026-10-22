@@ -25,8 +25,8 @@ def gen(c):
         emu.w32(out, 0)
         return 0
     list_obj = obj(c, 0x20, {
-        0x4c: pystub(c, 1, this=True, pop=4, side=begin),
-        0x5c: pystub(c, 1, this=True, pop=4, ret=lambda emu, k: next_item(emu, k)),
+        0x4c: pystub(c, 1, this=True, pop=4, side=begin, stackmark=(0,)),
+        0x5c: pystub(c, 1, this=True, pop=4, ret=lambda emu, k: next_item(emu, k), stackmark=(0,)),
     })
     e.w32(self + 0x5c, list_obj if r.random() < 0.9 else 0)
     return [self, wanted]
