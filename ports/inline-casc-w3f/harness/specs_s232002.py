@@ -434,8 +434,8 @@ def g57d500(c):
         emu.calllog.append(('d88', emu.reg('ecx') == DEV, emu.arg32(0), v))
         _s(emu, k)
     c.emu.w32(VD + 0x88, pystub(c, 2, ret=rnd32, pop=8, this=True, stackmark=(1,), side=s88))
-    c.emu.w32(VMG + 0x114, pystub(c, 5, ret=rnd32, pop=20, this=True, side=lambda emu, k, _s=mkside(4): (emu.calllog.append(('m114', [emu.arg32(q) for q in range(5)])), _s(emu, k))))
-    c.emu.w32(VL + 0x12c, pystub(c, 2, ret=rnd32, pop=8, this=True, side=lambda emu, k, _s=mkside(5): (emu.calllog.append(('l12c', emu.reg('ecx') == L, emu.arg32(0), emu.arg32(1))), _s(emu, k))))
+    c.emu.w32(VMG + 0x114, pystub(c, 4, ret=rnd32, pop=16, this=True, side=lambda emu, k, _s=mkside(4): (emu.calllog.append(('m114', [emu.arg32(q) for q in range(4)])), _s(emu, k))))
+    c.emu.w32(VL + 0x12c, pystub(c, 3, ret=rnd32, pop=12, this=True, side=lambda emu, k, _s=mkside(5): (emu.calllog.append(('l12c', emu.reg('ecx') == L, emu.arg32(0), emu.arg32(1), emu.arg32(2))), _s(emu, k))))
     c.emu.w32(VH, pystub(c, 0, ret=lambda emu, k: TB, pop=0, this=True, side=lambda emu, k, _s=mkside(6): (emu.calllog.append(('h0', emu.reg('ecx') == HO)), _s(emu, k))))
     def strcmp(emu, k):
         a, b = emu.arg32(0), emu.arg32(1)
@@ -1197,7 +1197,7 @@ def g4acf30(c):
     # P vtable
     c.emu.w32(VP + 0x1d8, pystub(c, 2, ret=lambda emu, k: r.choice([S1, S2]), pop=8, this=True, stackmark=(0,), side=lambda emu, k, _s=mkside(12): (fill(emu), emu.calllog.append(('p1d8', emu.arg32(1))), _s(emu, k))))
     c.emu.w32(VP + 0x1e0, pystub(c, 1, ret=lambda emu, k: (r.getrandbits(24) << 8) | (1 if pflag else 0), pop=4, this=True, side=lambda emu, k, _s=mkside(13): (emu.calllog.append(('p1e0', emu.arg32(0))), _s(emu, k))))
-    c.emu.w32(VP + 0x128, pystub(c, 1, ret=rnd32, pop=4, this=True, side=lambda emu, k, _s=mkside(14): (emu.calllog.append(('p128', emu.arg32(0))), _s(emu, k))))
+    c.emu.w32(VP + 0x128, pystub(c, 3, ret=rnd32, pop=12, this=True, side=lambda emu, k, _s=mkside(14): (emu.calllog.append(('p128', emu.arg32(0), emu.arg32(1), emu.arg32(2))), _s(emu, k))))
     c.emu.w32(VP + 0x20, pystub(c, 1, ret=lambda emu, k: 0x555, pop=4, this=True, side=lambda emu, k, _s=mkside(15): (emu.calllog.append(('p20', emu.arg32(0))), _s(emu, k))))
     # T vtable / sub
     c.emu.w32(VT + 0x98, pystub(c, 2, ret=lambda emu, k: id3, pop=8, this=True, side=lambda emu, k, _s=mkside(16): (emu.calllog.append(('t98', emu.arg32(0) in allobjs, emu.arg32(1))), _s(emu, k))))
@@ -1205,7 +1205,7 @@ def g4acf30(c):
     # manager vtable
     c.emu.w32(VMG + 0x58, pystub(c, 1, ret=lambda emu, k: ids.get(emu.arg32(0), 0) if not (emu.arg32(0) == 101 and nob) else 0, pop=4, this=True, side=lambda emu, k, _s=mkside(18): (emu.calllog.append(('m58', emu.arg32(0))), _s(emu, k))))
     c.emu.w32(VMG + 0x4c, pystub(c, 2, ret=lambda emu, k: (id2_ret if emu.arg32(1) == 0x4954454d else 0x4d2), pop=8, this=True, side=lambda emu, k, _s=mkside(19): (emu.calllog.append(('m4c', emu.arg32(0) == P, emu.arg32(1))), _s(emu, k))))
-    c.emu.w32(VMG + 0x114, pystub(c, 6, ret=rnd32, pop=24, this=True, side=lambda emu, k, _s=mkside(20): (emu.calllog.append(('m114', [emu.arg32(q) for q in range(6)])), _s(emu, k))))
+    c.emu.w32(VMG + 0x114, pystub(c, 4, ret=rnd32, pop=16, this=True, side=lambda emu, k, _s=mkside(20): (emu.calllog.append(('m114', [emu.arg32(q) for q in range(4)])), _s(emu, k))))
     c.emu.w32(VMG + 0x138, pystub(c, 0, ret=lambda emu, k: DEV, pop=0, this=True, side=mkside(21)))
     outv = r.choice([0, 104])
     def s88(emu, k, _s=mkside(22)):

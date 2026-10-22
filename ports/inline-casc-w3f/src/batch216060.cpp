@@ -1984,7 +1984,7 @@ extern "C" u32 THISCALL hand_505510(u32 ecx_in, u32 a0, u32 a1, float a2, float 
   SEH_ENTER(0x669cf1);  // @h_505510
   u8 s90[0x80] __attribute__((aligned(16)));
   u8 s110[0x80] __attribute__((aligned(16)));
-  u8 s41d4[0x4000] __attribute__((aligned(16)));
+  u8 s41d4[0x40c4] __attribute__((aligned(16)));
   u32 self = ecx_in, edi = a0;
   u32 Y = *(u32 *)(self + 0x14);
   if (edi != 0) {  // @h1_505510
@@ -2025,9 +2025,9 @@ extern "C" u32 THISCALL hand_505510(u32 ecx_in, u32 a0, u32 a1, float a2, float 
   Y = *(u32 *)(self + 0x14);
   u32 gg = G(u32, 0x70039c);
   u32 c = *(u32 *)(gg + 0x9b);
-  u32 v = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))VSLOT(c, 0x114))(c, 0x685874, 0, 0x69cd2c, 0x188, (u32)s41d4, 0);  // @h20_505510
+  u32 v = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(c, 0x114))(c, 0x685874, 0, 0x69cd2c, 0x188);  // @h20_505510 (slot 0x114 pops 4; the pushed s41d4 and 0 are args 2 and 3 of 0x128)
   Y = *(u32 *)(self + 0x14);
-  ((u32(THISCALL *)(u32, u32))(*(u32 *)(*(u32 *)Y + 0x128)))(Y, v & 0xffff);  // @h21_505510
+  ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(*(u32 *)Y + 0x128)))(Y, v & 0xffff, (u32)s41d4, 0);  // @h21_505510
   ext_4d2330_t0((u32)s41d4);  // @h22_505510
   SEH_LEAVE();
   ext_633654(G(u32, 0x6f5630));
@@ -2503,8 +2503,8 @@ extern "C" u32 THISCALL hand_595570(u32 ecx_in, u32 a0) {
     u32 cs = ext_4cc1d0_t0(S);
     ext_4d3a00_t3((u32)T, 0x6acb50, cs, 0xc);  // @h12_595570
     u32 c = *(u32 *)(G(u32, 0x70039c) + 0x9b);
-    u32 v = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))VSLOT(c, 0x114))(c, 0x6acb60, 0, 0x6ac6d0, 0x918, (u32)T);  // @h13_595570
-    eax = ((u32(THISCALL *)(u32, u32, u32))VSLOT(edi, 0x12c))(edi, v4158, v & 0xffff);  // @h14_595570
+    u32 v = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(c, 0x114))(c, 0x6acb60, 0, 0x6ac6d0, 0x918);  // @h13_595570 (slot 0x114 pops 4; the pushed T is the 3rd arg of 0x12c)
+    eax = ((u32(THISCALL *)(u32, u32, u32, u32))VSLOT(edi, 0x12c))(edi, v4158, v & 0xffff, (u32)T);  // @h14_595570
   }
   if (ebx == 0) {  // @h15_595570
     ext_4cbe80_t1((u32)s90, 0x677b5a);  // @h16_595570
@@ -2526,8 +2526,8 @@ extern "C" u32 THISCALL hand_595570(u32 ecx_in, u32 a0) {
     reg.state = 0;
     ext_4cbec0_t0((u32)s90);  // @h28_595570
     c = *(u32 *)(G(u32, 0x70039c) + 0x9b);
-    u32 v = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))VSLOT(c, 0x114))(c, 0x6acb9c, 0, 0x6ac6d0, 0x926, (u32)T);  // @h29_595570
-    eax = ((u32(THISCALL *)(u32, u32, u32))VSLOT(edi, 0x12c))(edi, v4158, v & 0xffff);  // @h30_595570
+    u32 v = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(c, 0x114))(c, 0x6acb9c, 0, 0x6ac6d0, 0x926);  // @h29_595570
+    eax = ((u32(THISCALL *)(u32, u32, u32, u32))VSLOT(edi, 0x12c))(edi, v4158, v & 0xffff, (u32)T);  // @h30_595570
   }
   *(u32 *)(edi + 0x688) = ebx;  // @h31_595570
   eax = ext_4d2330_t0((u32)T);  // @h32_595570
@@ -6061,8 +6061,8 @@ extern "C" u32 THISCALL hand_480a40(u32 ecx_in, u32 A1, u32 A2, u32 A3) {
     if (ob != 0) {  // @h81_480a40
       u32 vt = *(u32 *)ob;
       u32 m2 = MGR;
-      u32 ax2 = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))VSLOT(m2, 0x114))(m2, 0x68bedc, 0, 0x68bcbc, 0x280, 0, 0);  // @h82_480a40
-      ((u32(THISCALL *)(u32, u32))(*(u32 *)(vt + 0x128)))(ob, ax2 & 0xffff);  // @h83_480a40
+      u32 ax2 = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(m2, 0x114))(m2, 0x68bedc, 0, 0x68bcbc, 0x280);  // @h82_480a40 (slot 0x114 pops 4; the two pushed zeros are args 2 and 3 of 0x128)
+      ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(vt + 0x128)))(ob, ax2 & 0xffff, 0, 0);  // @h83_480a40
     }
   }
   F32(edi, 0x413) = 0;  // @h84_480a40
@@ -9255,9 +9255,9 @@ extern "C" u32 THISCALL hand_48c6c0(u32 T, u32 A1, u32 cmd, u32 argp) {
       u32 vt = F32(o, 0);
       g = G(u32, 0x70039c);
       m = F32(g, 0x9b);
-      u32 ax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))VSLOT(m, 0x114))(m, pa, 0, 0x68d798, pb, 0) & 0xffff;  // @h73_48c6c0
+      u32 ax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(m, 0x114))(m, pa, 0, 0x68d798, pb) & 0xffff;  // @h73_48c6c0 (slot 0x114 pops 4; the pushed 0 is arg 2 of 0x12c)
       o = F32(T, 0xadc);
-      ((u32(THISCALL *)(u32, u32, u32))F32(vt, 0x12c))(o, eb, ax);  // @h74_48c6c0
+      ((u32(THISCALL *)(u32, u32, u32, u32))F32(vt, 0x12c))(o, eb, ax, 0);  // @h74_48c6c0
     } else {
       if (pa == 0x68dba8) LOG2(0xdbc, 0x68ddfc) else LOG2(0xdc4, 0x68de1c)  // @h75_48c6c0
     }

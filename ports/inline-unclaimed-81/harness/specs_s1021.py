@@ -1,5 +1,5 @@
 """specs_s1021.py - area 81, batch 1021: ZFFHeroMovementCloseCombat::FrameUpdate (0x5e2020). The CRT sqrt at 0x634d7c is hooked by a sqrtsd stub (exe side;
-the port uses __builtin_sqrt). The fastcall helper 0x43e920 writes a random vector to its ecx. The helpers 0x4e09e0 and 0x4de040 are counting stubs. The
+the port uses __builtin_sqrt). The fastcall helper 0x43e920 writes a random vector to its ecx. The helper 0x4e09e0 negates the vector at EDX into ECX and logs the result in a heap ring; 0x4de040 is a counting stub. The
 render manager (sys+0x9b): slot 0x58 returns R (or null), slot 0x4c returns a random word, slot 0x114 (four arguments) returns a
 word. R: slot 0x80 writes the two out vectors (stack addresses, from random source vectors), slot 0x578 and slot 0x7c (O, returned by R's slot 0x20) are
 counting stubs, slot 0x674 returns two different random ints in turn (so T1 and T2 can differ), slot 0x128 counts its three arguments (ax, a stack address, 0); R+0xc points to a kind object whose dword at +0x23 selects the hook or the 0x2007f9 path;
@@ -25,6 +25,25 @@ def fast_vec_stub(c, src):
     return a
 
 
+def neg_stub(c):
+    """0x4e09e0 (ECX = dst, EDX = src): dst = -src, three floats, logged in a ring of eight 16-byte slots on the heap."""
+    cnt = c.emu.alloc(4, 4)
+    c.emu.w32(cnt, 0)
+    ring = c.emu.alloc(128, 4)
+    c.emu.wbytes(ring, bytes(128))
+    P = lambda v: struct.pack('<I', v)
+    # mov eax,[cnt]; and eax,7; shl eax,4; add eax,ring; push ebx
+    b = b'\xa1' + P(cnt) + b'\x83\xe0\x07\xc1\xe0\x04\x05' + P(ring) + b'\x53'
+    for j in range(3):
+        # mov ebx,[edx+4j]; xor ebx,0x80000000; mov [ecx+4j],ebx; mov [eax+4j],ebx
+        b += b'\x8b\x5a' + bytes([4 * j]) + b'\x81\xf3\x00\x00\x00\x80' + b'\x89\x59' + bytes([4 * j]) + b'\x89\x58' + bytes([4 * j])
+    # pop ebx; inc dword [cnt]; ret
+    b += b'\x5b\xff\x05' + P(cnt) + b'\xc3'
+    a = c.emu.alloc(len(b) + 16, 16)
+    c.emu.wbytes(a, b)
+    return a
+
+
 def fill(c, vals):
     a = c.emu.alloc(4 * len(vals), 4)
     for i, v in enumerate(vals):
@@ -38,7 +57,7 @@ def g(c):
     c.emu.wbytes(sq, b'\xf2\x0f\x51\xc0\xc3')           # sqrtsd xmm0,xmm0; ret
     ss.patch(c, 0x634d7c, sq)
     ss.patch(c, 0x43e920, fast_vec_stub(c, fill(c, [rf(c, -200, 200) for _ in range(3)])))
-    ss.patch(c, 0x4e09e0, ss.rec(c, 0))
+    ss.patch(c, 0x4e09e0, neg_stub(c))
     ss.patch(c, 0x4de040, ss.rec(c, 1))
     c.emu.w32(0x7003b0, ss.rec(c, 0))
     srcB = fill(c, [rf(c, -3, 3) for _ in range(3)])

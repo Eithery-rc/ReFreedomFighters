@@ -1,6 +1,6 @@
 // batch1021.cpp - area 81, batch 1021: ZFFHeroMovementCloseCombat::FrameUpdate(), 0x5e2020, thiscall, no arguments, plain ret. Cookie check not
 // reproduced (no SEH frame). The CRT sqrt at 0x634d7c (xmm0 in and out) is hooked in the harness by a sqrtsd stub; the port uses __builtin_sqrt (the same
-// correctly rounded double sqrt). Stand-ins (GUESS): 0x43e920 (fastcall, one stack argument; writes a vector to ecx), 0x4e09e0 (thiscall, no arguments),
+// correctly rounded double sqrt). Stand-ins (GUESS): 0x43e920 (fastcall, one stack argument; writes a vector to ecx), 0x4e09e0 (fastcall: ECX = dst, EDX = src, writes -src[0..2] to dst; the exe passes EDX = ESI = the +0x5c6 vector),
 // 0x4de040 (thiscall, one argument). The frame array fr is esp after the prologue: exe operands esp+X taken after a push are fr+X-4 (accounted for below).
 // The exe stores an int into esp+0x10 (the length slot) after pushing, so the length is overwritten before the final compare.
 #include "ff.h"
@@ -8,7 +8,7 @@
 #define D(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
 extern "C" void __attribute__((fastcall)) ext_43e920(void *ecx, void *edx, void *a2);   // GUESS (stood in)
-extern "C" void THISCALL ext_4e09e0(void *self);                                         // GUESS (stood in)
+extern "C" void __attribute__((fastcall)) ext_4e09e0(void *dst, void *src);              // negates src[0..2] into dst (reads EDX)
 extern "C" void THISCALL ext_4de040(void *self, u32 a);                                  // GUESS (stood in)
 
 // 0x5e236c: the gate tail, refreshes the flag at this+0x5ac.
@@ -83,7 +83,7 @@ static void THISCALL heroCloseCombatFrameUpdate(u8 *self) {
   float *S = (float *)(self + 0x5c6);
   float dot = ((S[1] * vB[1] + vB[0] * S[0]) + S[2] * vB[2]);
   if (0.0f > dot)
-    ext_4e09e0(fr + 0x8c);
+    ext_4e09e0(fr + 0x8c, S);
   ext_4de040(fr + 0x5c, 0u);
   if (ecSlot == 0) {
     vcall<void>(R, 0x578, (u32)vB, (u32)vA);

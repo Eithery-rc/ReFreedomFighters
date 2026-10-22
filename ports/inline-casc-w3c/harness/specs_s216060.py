@@ -84,9 +84,9 @@ def g50c900(c):
         _s(emu, k)
         emu.w32(emu.arg32(1), r.getrandbits(32))
     c.emu.w32(ROV + 0x88, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(1,), side=side_88))
-    c.emu.w32(TBV + 0x114, pystub(c, 5, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(4,), side=mkside(11)))
+    c.emu.w32(TBV + 0x114, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(11)))
     c.emu.w32(YOV + 0x25c, pystub(c, 2, ret=lambda emu, k: (0), this=True, side=mkside(11)))
-    c.emu.w32(XOV + 0x130, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(11)))
+    c.emu.w32(XOV + 0x130, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(2,), side=mkside(11)))
     c.emu.w32(LV + 0x20, pystub(c, 2, ret=lambda emu, k: LOGO, this=True, side=mkside(11)))
     def side_2c(emu, k, _s=mkside(11)):
         _s(emu, k)

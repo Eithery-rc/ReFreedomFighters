@@ -206,7 +206,7 @@ PCREG(448a30, lifted_448a30);
 
 extern "C" u32 THISCALL lifted_50c900(u32 ecx_in, u32 a0) {
   SEH_ENTER(0x669e8b);  // @h_50c900
-  u8 sb[0x4000] __attribute__((aligned(16)));
+  u8 sb[0x40c4] __attribute__((aligned(16)));   // the string-builder object spans ebp-0x40d4 .. the SEH record: 0x40c4 bytes
   volatile u32 w = 0;
   u32 ebx = a0, eax;
   ext_5003d0_t2(*(u32 *)(ebx + 8), 0);  // @h1_50c900
@@ -246,8 +246,8 @@ extern "C" u32 THISCALL lifted_50c900(u32 ecx_in, u32 a0) {
         u32 r41 = ext_41e680_t1(z);
         ext_4d3ad0_t4((u32)sb, 0x69d9b4, r41, 0x10);  // @h21_50c900
         tbl = *(u32 *)(G(u32, 0x70039c) + 0x9b);
-        u32 hv = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))VSLOT(tbl, 0x114))(tbl, 0x69d9c8, 0, 0x69d420, 0x418, (u32)sb) & 0xffff;  // @h22_50c900
-        ((u32(THISCALL *)(u32, u32, u32))VSLOT(x, 0x130))(x, x, hv);  // @h23_50c900
+        u32 hv = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(tbl, 0x114))(tbl, 0x69d9c8, 0, 0x69d420, 0x418) & 0xffff;  // @h22_50c900 (slot 0x114 pops 4; the pushed sb is arg 3 of 0x130)
+        ((u32(THISCALL *)(u32, u32, u32, u32))VSLOT(x, 0x130))(x, x, hv, (u32)sb);  // @h23_50c900
         u32 e2 = ext_4d2ed0_t2((u32)sb, 0x688a30);  // @h24_50c900
         u32 p5 = ext_5003d0_t2(*(u32 *)(ebx + 8), 0);  // @h25_50c900
         eax = ext_5002f0_t2(p5, e2);  // @h26_50c900

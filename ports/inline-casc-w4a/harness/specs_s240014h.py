@@ -1109,7 +1109,7 @@ def g425d30h(c):
         k = r.random()
         t = (b'(' if r.random() < 0.3 else b'') + txt(r.choice([0, 1, 7, 25])) + (b'\n' if r.random() < 0.4 else b'') + b'\0'
         em.wbytes(dst, t)
-        em.calllog.append(('format', em.reg('ecx'), mk(dst), em.arg32(1), mk(em.arg32(2)), em.r32(em.arg32(2)), em.r32(em.arg32(2) + 4)))
+        em.calllog.append(('format', em.reg('ecx'), mk(dst), em.arg32(1), mk(em.arg32(2)), tuple(em.r32(em.arg32(2) + 4 * q) for q in range(10))))
         em.ret(eax=_w(c), argbytes=12)
     obj_ = obj(c, 0x60, {0x0: c.emu.stub_fn('prefix', s_prefix), 0x4c: c.emu.stub_fn('format', s_format)})
     e.wbytes(obj_ + 0x10, bytes([r.choice([0, 1, 1, 1])]))
@@ -1160,7 +1160,7 @@ def g425d30h(c):
     fmtlen = r.choice([0, 3, 9, 30, 30, 0x1fe0, 0x2000, 0x2100 - 8])
     fmt = rnd(c, 0x2200)
     e.wbytes(fmt, txt(min(fmtlen, 0x2100)) + b'\0')
-    return [obj_, fmt, _w(c), _w(c), _w(c), _w(c)]
+    return [obj_, fmt] + [_w(c) for _ in range(10)]
 
 
 S(0x425d30, 'GUESS lifted 0x425d30', 'cdecl', None, ret=None, gen=g425d30h, note='batch240021')

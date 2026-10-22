@@ -10,10 +10,10 @@ static inline void SD(u32 *x, double d) { u64 v; __builtin_memcpy(&v, &d, 8); x[
 #define SEH_ENTER(H) volatile SehRecord reg; reg.next = seh_head(); reg.handler = (H); reg.state = -1; seh_set_head(&reg)
 #define SEH_LEAVE() seh_set_head(reg.next)
 
-extern "C" u32 lifted_425d30(u32 a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5) {  // hand fix: cdecl(obj, fmt, varargs...): the lifter saw no stack arguments
+extern "C" u32 lifted_425d30(u32 a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7, u32 a8, u32 a9, u32 a10, u32 a11) {  // hand fix: cdecl(obj, fmt, varargs...): the lifter saw no stack arguments; the exe passes the address of a2 on as the va_list, so ten varargs are kept
   u8 F[0x2160] __attribute__((aligned(4)));
   u32 EBP = (u32)(F + 0x2060);
-  __builtin_memcpy(F + 0x2060 + 8, &a0, 4); __builtin_memcpy(F + 0x2060 + 12, &a1, 4); __builtin_memcpy(F + 0x2060 + 16, &a2, 4); __builtin_memcpy(F + 0x2060 + 20, &a3, 4); __builtin_memcpy(F + 0x2060 + 24, &a4, 4); __builtin_memcpy(F + 0x2060 + 28, &a5, 4);
+  __builtin_memcpy(F + 0x2060 + 8, &a0, 4); __builtin_memcpy(F + 0x2060 + 12, &a1, 4); __builtin_memcpy(F + 0x2060 + 16, &a2, 4); __builtin_memcpy(F + 0x2060 + 20, &a3, 4); __builtin_memcpy(F + 0x2060 + 24, &a4, 4); __builtin_memcpy(F + 0x2060 + 28, &a5, 4); __builtin_memcpy(F + 0x2060 + 32, &a6, 4); __builtin_memcpy(F + 0x2060 + 36, &a7, 4); __builtin_memcpy(F + 0x2060 + 40, &a8, 4); __builtin_memcpy(F + 0x2060 + 44, &a9, 4); __builtin_memcpy(F + 0x2060 + 48, &a10, 4); __builtin_memcpy(F + 0x2060 + 52, &a11, 4);
   u32 PV[64], FL[4] = {0, 0, 0, 0}; u32 ecx_zero = 0, edx_zero = 0;
   u32 X0[4] = {0,0,0,0}, X1[4] = {0,0,0,0}, X2[4] = {0,0,0,0}, X3[4] = {0,0,0,0}, X4[4] = {0,0,0,0}, X5[4] = {0,0,0,0}, X6[4] = {0,0,0,0}, X7[4] = {0,0,0,0};
   u32 eax = 0, ecx = 0, edx = 0, ebx = 0, esi = 0, edi = 0;

@@ -1980,11 +1980,11 @@ def g505510(c):
     def s1d8(emu, k, _s=mkside(1)):
         fill16(emu, emu.arg32(0)); _s(emu, k)
     c.emu.w32(YV + 0x1d8, pystub(c, 2, ret=lambda emu, k: R1, this=True, stackmark=(0,), side=s1d8))
-    c.emu.w32(YV + 0x128, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(2)))
+    c.emu.w32(YV + 0x128, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(1,), side=mkside(2)))
     c.emu.w32(MV + 0x20, pystub(c, 2, ret=lambda emu, k: (LOG3 if emu.arg32(1) == 0x183 else LOG), this=True, side=mkside(3)))
     c.emu.w32(LV + 0x30, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), pop=0, this=False, side=mkside(4)))
     c.emu.w32(LV3 + 0x30, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), pop=0, this=False, side=mkside(4)))
-    c.emu.w32(TV + 0x114, pystub(c, 6, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(4,), side=mkside(5)))
+    c.emu.w32(TV + 0x114, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(5)))
     def hk(addr, n, pop, j, act=None, stackmark=(), this_='mark'):
         def sd(emu, k, _s=mkside(j)):
             if act: act(emu)
@@ -2520,10 +2520,10 @@ def g595570(c):
         return side
     def log16(emu, a, tag): emu.calllog.append((tag, emu.rbytes(a, 16).hex()))
     def fill16(emu, a): emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(16)))
-    c.emu.w32(VT + 0x12c, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(0)))
+    c.emu.w32(VT + 0x12c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(2,), side=mkside(0)))
     c.emu.w32(AV + 0x138, pystub(c, 0, ret=lambda emu, k: H, this=True, side=mkside(1)))
     c.emu.w32(AV + 0x4c, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(2)))
-    c.emu.w32(AV + 0x114, pystub(c, 5, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(4,), side=mkside(3)))
+    c.emu.w32(AV + 0x114, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(3)))
     def s88(emu, k, _s=mkside(4)):
         if r.random() < 0.6: emu.w32(emu.arg32(1), r.getrandbits(32))
         _s(emu, k)
@@ -7323,7 +7323,7 @@ def g48c6c0(c):
     m58 = mk('m58', 7, 1, 4, lambda emu, k: omap.get(emu.arg32(0), 0))
     L1 = obj(c, 0x80, {0x98: mk('l98', 8, 0, 0, lambda emu, k: r.choice([0, LIST, LIST])), 0x90: mk('l90', 9, 1, 4)})
     objs.append(L1)
-    mt = {0x58: m58, 0x138: mk('m138', 10, 0, 0), 0x114: mk('m114', 11, 5, 20, lambda emu, k: r.getrandbits(16))}
+    mt = {0x58: m58, 0x138: mk('m138', 10, 0, 0), 0x114: mk('m114', 11, 4, 16, lambda emu, k: r.getrandbits(16))}
     so = sysobj(c, slots={0x14: mk('s14', 12, 0, 0)}, table_slots=mt, table_size=0x40)
     SO_ = rnd(c, 0x2000); c.emu.w32(SO_, c.emu.r32(so)); c.emu.w32(SO_ + 0x9b, c.emu.r32(so + 0x9b)); c.emu.w32(SO_ + 0x190f, L1)
     c.emu.wbytes(SO_ + 0x6f, struct.pack('<ii', r.randrange(1, 2000), r.randrange(1, 2000)))
@@ -7333,7 +7333,7 @@ def g48c6c0(c):
     c.emu.w32(0x7003a4, r.choice([0, E4, E4])); objs.append(E4)
     E5 = obj(c, 0x20, {0x10: mk('e10', 15, 0, 0)}); c.emu.w32(0x7003ac, E5)
     # this
-    OBJ = obj(c, 0x20, {0x20c: mk('t20c', 16, 2, 8), 0x12c: mk('t12c', 17, 2, 8)}); objs.append(OBJ)
+    OBJ = obj(c, 0x20, {0x20c: mk('t20c', 16, 2, 8), 0x12c: mk('t12c', 17, 3, 12)}); objs.append(OBJ)
     EMB_V = c.emu.alloc(0x20, 4); c.emu.w32(EMB_V + 0x10, mk('emb10', 18, 0, 0))
     TV = c.emu.alloc(0x100, 4)
     for off, nm, j in ((0xb0, 'tb0', 19), (0xa4, 'ta4', 20), (0xa0, 'ta0', 21)):
@@ -8173,14 +8173,14 @@ def g480a40(c):
     hook_rec(c, 0x4d8180, 2, ret=rnd32, pop=8, this=True, side=mkside(5))
     hook_rec(c, 0x4d8330, 3, ret=lambda emu, k_: emu.reg('ecx'), pop=12, this=True, side=mkside(6))
     hook_rec(c, 0x4d83b0, 3, ret=lambda emu, k_: emu.reg('ecx'), pop=12, this=True, side=mkside(7))
-    stub6 = pystub(c, 6, ret=lambda emu, k_: r.getrandbits(32), this=True, side=mkside(8))
+    stub6 = pystub(c, 4, ret=lambda emu, k_: r.getrandbits(32), this=True, side=mkside(8))
     def a114(emu, k_, _s=mkside(9)):
         if emu.arg32(3) == 0x96:
             emu.w32(MV + 0x114, stub6)
         _s(emu, k_)
     c.emu.w32(MV + 0x114, pystub(c, 4, ret=lambda emu, k_: r.getrandbits(32), this=True, side=a114))
     c.emu.w32(MV + 0x58, pystub(c, 1, ret=lambda emu, k_: r.choice([0, OB]), this=True, side=mkside(10)))
-    c.emu.w32(OBV + 0x128, pystub(c, 1, ret=rnd32, this=True, side=mkside(11)))
+    c.emu.w32(OBV + 0x128, pystub(c, 3, ret=rnd32, this=True, side=mkside(11)))
     def a1a4(emu, k_, _s=mkside(12)):
         if r.random() < 0.3:
             emu.w32(this + 0x417, r.choice([0x1800, 0x800, 0x1000, 0x100, 0x1900, 0xffff, 0x101, 0x1, 0x2000]))

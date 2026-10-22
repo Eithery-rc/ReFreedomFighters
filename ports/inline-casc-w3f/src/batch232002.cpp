@@ -338,8 +338,8 @@ extern "C" u32 THISCALL hand_57d500(u32 this_, u32 a1, u32 a2) {
       ((u32(THISCALL *)(u32, u32, u32))VSLOT(dev, 0x88))(dev, 0x6aad08, (u32)&out);  // @h8_57d500
       u32 lo = F32(this_, 8);
       u32 outv = out;
-      u32 w = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))VSLOT(mgr, 0x114))(mgr, 0x6aacec, 0, 0x6aacc0, 0x109, 0);  // @h9_57d500
-      ((u32(THISCALL *)(u32, u32, u32))VSLOT(lo, 0x12c))(lo, outv, w & 0xffff);  // @h10_57d500
+      u32 w = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(mgr, 0x114))(mgr, 0x6aacec, 0, 0x6aacc0, 0x109);  // @h9_57d500 (slot 0x114 pops 4; the pushed 0 is arg 2 of 0x12c)
+      ((u32(THISCALL *)(u32, u32, u32, u32))VSLOT(lo, 0x12c))(lo, outv, w & 0xffff, 0);  // @h10_57d500
       sysr = G(u32, 0x70039c);
       rg = F32(sysr, 0x1907);
       t = ((u32(THISCALL *)(u32, u32))VSLOT(rg, 0x60))(rg, 0x69c690);  // @h11_57d500
@@ -1257,8 +1257,8 @@ extern "C" u32 THISCALL hand_4acf30(u32 T, u32 a1) {
       s32 cmpv = ((s32(*)(u32, u32))G(u32, 0x676414))(0x690bf4, sp);  // @h24_4acf30
       if (cmpv == 0) {  // @h25_4acf30
         u32 mg1 = F32(G(u32, 0x70039c), 0x9b);
-        u32 w = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))VSLOT(mg1, 0x114))(mg1, 0x690c00, 0, 0x6909a4, 0x252, 0x32, 0);  // @h26_4acf30
-        V1(P, 0x128)(P, w & 0xffff);  // @h27_4acf30
+        u32 w = ((u32(THISCALL *)(u32, u32, u32, u32, u32))VSLOT(mg1, 0x114))(mg1, 0x690c00, 0, 0x6909a4, 0x252);  // @h26_4acf30 (slot 0x114 pops 4; the pushed 0x32 and 0 are args 2 and 3 of 0x128)
+        ((u32(THISCALL *)(u32, u32, u32, u32))VSLOT(P, 0x128))(P, w & 0xffff, 0x32, 0);  // @h27_4acf30
         u32 mg2 = F32(G(u32, 0x70039c), 0x9b);
         u32 dev = V0(mg2, 0x138)(mg2);  // @h28_4acf30
         out120 = 0;
