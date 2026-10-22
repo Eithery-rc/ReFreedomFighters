@@ -11,7 +11,7 @@ static inline u32 rd(u8 *p) { return *(u32 *)p; }
 static inline void wr(u8 *p, u32 v) { *(u32 *)p = v; }
 
 extern "C" void *ext_634d22(void *dst, const void *src, u32 n);   // cdecl memcpy thunk
-extern "C" u8 *STDCALL ext_64c7e0(u32 id);                         // ret 4
+extern "C" u8 *THISCALL ext_64c7e0(u8 *child, u32 id);             // thiscall: ECX = the child (the loop variable c), ret 4
 
 // 0x63b850, thiscall(a, v) ret 8 (this = d): w = u16 a[0x5a]; w == 0 -> return. rec = d[0x68][w & 0xfff]; v += [0x70039c][0x1aa3][0x20]; sz = rec[0x3d] * 8; sz == 0 -> return.
 // old = rec[0x40]; new = d->slot 8 (0x20)(sz + 8); rec[0x40] = new; memcpy(new, old, sz); d->slot 9 (0x24)(old, sz); k = rec[0x3d]; rec[0x3d] = k + 1; new[k * 8 + 4] = v; new[k * 8] = 0.
@@ -42,7 +42,7 @@ static void THISCALL fn63b850(u8 *d, u8 *a, u32 v) {
       u8 *c = *(u8 **)p;
       u8 *arr = *(u8 **)(c + 0x10071);
       if (rd(arr + idx * 4) != 0) {
-        u8 *x = ext_64c7e0(w);
+        u8 *x = ext_64c7e0(c, w);
         x[0x14] |= 0x80;
       }
       i++;

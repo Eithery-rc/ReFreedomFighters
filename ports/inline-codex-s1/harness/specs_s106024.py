@@ -8,7 +8,7 @@ def gen(c):
  def construct(em,k):em.wbytes(em.reg('ecx'),struct.pack('<9f',*init))
  hook_rec(c,0x4de7a0,0,this='mark',side=construct)
  def fill(em,k):em.wbytes(em.arg32(0),struct.pack('<9f',*basis))
- actor=obj(c,0x80,{0x3a8:pystub(c,2,this=True,deref={0:9,1:3},ret=r.getrandbits(32)),0x390:pystub(c,1,this=True),0x98:pystub(c,2,this=True,nullflag=(0,1),side=fill)})
+ actor=obj(c,0x80,{0x3a8:pystub(c,0,this=True,ret=r.getrandbits(32)),0x390:pystub(c,3,this=True,deref={1:9,2:3}),0x98:pystub(c,2,this=True,nullflag=(0,1),side=fill)})
  state=obj(c,16,{0x34:pystub(c,0,this=True,ret=r.choice([0,1,0x100,0x101]))});e.w32(actor+0x6c,state)
  me=rnd(c,0x30);e.w32(me+0x1c,actor);arg=rnd(c,16);e.w32(arg+8,rnd(c,16))
  cell=rnd(c,8);hook_rec(c,0x5003d0,1,this=True,ret=cell)

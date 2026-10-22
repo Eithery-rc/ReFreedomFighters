@@ -39,8 +39,7 @@ static float normalise(u8 *c) {
 // position: first the entities found by the iterator object [[0x7003b8]+0x2c11] (slot 0x84), then the ids listed in [[0x7003b8]+0x4a0 .. +0x4a4).
 // kind 0/2 = owner is the id of the object at this[0x44] (kind 2: also a filter object arg[4]); kind 1 = from the struct arg; other kinds assert.
 static void body_5833e0(u8 *ebx, u32 kind, u8 *arg) {
-  u8 fr[0x108];
-  { void *d = fr; u32 n = sizeof fr; asm volatile("rep stosb" : "+D"(d), "+c"(n) : "a"(0xcc) : "memory"); }
+  u8 fr[0x108];   // not filled: the original leaves its frame uninitialised, and the consumer of the hit record (0x551b9f) reads the never-written word at record+0x2c
 #define EBP (fr + 0x100)
 #define P(off) (EBP - (off))
   u8 *eng = G(u8 *, 0x70039c);

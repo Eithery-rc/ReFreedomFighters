@@ -18,12 +18,12 @@ def _g467260(c):
     s1a9f = obj(c, 0x20, {0x70: pystub(c, 1, this=True, ret=lambda em, k: r.choice([0, 1, 0x100]))})
     _w(c, so + 0x1a9f, s1a9f if r.random() < 0.9 else 0)
 
-    def s3a0(em, k):
-        em.wbytes(em.arg32(0), bytes(r.getrandbits(8) for _ in range(36)))
-        em.wbytes(em.arg32(1), bytes(r.getrandbits(8) for _ in range(12)))
+    def s390(em, k):   # slot 0x390 (ret 0xc): (bone, matrix, vector); slot 0x3a0 is a plain `ret`, the two pushes before it are its 2nd and 3rd args
+        em.wbytes(em.arg32(1), bytes(r.getrandbits(8) for _ in range(36)))
+        em.wbytes(em.arg32(2), bytes(r.getrandbits(8) for _ in range(12)))
     creator = rnd(c, 0x20)
-    t = obj(c, 0x160, {0x3a0: pystub(c, 2, this=True, stackmark=(0, 1), side=s3a0, ret=lambda em, k: r.getrandbits(32)),
-                       0x390: pystub(c, 1, this=True), 0x20: pystub(c, 0, this=True, ret=creator)})
+    t = obj(c, 0x160, {0x3a0: pystub(c, 0, this=True, ret=lambda em, k: r.getrandbits(32)),
+                       0x390: pystub(c, 3, this=True, stackmark=(1, 2), side=s390), 0x20: pystub(c, 0, this=True, ret=creator)})
     _w(c, t + 0x153, r.choice([0, 0x31, 0x99]))
     hook_rec(c, 0x44b610, 0, this=True)
     hook_rec(c, 0x44b740, 1, pop=0)

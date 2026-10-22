@@ -10,16 +10,18 @@ static u32 vc2(u8 *o, u32 s, u32 a, u32 b) { return ((F2)(*(const u32 *)(*(const
 
 // a call with `self` in ecx and four stack arguments that the CALLER removes (add esp, 0x10 follows the original call)
 static void callCallerCleans4(u8 *self, u32 fn, u32 a, u32 b, u32 c, u32 d) {
+  u8 *ecx_io = self;   // the callee returns with an arbitrary ECX/EDX: both are in/out operands, or the compiler reuses the stale value after the call
+  u32 edx_io = fn;
   asm volatile(
       "pushl %[d]\n\t"
       "pushl %[c]\n\t"
       "pushl %[b]\n\t"
       "pushl %[a]\n\t"
-      "call *%[fn]\n\t"
+      "call *%%edx\n\t"
       "addl $16, %%esp\n\t"
-      :
-      : "c"(self), [fn] "r"(fn), [a] "r"(a), [b] "r"(b), [c] "r"(c), [d] "r"(d)
-      : "eax", "edx", "memory", "cc");
+      : "+c"(ecx_io), "+d"(edx_io)
+      : [a] "ri"(a), [b] "ri"(b), [c] "ri"(c), [d] "ri"(d)
+      : "eax", "memory", "cc");
 }
 
 extern "C" u32 THISCALL ext_4cc5f0(u8 *s);                 // plain, returns the strlen of [s]

@@ -38,7 +38,7 @@ def g(c):
     hook_rec(c, 0x5af0d0, 1, this=True, ret=lambda em,k: records[em.arg32(0)%5])
     def slot(n, ret=0, **kw):
         return pystub(c, n, this=True, ret=ret, **kw)
-    child = obj(c, 0x20, {0x324:slot(1), 0x2f0:slot(1)})
+    child = obj(c, 0x20, {0x324:slot(1), 0x2f0:slot(3)})
     base = obj(c, 0x20, {0x2c4:slot(1, child)})
     text = rnd(c, 0x10)
     e.w32(text+4, r.choice([0, rnd(c, 0x20)]))
@@ -54,10 +54,10 @@ def g(c):
     hook_rec(c, 0x591f00, 0, this=True, ret=r.choice([0,active,active]))
     hook_rec(c, 0x591080, 0, this=True, ret=y)
     lookup = obj(c, 0x20, {0:slot(2,r.getrandbits(32))})
-    # Variadic slot 0x4c: one key argument or three args for widget construction.
+    # Slot 0x4c pops ONE word; the widget-construction site pushes two more words that the 0x2f0 call takes.
     table_ret = r.getrandbits(32)
     def t4c(em,k):
-        n = 3 if em.arg32(0) == widget else 1
+        n = 1
         em.calllog.append(('table4c',em.reg('ecx'),tuple(em.arg32(i) for i in range(n))))
         em.ret(eax=table_ret,argbytes=4*n)
     so = sysobj(c,table_size=0xb00,table_slots={0x114:slot(4,r.getrandbits(32)),

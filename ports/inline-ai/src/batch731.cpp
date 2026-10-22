@@ -22,7 +22,7 @@ extern "C" void THISCALL ext_5a57a0(void *osd, float *A, u32 type, float one, s3
 // 0x5eac90 CActorActionMarker::Update() [medium].
 static void THISCALL marker_Update(u8 *self) {
   MarkerRec **arr = (MarkerRec **)(self + 4);
-  float A[3], B[3];
+  float A[3], B[9];   // B is the 9-float bone matrix filled by slot 0x390 (36 bytes in the original frame)
 
   for (u32 i = 0; i < *(u32 *)(self + 0x44); i++) {
     MarkerRec *r = arr[i];
@@ -35,8 +35,8 @@ static void THISCALL marker_Update(u8 *self) {
     u8 *Y = *(u8 **)((u8 *)X + 8);
     if (*(u32 *)(Y + 0x3c) & 0x800)
       continue;
-    u32 r1 = vcall<u32>(obj, 0x3a0, B, A);
-    vcall<void>(obj, 0x390, r1);
+    u32 r1 = vcall<u32>(obj, 0x3a0);        // plain `ret`: the pushes of B and A stay pending for slot 0x390 (ret 0xc)
+    vcall<void>(obj, 0x390, r1, B, A);
     A[1] = A[1] + bitsf(0x42580000u);      // 54
     vcall<void>(obj, 0x84, A);
     ext_5a57a0(*(void **)self, A, arr[i]->type, bitsf(0x3f800000u), -1);

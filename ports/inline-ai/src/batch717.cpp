@@ -52,16 +52,16 @@ static void send_sound(u8 *self, u8 *ev, MYSTR_buf *name) {
 static void THISCALL actor_OnSound(u8 *self, void *events) {
   if (!events)
     return;
-  u32 it = 0;
-  vcall<void>(events, 0x4c, &it);
-  u8 *ev = vcall<u8 *>(events, 0x64, &it);
+  u32 it[3] = {0, 0, 0};   // 12-byte iterator state: slot 0x4c fills three dwords
+  vcall<void>(events, 0x4c, it);
+  u8 *ev = vcall<u8 *>(events, 0x64, it);
   while (ev) {
     MYSTR_buf name;
     ext_4cbeb0(&name);
     u8 *src = vcall<u8 *>(db(), 0x58, *(u32 *)(ev + 0x14));
     if (src == self) {
       ext_4cbec0(&name);
-      ev = vcall<u8 *>(events, 0x64, &it);
+      ev = vcall<u8 *>(events, 0x64, it);
       continue;
     }
     u32 idx = *(u32 *)(ev + 0xc) - 1;
@@ -128,7 +128,7 @@ static void THISCALL actor_OnSound(u8 *self, void *events) {
     if (send)
       send_sound(self, ev, &name);
     ext_4cbec0(&name);
-    ev = vcall<u8 *>(events, 0x64, &it);
+    ev = vcall<u8 *>(events, 0x64, it);
   }
 }
 PCREG(47a620, actor_OnSound);

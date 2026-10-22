@@ -242,23 +242,30 @@ def g59f1a0(c):
     c.emu.w32(O[('load', ('glob', 7340956), 155)] + 0x0, O[('load', ('load', ('glob', 7340956), 155), 0)])
     TSZ = 0x7e0
     sr = [seh_record(c, 2) for _ in range(21)]
+    th = O[('this',)]
+    # the two blocks (+0x78a/+0x792 and +0x78e/+0x796) only run when the first word is zero and the second nonzero
+    c.emu.w32(th + 0x78a, r.choice([0, 0, 0x1234]))
+    c.emu.w32(th + 0x792, r.choice([0, r.getrandbits(32) | 1, r.getrandbits(32) | 1]))
+    c.emu.w32(th + 0x79a, r.choice([0, 1]))
+    c.emu.w32(th + 0x78e, r.choice([0, 0, 0x4321]))
+    c.emu.w32(th + 0x796, r.choice([0, r.getrandbits(32) | 1, r.getrandbits(32) | 1]))
     TS = len(rbytes_cache) if False else 0
     def mkside(j, rec=False):
         def side(emu, k):
             emu.calllog.append(('vt', emu.r32(O[('this',)]), zlib.crc32(emu.rbytes(O[('this',)], TSZ))))
             sr[j](emu, k)
         return side
-    c.emu.w32(O[('load', ('this',), 0)] + 0x72c, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
-    c.emu.w32(O[('load', ('this',), 0)] + 0x4f8, pystub(c, 0, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
-    c.emu.w32(O[('load', ('this',), 0)] + 0x1d8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
-    c.emu.w32(O[('load', ('this',), 0)] + 0x4fc, pystub(c, 0, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
+    c.emu.w32(O[('load', ('this',), 0)] + 0x72c, pystub(c, 1, ret=lambda emu, k: r.choice([0, O[('ret', 0)], O[('ret', 0)]]), this=True, side=mkside(20)))   # 0, or the object whose slot 0x2d0 is stubbed
+    c.emu.w32(O[('load', ('this',), 0)] + 0x4f8, pystub(c, 0, ret=O[('ret', 2)], this=True, side=mkside(20)))
+    c.emu.w32(O[('load', ('this',), 0)] + 0x1d8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(0,), side=mkside(20)))   # arg 0 is the address of a local buffer
+    c.emu.w32(O[('load', ('this',), 0)] + 0x4fc, pystub(c, 0, ret=O[('ret', 12)], this=True, side=mkside(20)))
     c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x4c, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
     c.emu.w32(O[('load', ('ret', 2), 0)] + 0x8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
     c.emu.w32(O[('load', ('ret', 0), 0)] + 0x2d0, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
-    c.emu.w32(O[('load', ('glob', 7340944), 0)] + 0x20, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
-    c.emu.w32(O[('load', ('ret', 5), 0)] + 0x2c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
+    c.emu.w32(O[('load', ('glob', 7340944), 0)] + 0x20, pystub(c, 2, ret=lambda emu, k: (O[('ret', 5)], O[('ret', 14)])[min(k, 1)], this=True, side=mkside(20)))   # the log object, first and second call
+    c.emu.w32(O[('load', ('ret', 5), 0)] + 0x2c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), pop=0, side=mkside(20)))   # cdecl log printf (obj, fmt, text): the caller pops
     c.emu.w32(O[('load', ('ret', 12), 0)] + 0x8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
-    c.emu.w32(O[('load', ('ret', 14), 0)] + 0x2c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(20)))
+    c.emu.w32(O[('load', ('ret', 14), 0)] + 0x2c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), pop=0, side=mkside(20)))   # cdecl log printf (obj, fmt, text): the caller pops
     def side_4cc1d0(emu, k, _s=mkside(7)):
         _s(emu, k)
     hook_rec(c, 0x4cc1d0, 0, ret=r.getrandbits(32), pop=0, this=True, side=side_4cc1d0)

@@ -60,8 +60,9 @@ static u32 THISCALL fn5b22a0(u8 *self) {
   u8 *m = (u8 *)ld32(eng + 0x9b);
   u8 *s = (u8 *)vcall<u32>(m, 0x138);  // @5b22a0_a
   u8 *m2 = (u8 *)ld32(G(u8 *, 0x70039c) + 0x9b);
-  u32 r = vcall<u32, u8 *, u32>(m2, 0x4c, self, 0x10);  // @5b22a0_b
-  return vcall<u32, u32, u32>(s, 0x60, 0x6b007c, r);  // @5b22a0_c
+  // slot 0x4c pops ONE arg (the camera): the `push 0x10` made before it stays pending and is the third argument of slot 0x60 of the registry object
+  u32 r = vcall<u32, u8 *>(m2, 0x4c, self);  // @5b22a0_b
+  return vcall<u32, u32, u32, u32>(s, 0x60, 0x6b007c, r, 0x10);  // @5b22a0_c
 }
 PCREG(5b22a0, fn5b22a0);
 

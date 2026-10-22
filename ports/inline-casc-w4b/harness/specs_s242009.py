@@ -231,13 +231,13 @@ def g4fefe0(c):
         for j in range(6): emu.w32(a0 + 4 * j, fv())
         for j in range(9): emu.w32(a1 + 4 * j, fv())
     hook_rec(c, 0x4fed00, 5, ret=R, this=True, nullflag=(0, 1, 2, 3), st0=fl, side=s4fed00)
-    def s3a4(emu, k):
-        for j in range(9): emu.w32(emu.arg32(0) + 4 * j, fv())
-        for j in range(3): emu.w32(emu.arg32(1) + 4 * j, fv())
+    def s390(emu, k):   # slot 0x390 (ret 0xc): (bone id, matrix, position); the bone-id slot 0x3a4 is a plain `ret`
+        for j in range(9): emu.w32(emu.arg32(1) + 4 * j, fv())
+        for j in range(3): emu.w32(emu.arg32(2) + 4 * j, fv())
     def mkobj():
         return obj(c, 0x40, {0x1e0: pystub(c, 1, ret=lambda emu, k: r.choice([0, 1, 1, 1, 0x100]), this=True),
-                             0x3a4: pystub(c, 2, ret=R, this=True, nullflag=(0, 1), side=s3a4),
-                             0x390: pystub(c, 1, ret=R, this=True),
+                             0x3a4: pystub(c, 0, ret=R, this=True),
+                             0x390: pystub(c, 3, ret=R, this=True, nullflag=(1, 2), side=s390),
                              0x84: pystub(c, 1, ret=R, this=True, deref={0: 3},
                                           side=lambda emu, k: [emu.w32(emu.arg32(0) + 4 * j, fv()) for j in range(3) if r.random() < 0.5])})
     A, B, C = mkobj(), mkobj(), mkobj()

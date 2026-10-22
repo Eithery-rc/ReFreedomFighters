@@ -1,5 +1,5 @@
 """specs_s38076.py - cascade s8 batch 38076. thiscall(this, a, b) ret 8. this+0x44 -> object (slot 0x12c(handle, word)), this+0x1d0f (unaligned) -> notice object (0 sometimes). Engine table object: slot 0x138 -> Z (slot 0x88 writes a
-value to its out pointer), slot 0x114 (5 args, writes an object pointer to its out pointer, returns a random dword), table +0xae4 -> text object (slot 0 pops two args). sys slot 0x190 -> formatter (slot 0x198 cdecl varargs writes a
+value to its out pointer), slot 0x114 (4 args, returns a random dword; the object pointer is written through the 3rd arg of the child slot 0x12c), table +0xae4 -> text object (slot 0 pops two args). sys slot 0x190 -> formatter (slot 0x198 cdecl varargs writes a
 text into the buffer). 0x5adeb0 (mask 0..255 random) / 0x5ae930 are custom hooks logging the buffer by content; 0x5a8510 is hooked. a in -3..0x2b (keys of the name table, -3..-1 and 0x28.. not found), b random (low byte often 0)."""
 import struct
 from pilot import S
@@ -37,8 +37,7 @@ def _g597fc0(c):
 
     def s114(em, res_):
         em.calllog.append(('s114', em.arg32(0), em.arg32(1), em.arg32(2), em.arg32(3)))
-        em.w32(em.arg32(4), ctxobj)
-        em.ret(eax=r.getrandbits(32), argbytes=20)
+        em.ret(eax=r.getrandbits(32), argbytes=16)   # slot 0x114 pops FOUR words; the out pointer is the 3rd arg of 0x12c
 
     def tx(em, res_):
         a0, a1 = em.arg32(0), em.arg32(1)
@@ -57,7 +56,11 @@ def _g597fc0(c):
     vt = e.r32(so)
     e.w32(vt + 0x190, e.stub_fn('s190', lambda em, res_: (em.calllog.append(('s190',)), em.ret(eax=F))))
     e.w32(e.r32(so + 0x9b) + 0xae4, tb2)
-    o44 = obj(c, 0x20, {0x12c: e.stub_fn('s12c', lambda em, res_: (em.calllog.append(('s12c', em.reg('ecx') != 0, em.arg32(0), em.arg32(1))), em.ret(eax=0, argbytes=8)))})
+    def s12c(em, res_):
+        em.calllog.append(('s12c', em.reg('ecx') != 0, em.arg32(0), em.arg32(1)))
+        em.w32(em.arg32(2), ctxobj)
+        em.ret(eax=0, argbytes=12)
+    o44 = obj(c, 0x20, {0x12c: e.stub_fn('s12c', s12c)})
     this = rnd(c, 0x1d20)
     e.w32(this + 0x44, o44)
     e.wbytes(this + 0x1d0f, struct.pack('<I', rnd(c, 0x40) if r.random() > 0.15 else 0))

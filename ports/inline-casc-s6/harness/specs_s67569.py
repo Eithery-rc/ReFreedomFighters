@@ -15,15 +15,15 @@ def _g4ad3a0(c):
     e = c.emu
 
     def t4c(em, res_):
-        em.calllog.append(('t4c', em.arg32(0), em.arg32(1), em.arg32(2)))
-        em.ret(eax=0x9000 + len(em.calllog), argbytes=12)
+        em.calllog.append(('t4c', em.arg32(0)))   # slot 0x4c pops ONE word; the two pending pushes go to the 0x2f0 call
+        em.ret(eax=0x9000 + len(em.calllog), argbytes=4)
     sysobj(c, table_slots={0x4c: e.stub_fn('recorder', t4c)})
     helpers = [obj(c, 0x20, {0x300: pystub(c, 0, this=True, ret=lambda em, k: r.choice([2, 2, 1, 0]))}) for _ in range(2)]
     objs = []
     for _ in range(3):
         rec = rnd(c, 0x60)
         _w(c, rec + 0x3c, r.choice([0, 0x400, 0x7ff, 0xffffffff, 0x3ff]))
-        o = obj(c, 0x20, {0x158: pystub(c, 0, this=True), 0x2f0: pystub(c, 1, this=True), 0x2d0: pystub(c, 2, this=True),
+        o = obj(c, 0x20, {0x158: pystub(c, 0, this=True), 0x2f0: pystub(c, 3, this=True), 0x2d0: pystub(c, 2, this=True),
                           0x2e8: pystub(c, 0, this=True, ret=lambda em, k: r.choice(helpers + [0]))})
         _w(c, o + 8, rec)
         objs.append(o)

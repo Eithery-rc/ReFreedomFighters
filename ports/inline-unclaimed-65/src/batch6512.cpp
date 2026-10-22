@@ -16,14 +16,15 @@ static u32 vc4(u8 *o, u32 s, u32 a, u32 b, u32 c, u32 d) { return ((F4)(*(const 
 
 // a call with `self` in ecx and two stack arguments that the CALLER removes (add esp, 8 follows the original call)
 static void callCallerCleans2(u8 *self, u32 fn, u32 a, u32 b) {
+  u32 edx_io = fn;   // the callee returns with arbitrary ECX/EDX: both are in/out operands, or the compiler reuses stale values after the call
   asm volatile(
       "pushl %[b]\n\t"
       "pushl %[a]\n\t"
-      "call *%[fn]\n\t"
+      "call *%%edx\n\t"
       "addl $8, %%esp\n\t"
-      :
-      : "c"(self), [fn] "r"(fn), [a] "r"(a), [b] "r"(b)
-      : "eax", "edx", "memory", "cc");
+      : "+c"(self), "+d"(edx_io)
+      : [a] "ri"(a), [b] "ri"(b)
+      : "eax", "memory", "cc");
 }
 
 extern "C" void THISCALL ext_4de7a0(u8 *s);         // plain thiscall, no args (sets +8 to 1.0)

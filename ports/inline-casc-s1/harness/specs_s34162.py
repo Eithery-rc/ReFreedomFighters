@@ -21,6 +21,7 @@ def _g484ff0(c):
 
     def fill(em, k):
         ptr = em.reg('ecx')
+        em.calllog.append(('edx', em.reg('edx')))   # EDX = base (the second argument of 0x484ff0), part of the register interface
         em.wbytes(ptr, b''.join(r.getrandbits(32).to_bytes(4, 'little') for _ in range(4)))
     hook_rec(c, 0x443ef0, 2, this='mark', pop=8, side=fill)
     hook_rec(c, 0x633654, 0, pop=0, ret=lambda em, k: em.reg("eax"))

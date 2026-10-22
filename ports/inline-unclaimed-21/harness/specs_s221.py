@@ -1,4 +1,4 @@
-"""specs_s221.py - core residue 0: 0x584580 (batch221). The original 0x4301c0 (stdcall, the buffer-grow path) is stubbed:
+"""specs_s221.py - core residue 0: 0x584580 (batch221). The original 0x4301c0 (thiscall ecx = the vector, ret 8, the buffer-grow path) is stubbed:
 it logs its two words. The render-manager child and the list global are set up per run."""
 import struct
 from pilot import S
@@ -36,9 +36,11 @@ def _init_obj(c):
     rm = _rnd(c, 0x100)
     c.emu.w32(rm + 0x9b, child)
     c.emu.w32(0x70039c, rm)
-    # 0x4301c0 (stdcall): stores the buffer pointer word and the local's value in cells
-    cell_p, cell_v = _cell(c), _cell(c)
-    ss.patch(c, 0x4301c0, ss.code(c, b'\x8b\x44\x24\x04' + b'\xa3' + struct.pack('<I', cell_p)
+    # 0x4301c0: stores the buffer pointer word and the local value in cells
+    # thiscall: ECX = the vector (list + 0x4a0) is recorded as well; the stub pops its two words (ret 8)
+    cell_p, cell_v, cell_c = _cell(c), _cell(c), _cell(c)
+    ss.patch(c, 0x4301c0, ss.code(c, b'\x89\x0d' + struct.pack('<I', cell_c)
+                                  + b'\x8b\x44\x24\x04' + b'\xa3' + struct.pack('<I', cell_p)
                                   + b'\x8b\x44\x24\x08' + b'\x8b\x00' + b'\xa3' + struct.pack('<I', cell_v)
                                   + b'\xc2\x08\x00'))
     _flush(c)

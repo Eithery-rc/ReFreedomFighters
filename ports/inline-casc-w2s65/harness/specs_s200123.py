@@ -249,8 +249,8 @@ def g4668d0(c):
             emu.calllog.append(('vt', emu.r32(O[('this',)]), zlib.crc32(emu.rbytes(O[('this',)], TSZ)), (7340956,) and tuple(emu.r32(_g) for _g in (7340956,))))
             sr[j](emu, k)
         return side
-    c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x114, pystub(c, 6, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(7)))
-    c.emu.w32(O[('load', ('ret', 1), 0)] + 0x128, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(7)))
+    c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x114, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(7)))   # slot 0x114 pops FOUR words
+    c.emu.w32(O[('load', ('ret', 1), 0)] + 0x128, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(1,), side=mkside(7)))   # the value + the two pending pushes (&local, 0)
     def side_4d2280(emu, k, _s=mkside(0)):
         a = emu.reg('ecx') if True else emu.arg32(0)
         if FO[0] == 0: emu.wbytes(a, bytes(r.getrandbits(8) for _ in range(0x30)))

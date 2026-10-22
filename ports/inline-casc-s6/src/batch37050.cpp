@@ -29,8 +29,8 @@ static u32 THISCALL fn472280(u8 *self, u8 *b, u32 id) {
   if (o) {
     *(u8 *)(self + 0x55) = 1;
     u8 *t = tabObj();
-    u32 h = (*(v3_t **)t)[0x4c / 4](t, (u32)b, *(u32 *)(t + 0xadc), 1);
-    (*(v1_t **)o)[0x2f0 / 4](o, h);
+    u32 h = (*(v1_t **)t)[0x4c / 4](t, (u32)b); // 0x4c pops ONE word; the two earlier pushes are the 2nd/3rd arguments of the 0x2f0 call (ret 0xc)
+    (*(v3_t **)o)[0x2f0 / 4](o, h, *(u32 *)(t + 0xadc), 1);
     u32 kind = F32(0x56);
     if (kind == 0x11) {
       u32 v[3] = {0, 0xc0800000u, 0};

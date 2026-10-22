@@ -72,6 +72,9 @@ def _cmd(c):
 
     def h4c(e, r):
         e.calllog.append(('MsgChain::begin', _norm(e, e.arg32(0))))
+        it = e.arg32(0)
+        e.w32(it + 4, c.rng.getrandbits(32) | 1)   # the iterator state is 12 bytes: slot 0x4c fills all three dwords
+        e.w32(it + 8, c.rng.getrandbits(32) | 1)
         e.ret(eax=0, argbytes=4)
 
     vt18 = c.emu.fake_vtable('MsgChain', 0x40, {0x4c: h4c, 0x5c: h5c})

@@ -55,13 +55,13 @@ def _layout(c):
     V = c.rng.getrandbits(32)                        # o.vt[0x4c]
 
     c.emu.w32(T, _vt(c, {
-        0x2f0: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)[0],
+        0x2f0: hs.stub(c, 3, ecx=True, edx=False, mask=[1, 2, 3], cleanup=True, ret=0)[0],
         0x2d0: hs.stub(c, 2, ecx=True, edx=False, mask=[1, 2], cleanup=True, ret=0)[0],
         0x324: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)[0]}))
     c.emu.w32(R, _vt(c, {0x2c4: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=T)[0]}))
     c.emu.w32(Q, _vt(c, {0x324: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)[0]}))
     c.emu.w32(W, _vt(c, {
-        0x2f0: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)[0],
+        0x2f0: hs.stub(c, 3, ecx=True, edx=False, mask=[1, 2, 3], cleanup=True, ret=0)[0],
         0x2d0: hs.stub(c, 2, ecx=True, edx=False, mask=[1, 2], cleanup=True, ret=0)[0],
         0x364: hs.stub(c, 0, ecx=True, edx=False, cleanup=True, ret=N)[0],
         0x360: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)[0],
@@ -72,7 +72,7 @@ def _layout(c):
         0x55c: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=Qret)[0],
         0x20: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=c.rng.getrandbits(32))[0],
         0x504: hs.stub(c, 0, ecx=True, edx=False, cleanup=True, ret=1 if c.rng.random() < 0.3 else 0)[0]}))
-    c.emu.w32(o + 0, _vt(c, {0x4c: hs.stub(c, 3, ecx=True, edx=False, mask=[1, 2, 3], cleanup=True, ret=V)[0]}))
+    c.emu.w32(o + 0, _vt(c, {0x4c: hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=V)[0]}))
 
     # the render manager: rm+0x9b = o; o+0xadc is an argument value (not dereferenced)
     rm = _rnd(c, 0x2000)

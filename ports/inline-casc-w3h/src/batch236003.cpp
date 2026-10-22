@@ -956,11 +956,11 @@ extern "C" u32 THISCALL lifted_477a30(u32 ecx_in) {
   eax = (u32)(EBP - 52);  // @211_477a30
   ecx = ebx;  // @212_477a30
   PV[4] = (u32)(eax);  // @213_477a30
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 928)))(ecx, PV[4], PV[3]);  // @214_477a30
+  eax = ((u32(THISCALL *)(u32))(*(u32 *)(esi + 928)))(ecx);   // slot 0x3a0 is a plain `ret`: both pushes stay pending for slot 0x390  // @214_477a30
   ecx = edx = 0;  // @215_477a30
   PV[5] = (u32)(eax);  // @216_477a30
   ecx = ebx;  // @217_477a30
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[5]);  // @218_477a30
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[5], PV[4], PV[3]);   // slot 0x390 (ret 0xc): result and the two pending pushes  // @218_477a30
   ecx = edx = 0;  // @219_477a30
   goto L477caf;  // @220_477a30
   L477c9a:;

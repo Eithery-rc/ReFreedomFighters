@@ -71,9 +71,16 @@ def _g648a40(c):
             recs.append((arr, arr - 0x70))
     blob = b''.join(a.to_bytes(4, 'little') + b.to_bytes(4, 'little') for a, b in recs)
 
+    wrote = [0]
+
     def fill(em, k):
-        em.wbytes(em.arg32(0), blob)
-    src = obj(c, 0x20, {0x2b0: pystub(c, 2, this=True, stackmark=(0, 1), side=fill, ret=lambda em, k: em.arg32(0) + len(blob))})
+        # arg0 = buffer start, arg1 = buffer END (the original passes the address just past its 0x800-byte array): at most that much is written, the return value is the cursor
+        room = (em.arg32(1) - em.arg32(0)) & 0xffffffff
+        em.calllog.append(('room', room))
+        n = min(len(blob), room & ~7) if room < 0x80000000 else 0
+        em.wbytes(em.arg32(0), blob[:n])
+        wrote[0] = n
+    src = obj(c, 0x20, {0x2b0: pystub(c, 2, this=True, stackmark=(0, 1), side=fill, ret=lambda em, k: em.arg32(0) + wrote[0])})
     return [this, src]
 
 

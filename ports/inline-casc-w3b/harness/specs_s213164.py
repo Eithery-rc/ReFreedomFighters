@@ -66,7 +66,7 @@ def g5833e0(c):
         return b
 
     def hit128(emu, k):
-        emu.calllog.append(('h128', emu.arg32(0), bytes(emu.rbytes(emu.arg32(1), 0x2c)), emu.arg32(2)))
+        emu.calllog.append(('h128', emu.arg32(0), bytes(emu.rbytes(emu.arg32(1), 0x30)), emu.arg32(2)))
 
     def s384(emu, k):
         v = vb(rvec())

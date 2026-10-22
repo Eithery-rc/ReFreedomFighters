@@ -35,7 +35,7 @@ def _g5ecd80(c):
 
     def side(em, k):
         em.wbytes(em.arg32(0), struct.pack('<ff', fv(-10, 10, 0.1), fv(-10, 10, 0.1)))
-    hook_rec(c, 0x4463b0, 2, this=True, nullflag=(0,), deref={1: 2}, side=side, pop=8)
+    hook_rec(c, 0x4463b0, 2, this=True, deref={0: 3, 1: 2}, side=side, pop=8)   # the third word of out is an input (the scale in [self+0xbf])
     hook_rec(c, 0x5ec8b0, 3, this=True, pop=12, stackmark=(1, 2))
     a = obj(c, 0x20, {0: pystub(c, 0, this=True, ret=lambda em, k: r.randrange(-500, 500)),
                       4: pystub(c, 0, this=True, ret=lambda em, k: r.randrange(-500, 500)),

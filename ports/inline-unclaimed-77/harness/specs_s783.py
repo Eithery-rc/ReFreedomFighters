@@ -24,12 +24,13 @@ def _fbits(c, zero_chance=0.0):
 
 
 def _stub443ef0(c, t):
-    """Thiscall, two stack arguments (C pointer, v float), ret 8: logs C's three floats and v (ring of 8 x 4 dwords), then writes T = t."""
+    """Register call (ECX = T, EDX = base B), two stack arguments (C pointer, v float), ret 8: logs C's three floats, v and EDX (ring of 8 x 8 dwords), then writes T = t."""
     cnt = c.emu.alloc(4, 4)
     c.emu.w32(cnt, 0)
-    ring = c.emu.alloc(128, 4)
-    c.emu.wbytes(ring, bytes(128))
-    b = (b'\xa1' + ss.P(cnt) + b'\x83\xe0\x07\xc1\xe0\x04\x05' + ss.P(ring)
+    ring = c.emu.alloc(256, 4)
+    c.emu.wbytes(ring, bytes(256))
+    b = (b'\xa1' + ss.P(cnt) + b'\x83\xe0\x07\xc1\xe0\x05\x05' + ss.P(ring)
+         + b'\x89\x50\x10'
          + b'\x8b\x54\x24\x04\x8b\x12\x89\x10'
          + b'\x8b\x54\x24\x04\x8b\x52\x04\x89\x50\x04'
          + b'\x8b\x54\x24\x04\x8b\x52\x08\x89\x50\x08'

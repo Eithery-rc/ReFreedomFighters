@@ -6,7 +6,8 @@ extern "C" void THISCALL ext_5ae930(u8 *ctx, char *buf, u32 mask);    // ret 8
 extern "C" void THISCALL ext_5a8510(u8 *obj, u32 text, u32 flag);     // ret 8
 typedef u32(THISCALL *v0_t)(void *);
 typedef u32(THISCALL *v2_t)(void *, u32, u32);
-typedef u32(THISCALL *v5_t)(void *, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *v4_t)(void *, u32, u32, u32, u32);
+typedef u32(THISCALL *v3_t)(void *, u32, u32, u32);
 typedef u32 (*fmt4_t)(void *, char *, u32, u32);
 #define SLOT(o, off, T) ((T)(*(u8 **)(*(u8 **)(o) + (off))))
 #define SYS G(u8 *, 0x70039c)
@@ -29,9 +30,10 @@ static void THISCALL fn597fc0(u8 *self, int a, u32 b) {
   u8 *o44 = (u8 *)UN32(self, 0x44);
   u8 *vt = *(u8 **)o44;
   tbl = *(u8 **)(SYS + 0x9b);
-  u32 r = SLOT(tbl, 0x114, v5_t)(tbl, 0x6ad354, 0, 0x6ad320, 0x12, (u32)&l170);
+  // slot 0x114 pops FOUR words; the push of &l170 made before them is the 3rd argument of the 0x12c call
+  u32 r = SLOT(tbl, 0x114, v4_t)(tbl, 0x6ad354, 0, 0x6ad320, 0x12);
   o44 = (u8 *)UN32(self, 0x44);
-  ((v2_t) * (u8 **)(vt + 0x12c))(o44, l174, r & 0xffff);
+  ((v3_t) * (u8 **)(vt + 0x12c))(o44, l174, r & 0xffff, (u32)&l170);
   if (UN32(self, 0x1d0f) == 0) return;
   u8 *F = (u8 *)SLOT(SYS, 0x190, v0_t)(SYS);
   char buf[0x20];

@@ -42,6 +42,8 @@ def _gen(c):
         e.w32(o, (o + 4) & 0xffffffff)
         e.wbytes(o + 4, text + b'\x00')
         e.ret(eax=0, argbytes=0)                          # caller cleans the four arguments
+        from unicorn.x86_const import UC_X86_REG_ECX, UC_X86_REG_EDX
+        e.mu.reg_write(UC_X86_REG_ECX, 5); e.mu.reg_write(UC_X86_REG_EDX, 0x10)   # the real callee (0x42f880 -> vsprintf) leaves arbitrary ECX/EDX
 
     p_vt = c.emu.fake_vtable('gbn-p', 0x300, {0x198: s198})
     p = _rnd(c, 0x40)

@@ -2145,8 +2145,11 @@ extern "C" u32 THISCALL hand_478780(u32 ecx_in, u32 a0, u32 a1) {
   u32 loc = 0;
   if (*(u8 *)(ebx + 0x6c4) != 0 && *(u8 *)(ebx + 0x6c3) == 0) loc = 1;  // @h23_478780
   u32 c = *(u32 *)(G(u32, 0x70039c) + 0x9b);
-  u32 t = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32, u32))VSLOT(c, 0x4c))(c, ebx, a0, a1, 0, 0, 0, 0xcccccc00u | loc);  // @h24_478780
-  u32 r = ((u32(THISCALL *)(u32, u32))VSLOT(esi, 0x214))(esi, t);  // @h25_478780
+  // The slot 0x4c pops ONE stack arg (this setter, ret 4): the other six pushes stay pending and are the trailing args of slot 0x214 (ret 0x1c).
+  u32 fn214 = *(u32 *)(*(u32 *)esi + 0x214);   // the vtable is loaded before the 0x4c call, the object ([ebx+0x5b2]) after it
+  u32 t = ((u32(THISCALL *)(u32, u32))VSLOT(c, 0x4c))(c, ebx);  // @h24_478780
+  u32 esi2 = *(u32 *)(ebx + 0x5b2);
+  u32 r = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32, u32))fn214)(esi2, t, a0, a1, 0, 0, 0, 0xcccccc00u | loc);  // @h25_478780
   *(u32 *)(ebx + 0x691) = r;  // @h26_478780
   SEH_LEAVE();
   return r;

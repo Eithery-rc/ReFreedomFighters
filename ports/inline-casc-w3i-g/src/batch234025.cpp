@@ -63,7 +63,7 @@ extern "C" u32 THISCALL lifted_58d000(u32 ecx_in) {
   long double FA = 0, FB = 0;
   u32 X0[4] = {0,0,0,0}, X1[4] = {0,0,0,0}, X2[4] = {0,0,0,0}, X3[4] = {0,0,0,0}, X4[4] = {0,0,0,0}, X5[4] = {0,0,0,0}, X6[4] = {0,0,0,0}, X7[4] = {0,0,0,0};
   u32 eax = 0, ecx = ecx_in, edx = 0, ebx = 0x0d0d0d0d, esi = 0x0d0d0d0d, edi = 0x0d0d0d0d;
-  { u8 *d_ = (u8 *)((EBP - 144) + 8); const u8 *s_ = (const u8 *)(0x20201000 + 8); u32 n_ = (0x80 - 8) / 4; __asm__ volatile("rep movsl" : "+D"(d_), "+S"(s_), "+c"(n_) : : "memory"); }   // w3i: same per-case garbage as the exe frame (spec fills both)
+  { u32 *d_ = (u32 *)((EBP - 144) + 8); u32 n_ = (0x80 - 8) / 4, z_ = 0; __asm__ volatile("rep stosl" : "+D"(d_), "+c"(n_) : "a"(z_) : "memory"); }   // the original reads uninitialised stack here (garbage, not reproducible): zero-filled, never read from a fixed address (0x20201000 is unmapped in the game)
   edi = ecx;  // @0_58d000
   { u32 v = (u32)(edi); __builtin_memcpy((void *)(u32)((EBP - 144) + 16), &v, sizeof v); }  // @1_58d000
   { u32 v = (u32)((u32)(1045220557)); __builtin_memcpy((void *)(u32)(edi + 2089), &v, sizeof v); }  // @2_58d000
@@ -256,11 +256,11 @@ extern "C" u32 THISCALL lifted_58d000(u32 ecx_in) {
   eax = (u32)(ecx + 2146);  // @189_58d000
   PV[5] = (u32)(eax);  // @190_58d000
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi + 936), sizeof v); (u32)v; });  // @191_58d000
-  eax = ((u32(THISCALL *)(u32, u32, u32))(eax))(ecx, PV[5], PV[4]);  // @192_58d000
+  eax = ((u32(THISCALL *)(u32))(eax))(ecx);  // @192_58d000: slot 0x3a8 is a plain `ret`, both pushes stay pending for slot 0x390
   ecx = edx = 0;  // @193_58d000
-  ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)((EBP - 144) + 24), sizeof v); (u32)v; });  // @194_58d000
+  ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)((EBP - 144) + 16), sizeof v); (u32)v; });  // @194_58d000: the two pushes of slot 0x3a8 are still pending (it pops nothing), so the saved this is at +16
   PV[6] = (u32)(eax);  // @195_58d000
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[6]);  // @196_58d000
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[6], PV[5], PV[4]);  // @196_58d000: slot 0x390 (ret 0xc)
   ecx = edx = 0;  // @197_58d000
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)((EBP - 144) + 16), sizeof v); (u32)v; });  // @198_58d000
   PV[7] = (u32)(edi);  // @199_58d000
@@ -1059,11 +1059,11 @@ extern "C" u32 THISCALL lifted_58d000(u32 ecx_in) {
   eax = (u32)(ecx + 2146);  // @992_58d000
   PV[57] = (u32)(eax);  // @993_58d000
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi + 936), sizeof v); (u32)v; });  // @994_58d000
-  eax = ((u32(THISCALL *)(u32, u32, u32))(eax))(ecx, PV[57], PV[56]);  // @995_58d000
+  eax = ((u32(THISCALL *)(u32))(eax))(ecx);  // @995_58d000: plain `ret`, both pushes stay pending for slot 0x390
   ecx = edx = 0;  // @996_58d000
-  ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)((EBP - 144) + 24), sizeof v); (u32)v; });  // @997_58d000
+  ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)((EBP - 144) + 16), sizeof v); (u32)v; });  // @997_58d000: the two pushes of slot 0x3a8 are still pending (it pops nothing), so the saved this is at +16
   PV[58] = (u32)(eax);  // @998_58d000
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[58]);  // @999_58d000
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[58], PV[57], PV[56]);  // @999_58d000: slot 0x390 (ret 0xc)
   ecx = edx = 0;  // @1000_58d000
   esi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)((EBP - 144) + 16), sizeof v); (u32)v; });  // @1001_58d000
   PV[59] = (u32)(edi);  // @1002_58d000

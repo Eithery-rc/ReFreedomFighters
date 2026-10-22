@@ -4,6 +4,7 @@
 extern "C" u32 *THISCALL ext_5af130(u32 self, u32 a);   // thiscall, ret 4
 typedef u8 *(THISCALL *g2_t)(void *, u32, u32);
 typedef u32(THISCALL *g3_t)(void *, u32, u32, u32);
+typedef u32(THISCALL *g1_t)(void *, u32);
 typedef void(THISCALL *v1_t)(void *, u32);
 typedef void(THISCALL *v2_t)(void *, u32, u32);
 
@@ -21,8 +22,8 @@ static u32 *THISCALL fn5af8f0(u8 *self, u32 a, u32 n) {
       u32 f = (*(u32 **)o)[0x2f0 / 4];
       eng = G(u8 *, 0x70039c);
       tab = *(u8 **)(eng + 0x9b);
-      u32 id = (*(g3_t **)tab)[0x4c / 4](tab, *(u32 *)self, 0, 1);
-      ((v1_t)f)(o, id);
+      u32 id = (*(g1_t **)tab)[0x4c / 4](tab, *(u32 *)self); // 0x4c pops ONE word; the two earlier pushes are the 2nd/3rd arguments of the 0x2f0 call (ret 0xc)
+      ((g3_t)f)(o, id, 0, 1);
       (*(v2_t **)o)[0x2d0 / 4](o, 1, 0);
     }
     n--;

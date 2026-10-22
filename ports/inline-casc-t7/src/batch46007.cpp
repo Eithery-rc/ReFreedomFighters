@@ -117,8 +117,8 @@ static void THISCALL fn568dc0(u8 *self) {
                 u8 *e3 = vcall<u8 *>(s2, 0x328);
                 u32 r6 = vcall<u32>(rd(self, 0x90), 0x20, (u32)0x4954454d);
                 u8 *r7 = vcall<u8 *>(e3, 0x2c4, r6);
-                u32 r8 = table4c((u32)rd(self, 0x90), 0, 1, 3);
-                vcall<void>(r7, 0x2f0, r8);
+                u32 r8 = table4c((u32)rd(self, 0x90), 0, 1, 1); // 0x4c pops ONE word; the two earlier pushes are the 2nd/3rd arguments of the 0x2f0 call (ret 0xc)
+                vcall<void>(r7, 0x2f0, r8, 0u, 1u);
                 ed = r7;
               }
               vcall<void>(ed, 0x324, L8);

@@ -43,8 +43,8 @@ static u8 STDCALL fn58c150(u8 *a, u8 *p1, u32 *p2) {
       p2[2] = 0;
       ext_4de7a0(p1);
       if ((u8)vcall<u32>(O, 0x1e0, 0x200074u)) {
-        u32 t = vcall<u32>(O, 0x3a8, (u32)p1, (u32)p2);
-        vcall<void>(O, 0x390, t);
+        u32 t = vcall<u32>(O, 0x3a8);   // the bone-id slot is a plain `ret`: the two pushes before it stay pending and are args 2 and 3 of slot 0x390 (ret 0xc: bone, matrix, position)
+        vcall<void>(O, 0x390, t, (u32)p1, (u32)p2);
       }
       vcall<void>(O, 0x98, (u32)p1, (u32)p2);
       ebx = (u8 *)vcall<u32>(g, 0xcc, D32(a, 0x106));

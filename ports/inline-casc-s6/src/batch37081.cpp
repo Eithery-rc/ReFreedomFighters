@@ -23,8 +23,8 @@ static void THISCALL fn58eb50(u8 *self, u8 *a) {
           u8 *q = (u8 *)vcall<u32>(a, 0x328);
           u32 r1 = vcall<u32>(self, 0x20, 0x4954454du);
           e = (u8 *)vcall<u32>(q, 0x2c4, r1);
-          u32 r3 = vcall<u32>(tabObj(), 0x4c, (u32)self, 0u, 1u);
-          vcall<void>(e, 0x2f0, r3);
+          u32 r3 = vcall<u32>(tabObj(), 0x4c, (u32)self); // 0x4c pops ONE word; the two earlier pushes are the 2nd/3rd arguments of the 0x2f0 call (ret 0xc)
+          vcall<void>(e, 0x2f0, r3, 0u, 1u);
         }
         u32 v = vcall<u32>(e, 0x320);
         vcall<void>(e, 0x324, v + (u32)(cnt - 1));
@@ -32,8 +32,8 @@ static void THISCALL fn58eb50(u8 *self, u8 *a) {
       }
       u8 *t = *(u8 **)(*(u8 **)0x70039c + 0x9b);
       u8 *b = (u8 *)vcall<u32>(o, 0x2c4, D32(t, 0xadc), 0x4954454du);
-      u32 r5 = vcall<u32>(tabObj(), 0x4c, (u32)self, 0u, 1u);
-      vcall<void>(b, 0x2f0, r5);
+      u32 r5 = vcall<u32>(tabObj(), 0x4c, (u32)self);
+      vcall<void>(b, 0x2f0, r5, 0u, 1u);
       vcall<void>(b, 0x2d0, 1u, 0u);
     }
   }

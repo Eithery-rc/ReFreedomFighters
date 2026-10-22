@@ -7345,12 +7345,12 @@ extern "C" u32 THISCALL lifted_5c6cb0(u32 ecx_in) {
   { u32 v = (u32)((u32)(0)); __builtin_memcpy((void *)(u32)(EBP - 160), &v, sizeof v); }  // @26_5c6cb0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx + 155), sizeof v); (u32)v; });  // @27_5c6cb0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @28_5c6cb0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6970472), (u32)(0), (u32)(7030208), (u32)(812), (u32)(p1_), (u32)(0));  // @29_5c6cb0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6970472), (u32)(0), (u32)(7030208), (u32)(812));  // @29_5c6cb0  // 0x114 pops 4 words; 2 pending push(es) go to the next call
   ecx = edx = 0;  // @30_5c6cb0
   eax = (eax & 0xffff);  // @31_5c6cb0
   ecx = edi;  // @32_5c6cb0
   p2_ = eax;  // @33_5c6cb0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 296)))(ecx, (u32)(p2_));  // @34_5c6cb0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 296)))(ecx, (u32)(p2_), (u32)(p1_), (u32)(0));  // @34_5c6cb0
   ecx = edx = 0;  // @35_5c6cb0
   if (({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP - 160), sizeof v); (u32)v; }) == (u32)(0)) goto L5c6f23;  // @36_5c6cb0
   { u8 v = (u8)((u32)(0)); __builtin_memcpy((void *)(u32)(ebx + 84), &v, sizeof v); }  // @37_5c6cb0
@@ -7452,12 +7452,12 @@ extern "C" u32 THISCALL lifted_5c6cb0(u32 ecx_in) {
   { u32 v = (u32)((u32)(1056964608)); __builtin_memcpy((void *)(u32)(EBP - 152), &v, sizeof v); }  // @133_5c6cb0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx + 155), sizeof v); (u32)v; });  // @134_5c6cb0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @135_5c6cb0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6882516), (u32)(0), (u32)(7030208), (u32)(836), (u32)(p11_), (u32)(0));  // @136_5c6cb0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6882516), (u32)(0), (u32)(7030208), (u32)(836));  // @136_5c6cb0  // 0x114 pops 4 words; 2 pending push(es) go to the next call
   ecx = edx = 0;  // @137_5c6cb0
   eax = (eax & 0xffff);  // @138_5c6cb0
   ecx = edi;  // @139_5c6cb0
   p12_ = eax;  // @140_5c6cb0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 296)))(ecx, (u32)(p12_));  // @141_5c6cb0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 296)))(ecx, (u32)(p12_), (u32)(p11_), (u32)(0));  // @141_5c6cb0
   ecx = edx = 0;  // @142_5c6cb0
   L5c6f23:;
   SEH_LEAVE();  // @144_5c6cb0

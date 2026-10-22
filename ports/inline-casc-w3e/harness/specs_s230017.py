@@ -53,7 +53,7 @@ def g4e54c0(c):
     def H(emu, k):
         x, y = emu.arg32(0), emu.arg32(1)
         return (x * 3 + y * 5 + r.choice([0, 0])) % 7
-    hook_rec(c, 0x4e5de0, 2, ret=H, pop=8, this=False, side=lambda emu, k: emu.calllog.append(('h5de0', emu.arg32(0), emu.arg32(1))))
+    hook_rec(c, 0x4e5de0, 2, ret=H, pop=8, this=True, side=lambda emu, k: emu.calllog.append(('h5de0', emu.arg32(0), emu.arg32(1))))
     def h040(emu, k):
         a0 = emu.arg32(0); pre = rb(emu, emu.reg('ecx'), 16)
         emu.wbytes(emu.reg('ecx'), struct.pack('<4I', *[r.getrandbits(32) for _ in range(4)]))

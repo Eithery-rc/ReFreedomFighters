@@ -3,7 +3,7 @@
 // (none: the exe's x87 stack is empty at return). The CRT security-cookie check is not reproduced.
 #include "ff.h"
 
-extern "C" void THISCALL ext_443ef0(void *T, float *C, float v);          // stubbed: writes T, ret 8
+extern "C" void FASTCALL ext_443ef0(void *T, float *B, float *C, float v);   // stubbed: writes T, ret 8; ECX = T, EDX = B (the base vector), stack C, v
 extern "C" void THISCALL ext_4e0d00(void *vec, float s);                   // stubbed: writes its vector, ret 4
 extern "C" void THISCALL ext_451890(void *obj, float s);                   // stubbed: logs its argument, ret 4
 extern "C" void THISCALL ext_4e0a10(void *vec);                            // stubbed: writes L, ret 0
@@ -47,7 +47,7 @@ static void THISCALL explodeMolotovCreateParticles(u8 *self, float *A, float *B,
       : [out] "=m"(v)
       : [b] "r"(B), [c] "r"(C), [mask] "m"(kSignMask[0]), [k] "m"(k1125)
       : "xmm0", "xmm1", "memory");
-  ext_443ef0(T, C, v);
+  ext_443ef0(T, B, C, v);
 
   bool allzero = (T[0] == 0.0f) && (T[1] == 0.0f) && (T[2] == 0.0f);
   float x1 = 0.0f;

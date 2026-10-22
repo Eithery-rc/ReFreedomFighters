@@ -294,8 +294,10 @@ extern "C" u32 THISCALL lifted_59f1a0(u32 ecx_in) {
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 1938), sizeof v); (u32)v; });  // @2_59f1a0
   if ((ecx & ecx) == 0) goto L59f2a0;  // @3_59f1a0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @4_59f1a0
-  ecx = ebx;  // @5_59f1a0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 1836)))(ecx, (u32)(ecx));  // @6_59f1a0
+  { u32 pushed = ecx;   // push ecx comes BEFORE mov ecx, ebx: the argument is the old ecx
+    ecx = ebx;  // @5_59f1a0
+    eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 1836)))(ecx, pushed);  // @6_59f1a0
+  }
   ecx = edx = 0;  // @7_59f1a0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @8_59f1a0
   esi = eax;  // @9_59f1a0
@@ -348,8 +350,10 @@ extern "C" u32 THISCALL lifted_59f1a0(u32 ecx_in) {
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 1942), sizeof v); (u32)v; });  // @56_59f1a0
   if ((ecx & ecx) == 0) goto L59f350;  // @57_59f1a0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @58_59f1a0
-  ecx = ebx;  // @59_59f1a0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 1836)))(ecx, (u32)(ecx));  // @60_59f1a0
+  { u32 pushed = ecx;   // push ecx comes BEFORE mov ecx, ebx: the argument is the old ecx
+    ecx = ebx;  // @59_59f1a0
+    eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 1836)))(ecx, pushed);  // @60_59f1a0
+  }
   ecx = edx = 0;  // @61_59f1a0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @62_59f1a0
   esi = eax;  // @63_59f1a0

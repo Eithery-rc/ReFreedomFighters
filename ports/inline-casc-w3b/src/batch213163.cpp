@@ -71,8 +71,8 @@ static void body_472ae0(u8 *edi, u32 arg1, u8 *arg2) {
       u8 *e = (u8 *)R32(P(0x78));
       vcall<u32>(e, 0x2e0, P(0x70), P(0x28));
       vcall<u32>(e, 0x98, P(0x70), P(0x28));
-      u32 r = vcall<u32>(edi, 0x3a8, P(0x4c), P(0x1c));
-      vcall<u32>(edi, 0x390, r);
+      u32 r = vcall<u32>(edi, 0x3a8);   // the bone-id slot is a plain `ret`: the two pushes before it stay pending and are args 2 and 3 of slot 0x390 (ret 0xc: bone, matrix, position)
+      vcall<u32>(edi, 0x390, r, P(0x4c), P(0x1c));
       vcall<u32>(edi, 0x98, P(0x4c), P(0x1c));
       vcall<u32>(edi, 0x80, P(0x4c), P(0x10));
       ext_43e920(P(0x10), P(0x28), P(0x1c));

@@ -49,7 +49,7 @@ def _g63b850(c):
         e.w32(ch + 0x10071, ca)
         childs.append(ch)
     xs = [rnd(c, 0x20) for _ in range(3)]
-    hook_rec(c, 0x64c7e0, 1, ret=lambda em, k, _x=xs: _x[min(k, 2)])
+    hook_rec(c, 0x64c7e0, 1, ret=lambda em, k, _x=xs: _x[min(k, 2)], this=True)
     newbuf = e.alloc(8 * 6 + 8, 4)
     e.wbytes(newbuf, bytes([0x5a]) * (8 * 6 + 8))
     d = obj(c, 0x120, {0x20: pystub(c, 1, this=True, ret=newbuf), 0x24: pystub(c, 2, this=True)})

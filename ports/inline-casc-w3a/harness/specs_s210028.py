@@ -34,9 +34,9 @@ def g5a4610(c):
 
 def g512940(c):
     clear_hooks(c)
-    x = obj(c, 0x40, {0x2c: pystub(c, 0, ret=_r(c), this=True), 0x2f0: pystub(c, 1, ret=_r(c), this=True), 0xbc: pystub(c, 1, ret=_r(c), this=True)}, nslots=0xc0)
+    x = obj(c, 0x40, {0x2c: pystub(c, 0, ret=_r(c), this=True), 0x2f0: pystub(c, 3, ret=_r(c), this=True), 0xbc: pystub(c, 1, ret=_r(c), this=True)}, nslots=0xc0)
     o = obj(c, 0x40, {0x2c4: pystub(c, 2, ret=x, this=True)}, nslots=0xb2)
-    _eng(c, obj(c, 0x40, {0x58: pystub(c, 1, ret=o, this=True), 0x4c: pystub(c, 3, ret=_r(c), this=True)}, nslots=0x60))
+    _eng(c, obj(c, 0x40, {0x58: pystub(c, 1, ret=o, this=True), 0x4c: pystub(c, 1, ret=_r(c), this=True)}, nslots=0x60))
     return [rnd(c, 0x20), _r(c), c.rng.choice([0, 0, _r(c)]), _r(c)]
 
 

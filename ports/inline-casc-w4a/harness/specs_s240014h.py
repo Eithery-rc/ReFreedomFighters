@@ -1331,7 +1331,7 @@ def g482b80h(c):
         sr(em)
         em.ret(eax=r.choice([0, 6, 30, 100, 1000]), argbytes=0)
     P = obj(c, 0x20, {0x84: stubfn('P84', 1, deref={0: 12}), 0x28c: stubfn('P28c', 4, deref={0: 12}, ret=rb(0.75), fill={0: lambda: flb(8)})})
-    U = obj(c, 0x20, {0x128: stubfn('U128', 1)})
+    U = obj(c, 0x20, {0x128: stubfn('U128', 3)})   # 3 stack args: the value and the two pending pushes of the 0x114 call
     S = obj(c, 0x20, {0x25c: stubfn('S25c', 2, ret=lambda: U if r.random() < 0.7 else 0), 0x23c: stubfn('S23c', 6, deref={1: 12, 2: 12, 3: 12}),
                       0x238: stubfn('S238', 5, deref={0: 12, 1: 12, 2: 12}), 0x240: stubfn('S240', 1)})
     Rq = obj(c, 0x20, {})
@@ -1340,7 +1340,7 @@ def g482b80h(c):
     e.w32(G + 0x1c, Q)
     J = obj(c, 0x40, {0xb4: stubfn('J_b4', 1, ret=lambda: _w(c)), 0xdc: e.stub_fn('v220', v220)})
     T = obj(c, 0xb00, {0x58: stubfn('T58', 1, ret=lambda: P if r.random() < 0.8 else 0),
-                       0x114: stubfn('T114', 6, ret=lambda: _w(c) & 0xffff)})
+                       0x114: stubfn('T114', 4, ret=lambda: _w(c) & 0xffff)})   # slot 0x114 pops FOUR words
     e.w32(T + 0xadc, S)
     # console draw: cdecl(console, x, y)
     def draw(em, res):

@@ -95,12 +95,13 @@ def g477a30(c):
     em.w32(VG + 0x58, pystub(c, 1, ret=lambda emu, k: B if r.random() < 0.8 else 0, this=True, side=LG('g58', 1)))
     em.w32(THIS + 0x648, r.choice([0, r.getrandbits(32) | 1, r.getrandbits(32) | 1]))
     em.w32(VB + 0x1e0, pystub(c, 1, ret=lambda emu, k: r.choice([0, 1, 0x100, 0x201]), this=True, side=LG('b1e0', 1)))
-    def b3a0(emu, k):
-        for a in (emu.arg32(0), emu.arg32(1)):
+    # slot 0x3a0 is a plain `ret` (no stack args): the two pointers pushed before it are the 2nd and 3rd args of slot 0x390 (ret 0xc)
+    def b390(emu, k):
+        for a in (emu.arg32(1), emu.arg32(2)):
             emu.wbytes(a, struct.pack('<3I', FB(), FB(), FB()))
-        emu.calllog.append(('b3a0', emu.reg('ecx'), bytes(emu.rbytes(emu.arg32(1), 12)).hex()))
-    em.w32(VB + 0x3a0, pystub(c, 2, ret=R, this=True, stackmark=(0, 1), side=b3a0))
-    em.w32(VB + 0x390, pystub(c, 1, ret=R, this=True, side=LG('b390', 1)))
+        emu.calllog.append(('b390', emu.reg('ecx'), emu.arg32(0), bytes(emu.rbytes(emu.arg32(2), 12)).hex()))
+    em.w32(VB + 0x3a0, pystub(c, 0, ret=R, this=True, side=LG('b3a0', 0)))
+    em.w32(VB + 0x390, pystub(c, 3, ret=R, this=True, stackmark=(1, 2), side=b390))
     def b84(emu, k):
         a = emu.arg32(0)
         if r.random() < 0.7: emu.wbytes(a, struct.pack('<3I', FB(), FB(), FB()))

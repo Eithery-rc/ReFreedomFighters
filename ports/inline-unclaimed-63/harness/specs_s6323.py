@@ -39,7 +39,7 @@ def _patch_callee(c):
             b'\x8b\x44\x24\x08\xa3' + _le(cc + 8) +
             b'\x8b\x54\x24\x0c\x8b\x02\xa3' + _le(cc + 12) +
             b'\x8b\x44\x24\x10\xa3' + _le(cc + 16) +
-            b'\x31\xc0' + b'\xc2\x10\x00')
+            b'\xb8' + _le(c.rng.getrandbits(32)) + b'\xc2\x10\x00')   # returns a random value (EAX is the function's result)
     s = c.emu.alloc(len(code) + 16, 16)
     c.emu.wbytes(s, code)
     ss.patch(c, 0x4d24e0, s)
@@ -64,7 +64,7 @@ def _gen_3(c):
     return [c.rng.getrandbits(32), c.rng.getrandbits(32), c.rng.getrandbits(32)]
 
 
-S(0x4d2bc0, 'unnamed C-set 0x4d2bc0 thiscall', 'thiscall', None, ret=None, gen=_gen_2bc0, note='unclaimed-63 band batch 23')
-S(0x4d39c0, 'unnamed C-set 0x4d39c0 thiscall', 'thiscall', None, ret=None, gen=_gen_39c0, note='unclaimed-63 band batch 23; 0x4d24e0 stubbed')
-S(0x4d3ab0, 'unnamed C-set 0x4d3ab0 thiscall', 'thiscall', None, ret=None, gen=_gen_3, note='unclaimed-63 band batch 23; 0x4d24e0 stubbed')
-S(0x4d3db0, 'unnamed C-set 0x4d3db0 thiscall', 'thiscall', None, ret=None, gen=_gen_3, note='unclaimed-63 band batch 23; 0x4d24e0 stubbed')
+S(0x4d2bc0, 'unnamed C-set 0x4d2bc0 thiscall', 'thiscall', None, ret='eax', gen=_gen_2bc0, note='unclaimed-63 band batch 23')
+S(0x4d39c0, 'unnamed C-set 0x4d39c0 thiscall', 'thiscall', None, ret='eax', gen=_gen_39c0, note='unclaimed-63 band batch 23; 0x4d24e0 stubbed')
+S(0x4d3ab0, 'unnamed C-set 0x4d3ab0 thiscall', 'thiscall', None, ret='eax', gen=_gen_3, note='unclaimed-63 band batch 23; 0x4d24e0 stubbed')
+S(0x4d3db0, 'unnamed C-set 0x4d3db0 thiscall', 'thiscall', None, ret='eax', gen=_gen_3, note='unclaimed-63 band batch 23; 0x4d24e0 stubbed')

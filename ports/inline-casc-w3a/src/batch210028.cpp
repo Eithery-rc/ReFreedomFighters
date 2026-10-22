@@ -26,9 +26,9 @@ static u32 THISCALL fn512940(u8 *self, u32 a, u32 b, u32 c) {
   u8 *vt = *(u8 **)x;
   vcall<u32>(x, 0x2c);  // @512940_c
   u32 edx = b ? b : (u32)self;  // @512940_d
-  u32 v = vcall<u32, u8 *, u32, u32>(mgr(), 0x4c, self, edx, 1);  // @512940_e
-  typedef u32 (THISCALL *F)(u8 *, u32);
-  (*(F *)(vt + 0x2f0))(x, v);  // @512940_f
+  u32 v = vcall<u32, u8 *>(mgr(), 0x4c, self);  // @512940_e: slot 0x4c pops ONE argument (ret 4)
+  typedef u32 (THISCALL *F)(u8 *, u32, u32, u32);
+  (*(F *)(vt + 0x2f0))(x, v, edx, 1);  // @512940_f: the two earlier pushes (edx, 1) are the 2nd and 3rd args of 0x2f0 (ret 0xc)
   vcall<u32, u32>(x, 0xbc, 0);  // @512940_g
   return (u32)x;
 }

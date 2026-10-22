@@ -44,17 +44,17 @@ def _upd(c):
         log('obj', 0x20, ())
         em.ret(eax=xobj, argbytes=0)
 
-    def f3a0(em, r):
-        B, A = em.arg32(0), em.arg32(1)
+    def f3a0(em, r):   # plain `ret`: the pushes of B and A before it stay pending for slot 0x390
+        log('obj', 0x3a0, ())
+        em.ret(eax=r1, argbytes=0)
+
+    def f390(em, r):   # ret 0xc: (result of 0x3a0, B, A)
+        B, A = em.arg32(1), em.arg32(2)
         vals = [c.rng.uniform(-50.0, 50.0) for _ in range(6)]
         e.wbytes(B, struct.pack('<fff', *vals[:3]))
         e.wbytes(A, struct.pack('<fff', *vals[3:]))
-        log('obj', 0x3a0, ())
-        em.ret(eax=r1, argbytes=8)
-
-    def f390(em, r):
         log('obj', 0x390, (em.arg32(0),))
-        em.ret(eax=0, argbytes=4)
+        em.ret(eax=0, argbytes=12)
 
     def f84(em, r):
         # in place, as the geom's slot 0x84 (batch 718): the input point is moved, so earlier edits to it show

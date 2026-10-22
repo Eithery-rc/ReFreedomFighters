@@ -13,15 +13,16 @@ static u32 vc4(u8 *o, u32 s, u32 a, u32 b, u32 c, u32 d) { return ((F4)(*(const 
 
 // a call with `self` in ecx and three stack arguments that the CALLER removes (add esp, 0xc follows the original call)
 static void callCallerCleans3(u8 *self, u32 fn, u32 a, u32 b, u32 c) {
+  u32 edx_io = fn;   // the callee returns with arbitrary ECX/EDX: both are in/out operands, or the compiler reuses stale values after the call
   asm volatile(
       "pushl %[c]\n\t"
       "pushl %[b]\n\t"
       "pushl %[a]\n\t"
-      "call *%[fn]\n\t"
+      "call *%%edx\n\t"
       "addl $12, %%esp\n\t"
-      :
-      : "c"(self), [fn] "r"(fn), [a] "r"(a), [b] "r"(b), [c] "r"(c)
-      : "eax", "edx", "memory", "cc");
+      : "+c"(self), "+d"(edx_io)
+      : [a] "ri"(a), [b] "ri"(b), [c] "ri"(c)
+      : "eax", "memory", "cc");
 }
 
 typedef void(__attribute__((cdecl)) * C2)(u32, u32);

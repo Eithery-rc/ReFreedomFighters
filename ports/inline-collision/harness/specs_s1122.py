@@ -20,9 +20,10 @@ def _sout(c):
     for off in (0x70, 0x94, 0xa0):   # pointer-sized inputs: heap objects, so their values do not depend on the frame
         e.w32(q + off, e.alloc(0x20, 4))
     helper = e.alloc(0x20, 4)
+    adv = r.random() < 0.7   # the helper may write nothing (returns the old end): then the callback fails without touching +0x60 / +0x6c
     def slot88(em, a):
         em.calllog.append(('helper', 0x88, tuple(a[1:4]) + (em.r32(a[0] + 0x10), em.r32(a[0] + 0x14))))
-        return (end + 0x14 + 0x10) & 0xffffffff, ()
+        return ((end + 0x14 + 0x10) if adv else end) & 0xffffffff, ()
     e.w32(helper, _vt(c, 'helper', {0x88: (6, slot88)}, 0x90 // 4))
     e.w32(q + 0xb0, helper)
     # ECX is a pointer to the ref word (the callee reads it: begin + [ECX]) and stores the pointer itself

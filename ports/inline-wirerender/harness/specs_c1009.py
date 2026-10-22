@@ -46,8 +46,8 @@ def _uv(c):
     if r.random() < 0.85:
         g = c.emu.fake_object('focus', 0x10, slots={
             0x80: handler(log, 0x80, 2, eax=r.getrandbits(32)), 0x84: handler(log, 0x84, 1, eax=r.getrandbits(32)),
-            0x88: handler(log, 0x88, 1, eax=r.getrandbits(32)), 0x390: handler(log, 0x390, 1, eax=r.getrandbits(32)),
-            0x3a0: handler(log, 0x3a0, 2, eax=r.getrandbits(32))})
+            0x88: handler(log, 0x88, 1, eax=r.getrandbits(32)), 0x390: handler(log, 0x390, 3, eax=r.getrandbits(32)),   # ret 0xc: (bone, matrix, position)
+            0x3a0: handler(log, 0x3a0, 0, eax=r.getrandbits(32))})   # plain `ret`: the two pushes before it are args 2 and 3 of slot 0x390
     s = sys_with_mgr(c, 0x100)
     c.emu.w32(s + 0x48, r.choice([0, 0x80000000, _fl(c, 0, 0.1)]))
     m = c.emu.fake_object('mgr', 0x40, slots={0x58: handler(log, 0x58, 1, eax=g)})

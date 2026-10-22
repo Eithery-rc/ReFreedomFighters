@@ -51,8 +51,9 @@ static THISCALL void ZFFCam_UpdateVars(void *self) {
   vcall<void>(g, 0x80, &at<float>(self, 0x3e4), &at<float>(self, 0x408));
   u8 *vt = *(u8 **)g;
   float *fpos = &at<float>(self, 0x438), *fmat = &at<float>(self, 0x414);
-  u32 x = (*(u32(THISCALL **)(void *, float *, float *))(vt + 0x3a0))(g, fmat, fpos);
-  (*(void(THISCALL **)(void *, u32))(vt + 0x390))(g, x);
+  // slot 0x3a0 (0x466c00) is a plain `ret`: the two pushes (fmat, fpos) stay pending and are the 2nd and 3rd stack args of slot 0x390 (ret 0xc)
+  u32 x = (*(u32(THISCALL **)(void *))(vt + 0x3a0))(g);
+  (*(void(THISCALL **)(void *, u32, float *, float *))(vt + 0x390))(g, x, fmat, fpos);
   vcall<void>(g, 0x84, fpos);
   vcall<void>(g, 0x88, &at<float>(self, 0x42c));
   ext_4de040(fmat, &at<float>(self, 0x42c), 0);

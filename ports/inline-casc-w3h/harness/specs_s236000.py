@@ -70,9 +70,9 @@ def g563110(c):
     em.w32(VQ + 436, pystub(c, 1, ret=R, this=True, side=LG('q436', 1)))
     em.w32(VX + 532, pystub(c, 1, ret=R, this=True, side=LG('x532', 1)))
     em.w32(VY + 188, pystub(c, 1, ret=R, this=True, side=LG('y188', 1)))
-    em.w32(VTT + 276, pystub(c, 5, ret=R, this=True, side=LG('t276', 5)))
+    em.w32(VTT + 276, pystub(c, 4, ret=R, this=True, side=LG('t276', 4)))   # slot 0x114 pops FOUR words
     em.w32(VTT + 76, pystub(c, 1, ret=R, this=True, side=LG('t76', 1)))
-    em.w32(VP + 304, pystub(c, 2, ret=R, this=True, side=LG('p304', 2)))
+    em.w32(VP + 304, pystub(c, 3, ret=R, this=True, side=LG('p304', 3)))   # slot 0x130: the value, the handle and the pending push of the 0x114 call
     em.w32(VP + 728, pystub(c, 2, ret=R, this=True, side=LG('p728', 2)))
     # A slots
     em.w32(VZ + 20, pystub(c, 0, ret=lambda emu, k: 1 if r.random() < 0.75 else r.choice([0, 2, 0x101, r.getrandbits(32)]), this=True, side=LG('z20', 0)))

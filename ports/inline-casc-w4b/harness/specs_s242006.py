@@ -108,9 +108,9 @@ def g4c7330(c):
     def mkedi():
         return obj(c, 0x600, {0x84: pystub(c, 1, ret=R, this=True, deref={0: 3}, side=lambda emu, k: [emu.w32(emu.arg32(0) + 4 * j, fv()) for j in range(3) if r.random() < 0.5]),
                               0x1e0: pystub(c, 1, ret=ctl, this=True), 0x588: pystub(c, 0, ret=lambda emu, k: r.choice([0, 1, 1]), this=True),
-                              0x130: pystub(c, 2, ret=R, this=True)})
+                              0x130: pystub(c, 3, ret=R, this=True, nullflag=(2,))})   # 3 stack args: the pending 0x4c result is the last
     pool = [mkedi() for _ in range(2)]
-    L = obj(c, 0x40, {0x114: pystub(c, 5, ret=lambda emu, k: r.getrandbits(32), this=True, nullflag=(4,))})
+    L = obj(c, 0x40, {0x114: pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=True)})
     B = obj(c, 0x300, {0x25c: pystub(c, 2, ret=lambda emu, k: BB, this=True)})
     BB = rnd(c, 0x40)
     em.w32(BB + 0x18, C if r.random() < 0.9 else 0)
@@ -121,7 +121,7 @@ def g4c7330(c):
     so = sysobj(c, table_slots={0x58: pystub(c, 1, ret=tab, this=True)})
     tbl = em.r32(so + 0x9b)
     tbl2 = rnd(c, 0xb10); vt = em.alloc(0x200, 4); em.w32(vt + 0x58, em.r32(em.r32(tbl) + 0x58)); em.w32(tbl2, vt); em.w32(so + 0x9b, tbl2); em.w32(tbl2 + 0xadc, B)
-    em.w32(vt + 0x114, pystub(c, 5, ret=lambda emu, k: r.getrandbits(32), pop=20, this=True, nullflag=(4,)))
+    em.w32(vt + 0x114, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), pop=16, this=True))   # slot 0x114 pops FOUR words
     em.w32(so + 0x190f, H)
     return []
 

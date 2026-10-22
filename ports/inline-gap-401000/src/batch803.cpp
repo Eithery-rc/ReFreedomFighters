@@ -9,14 +9,15 @@ extern "C" void THISCALL ext_41f190(u8 *self, u32 a);   // thiscall, one argumen
 
 // a call with `self` in ecx and two stack arguments that the CALLER removes (add esp, 8 follows the original call)
 static void callCallerCleans2(u8 *self, u32 fn, u32 a, u32 b) {
+  u32 edx_io = fn;   // the callee returns with arbitrary ECX/EDX: both are in/out operands, or the compiler reuses stale values after the call
   asm volatile(
       "pushl %[b]\n\t"
       "pushl %[a]\n\t"
-      "call *%[fn]\n\t"
+      "call *%%edx\n\t"
       "addl $8, %%esp\n\t"
-      :
-      : "c"(self), [fn] "r"(fn), [a] "r"(a), [b] "r"(b)
-      : "eax", "edx", "memory", "cc");
+      : "+c"(self), "+d"(edx_io)
+      : [a] "ri"(a), [b] "ri"(b)
+      : "eax", "memory", "cc");
 }
 
 static u8 THISCALL fn41fa40(u8 *self, u32 a) {

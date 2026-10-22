@@ -179,11 +179,11 @@ extern "C" u32 THISCALL lifted_592410(u32 ecx_in, u32 a0) {
   eax = (u32)(EBP - 64);  // @52_592410
   ecx = ebx;  // @53_592410
   PV[7] = (u32)(eax);  // @54_592410
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 928)))(ecx, PV[7], PV[6]);  // @55_592410
+  eax = ((u32(THISCALL *)(u32))(*(u32 *)(esi + 928)))(ecx);   // slot 0x3a0 is a plain `ret`: both pushes stay pending for slot 0x390  // @55_592410
   ecx = edx = 0;  // @56_592410
   PV[8] = (u32)(eax);  // @57_592410
   ecx = ebx;  // @58_592410
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[8]);  // @59_592410
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[8], PV[7], PV[6]);   // slot 0x390 (ret 0xc): result and the two pending pushes  // @59_592410
   ecx = edx = 0;  // @60_592410
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @61_592410
   ecx = ebx;  // @62_592410

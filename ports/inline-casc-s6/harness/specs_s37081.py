@@ -17,19 +17,15 @@ def _g58eb50(c):
     Tbox = []
 
     def t4c(em, res_):
-        a0 = em.arg32(0)
-        if Tbox and a0 == Tbox[0]:
-            em.calllog.append(('4c3', a0, em.arg32(1), em.arg32(2), em.reg('ecx')))
-            em.ret(eax=r.choice(vals), argbytes=12)
-        else:
-            em.calllog.append(('4c1', a0, em.reg('ecx')))
-            em.ret(eax=r.choice(vals), argbytes=4)
+        a0 = em.arg32(0)   # slot 0x4c pops ONE word at every site; the two pending pushes (0, 1) go to the 0x2f0 call
+        em.calllog.append(('4c1', a0, em.reg('ecx')))
+        em.ret(eax=r.choice(vals), argbytes=4)
     so = sysobj(c, table_slots={0x4c: e.stub_fn('4c', t4c)}, table_size=0xb00)
     tab = int.from_bytes(e.rbytes(so + 0x9b, 4), 'little')
     _w(c, tab + 0xadc, r.getrandbits(32))
 
     def mk3():
-        return obj(c, 0x40, {0x2f0: pystub(c, 1, this=True), 0x320: pystub(c, 0, this=True, ret=r.choice([0, 3, 0xfffffffe])),
+        return obj(c, 0x40, {0x2f0: pystub(c, 3, this=True), 0x320: pystub(c, 0, this=True, ret=r.choice([0, 3, 0xfffffffe])),
                              0x324: pystub(c, 1, this=True), 0x2d0: pystub(c, 2, this=True)})
     B = mk3()
     r2 = mk3()

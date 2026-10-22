@@ -18,26 +18,28 @@ static u8 THISCALL soundAmbientCanPlayInRoom(u8 *self, u32 room) {
   if (room == *(u32 *)(mgr + 0xadc)) return 0;
   u8 *A = self + 0x5c;
   if (((VNoArg)*(u32 *)(*(u8 **)A + 0x14))(A) != 0) {
-    u32 l = 0;
-    ((VOutRet)*(u32 *)(*(u8 **)A + 0x4c))(A, &l);
-    u32 v = ((VOutRet)*(u32 *)(*(u8 **)A + 0x5c))(A, &l);
+    u32 it[3] = {0, 0, 0};   // slots 0x4c / 0x5c fill a 12-byte iterator state (a 4-byte local overran the saved ESI)
+    u32 &l = it[0];
+    ((VOutRet)*(u32 *)(*(u8 **)A + 0x4c))(A, it);
+    u32 v = ((VOutRet)*(u32 *)(*(u8 **)A + 0x5c))(A, it);
     while (l != 0) {
       mgr = soundMgr();
       if (((VMgrSlot58)*(u32 *)(*(u8 **)mgr + 0x58))(mgr, v) == room) return 1;
-      v = ((VOutRet)*(u32 *)(*(u8 **)A + 0x5c))(A, &l);
+      v = ((VOutRet)*(u32 *)(*(u8 **)A + 0x5c))(A, it);
     }
     return 0;
   }
   u8 *B = self + 0x108;
   if (((VNoArg)*(u32 *)(*(u8 **)B + 0x14))(B) == 0) return 1;
-  u32 l = 0;
-  ((VOutRet)*(u32 *)(*(u8 **)B + 0x4c))(B, &l);
-  u32 v = ((VOutRet)*(u32 *)(*(u8 **)B + 0x5c))(B, &l);
+  u32 it[3] = {0, 0, 0};
+  u32 &l = it[0];
+  ((VOutRet)*(u32 *)(*(u8 **)B + 0x4c))(B, it);
+  u32 v = ((VOutRet)*(u32 *)(*(u8 **)B + 0x5c))(B, it);
   if (l == 0) return 1;
   do {
     mgr = soundMgr();
     if (((VMgrSlot58)*(u32 *)(*(u8 **)mgr + 0x58))(mgr, v) == room) return 0;
-    v = ((VOutRet)*(u32 *)(*(u8 **)B + 0x5c))(B, &l);
+    v = ((VOutRet)*(u32 *)(*(u8 **)B + 0x5c))(B, it);
   } while (l != 0);
   return 1;
 }

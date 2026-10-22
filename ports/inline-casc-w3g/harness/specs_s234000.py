@@ -50,8 +50,8 @@ def g5b8d80(c):
                       0x30: pystub(c, 1, ret=R, this=True, side=LGP(1, {}))}, nslots=0x14)
     H = obj(c, 0x20, {0x84: pystub(c, 1, ret=R, this=True, stackmark=(0,), side=both(FILL(0, 12, 0.7), LGP(1, {0: 12})))}, nslots=0x24)
     T = obj(c, 0xb00, {0x58: pystub(c, 1, ret=H, this=True, side=LGP(1, {})),
-                       0x114: pystub(c, 6, ret=R, this=True, side=LGP(6, {}))}, nslots=0x46)
-    E2 = obj(c, 0x20, {0x128: pystub(c, 1, ret=R, this=True, side=LGP(1, {}))}, nslots=0x4c)
+                       0x114: pystub(c, 4, ret=R, this=True, side=LGP(4, {}))}, nslots=0x46)   # slot 0x114 pops FOUR words
+    E2 = obj(c, 0x20, {0x128: pystub(c, 3, ret=R, this=True, side=LGP(3, {}))}, nslots=0x4c)   # slot 0x128 takes 3 words (the last two are pending pushes of the 0x114 call)
     G = rnd(c, 0x100); em.w32(G + 0x9b, T); em.w32(0x70039c, G)
     hook_rec(c, 0x5b9050, 1, pop=4, this=True, stackmark=(0,), ret=R, side=LGP(1, {0: 12}))
     hook_rec(c, 0x4db7c0, 1, pop=4, this=True, stackmark=(0,), ret=R, side=FILL(0, 24))
@@ -104,7 +104,7 @@ def g5dc8b0(c):
     C4 = obj(c, 0x40, {0x7c: pystub(c, 2, ret=R, this=True, stackmark=(0, 1), side=LGP(2, {0: 48, 1: 12})),
                        0x128: pystub(c, 3, ret=R, this=True, side=LG(3))}, nslots=0x4c)
     C5 = obj(c, 0x40, {0x84: pystub(c, 1, ret=R, this=True, stackmark=(0,), side=both(lambda emu, k: FILL(0)(emu, k) if r.random() < 0.6 else None, LGP(1, {0: 12}))),
-                       0x128: pystub(c, 1, ret=R, this=True, side=LG(1))}, nslots=0x4c)
+                       0x128: pystub(c, 3, ret=R, this=True, side=LG(3))}, nslots=0x4c)
     EV = obj(c, 0x40, {0x94: pystub(c, 2, ret=R, this=True, stackmark=(0, 1), side=LGP(2, {0: 48, 1: 12}))}, nslots=0x26)
     CH = obj(c, 0x40, {}, nslots=4)
     em.w32(CH + 8, rnd(c, 0x20))
@@ -113,7 +113,7 @@ def g5dc8b0(c):
         emu.calllog.append(('t58', a))
         return {id50: C3, id54: C4, id58: C5}.get(a, CH)
     T = obj(c, 0xb00, {0x58: pystub(c, 1, ret=t58, this=True, side=None),
-                       0x114: pystub(c, 6, ret=R, this=True, side=LG(6))}, nslots=0x46)
+                       0x114: pystub(c, 4, ret=R, this=True, side=LG(4))}, nslots=0x46)   # slot 0x114 pops FOUR words
     U = obj(c, 0x20, {0x2e0: pystub(c, 6, ret=RB, this=True, stackmark=(0,), side=LGP(6, {0: 0x40}))}, nslots=0xb8)
     em.w32(T + 0xadc, U)
     X = obj(c, 0x40, {0x24: pystub(c, 5, ret=R, this=True, stackmark=(0, 1, 2, 3, 4), side=both(lambda emu, k: emu.w32(emu.arg32(0), EV), LGP(5, {1: 48, 3: 12, 4: 12})))}, nslots=0x10)

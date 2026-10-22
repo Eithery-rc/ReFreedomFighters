@@ -32,7 +32,8 @@ def _os(c):
     e.w32(self_ + 0x54, selfteam)
 
     def sendcmd(em, r):
-        log('self', 0x128, (em.arg32(0), nostk(em.arg32(1)), em.arg32(2)))
+        blk = em.arg32(1)
+        log('self', 0x128, (em.arg32(0), tuple(struct.unpack('<6I', em.rbytes(blk, 24))) if blk else 0, em.arg32(2)))
         em.ret(eax=0, argbytes=12)
     def self_isd(em, r):
         log('self', 0x1e0, (em.arg32(0),))
@@ -89,6 +90,8 @@ def _os(c):
     def lst_begin(em, r):
         it = em.arg32(0)
         em.w32(it, 0)
+        em.w32(it + 4, c.rng.getrandbits(32) | 1)   # the iterator state is 12 bytes
+        em.w32(it + 8, c.rng.getrandbits(32) | 1)
         em.ret(eax=0, argbytes=4)
 
     def lst_next(em, r):

@@ -8,7 +8,7 @@ def _g5af8f0(c):
     clear_hooks(c)
     r = c.rng
     e = c.emu
-    os_ = [0 if r.random() < 0.25 else obj(c, 0x20, {0x2f0: pystub(c, 1, this=True), 0x2d0: pystub(c, 2, this=True)}, nslots=0xc0) for _ in range(4)]
+    os_ = [0 if r.random() < 0.25 else obj(c, 0x20, {0x2f0: pystub(c, 3, this=True), 0x2d0: pystub(c, 2, this=True)}, nslots=0xc0) for _ in range(4)]
     X = obj(c, 0x20, {0x2c4: pystub(c, 2, this=True, ret=lambda em, k: os_[min(k, 3)])}, nslots=0xb2)
     t = r.random()
     if t < 1 / 6:
@@ -17,7 +17,7 @@ def _g5af8f0(c):
         rec = rnd(c, 0x10)
         e.w32(rec, 0 if t < 2 / 6 else X)
     hook_rec(c, 0x5af130, 1, this=True, ret=rec)
-    so = sysobj(c, table_slots={0x4c: pystub(c, 3, this=True, ret=lambda em, k: (k + 1) * 0x101)}, table_size=0xb00)
+    so = sysobj(c, table_slots={0x4c: pystub(c, 1, this=True, ret=lambda em, k: (k + 1) * 0x101)}, table_size=0xb00)
     e.w32(e.r32(so + 0x9b) + 0xadc, r.getrandbits(32))
     me = obj(c, 0x20, {}, nslots=2)
     e.w32(me, r.getrandbits(32))

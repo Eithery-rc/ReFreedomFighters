@@ -921,11 +921,11 @@ extern "C" u32 THISCALL lifted_5ce0b0(u32 ecx_in) {
   { u32 v = (u32)((u32)(0)); __builtin_memcpy((void *)(u32)((EBP - 236) + 32), &v, sizeof v); }  // @889_5ce0b0
   PV[28] = (u32)(eax);  // @890_5ce0b0
   ecx = edi;  // @891_5ce0b0
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 928)))(ecx, PV[28], PV[27]);  // @892_5ce0b0
+  eax = ((u32(THISCALL *)(u32))(*(u32 *)(esi + 928)))(ecx);  // @892_5ce0b0: slot 0x3a0 (0x466c00) is a plain `ret`, the two pushes stay pending for slot 0x390
   ecx = edx = 0;  // @893_5ce0b0
   PV[29] = (u32)(eax);  // @894_5ce0b0
   ecx = edi;  // @895_5ce0b0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[29]);  // @896_5ce0b0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 912)))(ecx, PV[29], PV[28], PV[27]);  // @896_5ce0b0: slot 0x390 (0x466870, ret 0xc) takes the result and the two pending pushes
   ecx = edx = 0;  // @897_5ce0b0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(edi), sizeof v); (u32)v; });  // @898_5ce0b0
   ecx = (u32)((EBP - 232) + 168);  // @899_5ce0b0

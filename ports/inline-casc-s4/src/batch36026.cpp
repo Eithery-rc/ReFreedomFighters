@@ -36,8 +36,9 @@ static void THISCALL fn474eb0(u8 *E, u8 *a, u8 *b) {
   u32 buf10[3];
   u32 buf44[4];
   void **avt = *(void ***)a;
-  u32 v = ((u32(THISCALL *)(void *, u32, u32, u32))avt[0x2b4 / 4])(a, E[0x56], (u32)buf34, (u32)buf10);
-  ((void(THISCALL *)(void *, u32))avt[0x390 / 4])(a, v);
+  // slot 0x2b4 takes ONE stack arg (the byte); buf34 and buf10 were pushed before it and stay pending: they are args 2 and 3 of slot 0x390 (ret 0xc)
+  u32 v = ((u32(THISCALL *)(void *, u32))avt[0x2b4 / 4])(a, E[0x56]);
+  ((void(THISCALL *)(void *, u32, u32, u32))avt[0x390 / 4])(a, v, (u32)buf34, (u32)buf10);
   (*(v2_t **)a)[0x98 / 4](a, (u32)buf34, (u32)buf10);
   u8 *t = (*(v0o_t **)b)[0x20 / 4](b);
   (*(v2_t **)t)[0x94 / 4](t, (u32)buf34, (u32)buf10);

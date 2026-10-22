@@ -26,8 +26,8 @@ def _g58c150(c):
     delegate = obj(c, 0x20, {0x1e0: pystub(c, 1, this=True, ret=yes), 0x2e0: pystub(c, 2, this=True), 0x98: pystub(c, 2, this=True)})
     dg = delegate if r.random() < 0.8 else 0
     O = obj(c, 0x40, {0x1e0: pystub(c, 1, this=True, ret=yes), 0x20: pystub(c, 0, this=True, ret=dg),
-                      0x2e0: pystub(c, 2, this=True), 0x98: pystub(c, 2, this=True), 0x3a8: pystub(c, 2, this=True, nullflag=(), ret=lambda em, k: r.getrandbits(32)),
-                      0x390: pystub(c, 1, this=True)})
+                      0x2e0: pystub(c, 2, this=True), 0x98: pystub(c, 2, this=True), 0x3a8: pystub(c, 0, this=True, ret=lambda em, k: r.getrandbits(32)),
+                      0x390: pystub(c, 3, this=True, stackmark=(1, 2))})   # 0x3a8 is a plain ret; 0x390 (ret 0xc) takes the bone id and the two pending pointers
     a = rnd(c, 0x120)
     _w(c, a + 0x44, O)
     _w(c, a + 0x106, r.getrandbits(32))

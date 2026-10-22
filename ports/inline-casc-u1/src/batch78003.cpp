@@ -38,13 +38,19 @@ static void THISCALL fn5d28c0(u8 *self) {
     ext_5d2630(self, *(u32 *)(self+0xd2e));
   }
   float lim = rf((u8 *)0x67da04);
-  float tmp[2] = {0,0};
+  // [ebp-0x18], [ebp-0x14] hold the two words of the double `a` (stored there earlier) when 0x5cf300 writes nothing (no object for the id)
+  float tmp[2];
+  __builtin_memcpy(tmp, &a, 8);
   ext_5cf300(self, tmp, self+0xa7e);
+  // the limit is compared with the two floats stored at self+0xaf9 / +0xafd (not with the values 0x5cf300 produced): at or below it the component is 0
   float x = tmp[0], y = tmp[1];
-  if (!(lim >= x)) x = 0;
-  if (!(lim >= y)) y = 0;
+  if (lim >= rf(self+0xaf9)) x = 0;
+  if (lim >= rf(self+0xafd)) y = 0;
   u32 ctrl = *(u32 *)(self+0xe18);
   if (ctrl) ext_5a7500((void *)ctrl, x, y);
   for(int i=0;i<3;i++) *(u32 *)(self + 0xd15 + 4*i)=*(u32 *)(self + 0xa7e + 4*i);
+  // the original ends with a second call 0x5a7500(ctrl, 0, 0) on the control object reloaded from [self+0xe18]
+  ctrl = *(u32 *)(self+0xe18);
+  if (ctrl) ext_5a7500((void *)ctrl, 0.0f, 0.0f);
 }
 PCREG(5d28c0, fn5d28c0);

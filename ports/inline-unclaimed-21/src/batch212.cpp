@@ -48,7 +48,7 @@ static u32 THISCALL pairStore_4dc9c0(u8 *self, u32 arg) {
 PCREG(4dc9c0, pairStore_4dc9c0);
 
 // 0x5922c0, thiscall(arg) (ret 4). o = this->vt[0x504](this); if o and o->vt[0x1e0](o, 0x1007d2) (low byte):
-// o->vt[0x34c](o, arg) and return. Else: x = this->vt[0x3a0](this, &local, arg) (ret 8); this->vt[0x390](this, x);
+// o->vt[0x34c](o, arg) and return. Else: x = this->vt[0x3a0](this) (plain ret); this->vt[0x390](this, x, &local, arg) (ret 0xc: the two pushes before 0x3a0 stay pending; local is a 9-dword matrix);
 // this->vt[0x84](this, arg). Name GUESS.
 typedef u32(THISCALL *SlotOutArg)(u8 *, u32 *, u32);  // vtable slot with an out pointer and one more word (ret 8)
 
@@ -61,9 +61,10 @@ static void THISCALL callIfOk_5922c0(u8 *self, u32 arg) {
       return;
     }
   }
-  u32 local = 0;
-  u32 x = ((SlotOutArg)vslot(self, 0x3a0))(self, &local, arg);
-  ((SlotArgVoid)vslot(self, 0x390))(self, x);
+  u32 local[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};   // the 9-dword bone matrix that slot 0x390 fills (the original has 36 bytes at ebp-0x28)
+  // slot 0x3a0 is a plain `ret`: the two pushes (&local, arg) stay pending and are the 2nd and 3rd stack args of slot 0x390 (ret 0xc)
+  u32 x = ((u32(THISCALL *)(u8 *))vslot(self, 0x3a0))(self);
+  ((void(THISCALL *)(u8 *, u32, u32 *, u32))vslot(self, 0x390))(self, x, local, arg);
   ((SlotArgVoid)vslot(self, 0x84))(self, arg);
 }
 PCREG(5922c0, callIfOk_5922c0);

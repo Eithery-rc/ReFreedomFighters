@@ -4,9 +4,9 @@ from recruits_util import rnd, obj, clear_hooks, hook_rec, pystub
 def gen(c):
     clear_hooks(c)
     r, e = c.rng, c.emu
-    result_obj = obj(c, 0x30, {0x228: pystub(c, 1, this=True, pop=4)})
+    result_obj = obj(c, 0x30, {0x228: pystub(c, 3, this=True, pop=12)})
     manager = obj(c, 0x30, {0x25c: pystub(c, 2, this=True, pop=8, ret=result_obj)})
-    table = obj(c, 0x1000, {0x4c: pystub(c, 3, this=True, pop=12, ret=r.getrandbits(32))})
+    table = obj(c, 0x1000, {0x4c: pystub(c, 1, this=True, pop=4, ret=r.getrandbits(32), stackmark=(0,))})
     e.w32(table + 0xadc, manager)
     sys = rnd(c, 0x2000)
     e.w32(sys + 0x9b, table)

@@ -24,14 +24,14 @@ def _g472280(c):
     ids = [r.randint(1, 0xffff) for _ in range(3)]
 
     def mkobj():
-        o = obj(c, 0x20, {0x2f0: pystub(c, 1, this=True)})
+        o = obj(c, 0x20, {0x2f0: pystub(c, 3, this=True)})   # 3 words: the 0x4c result and the two pending pushes
         e.w32(o + 8, rnd(c, 0x20))
         return o
     table = {i: (mkobj() if r.random() < 0.8 else 0) for i in ids}
     if r.random() < 0.4:
         table[0] = mkobj()
     so = sysobj(c, table_slots={0x58: pystub(c, 1, this=True, ret=lambda em, k: table.get(em.arg32(0), 0)),
-                                0x4c: pystub(c, 3, this=True, ret=lambda em, k: r.getrandbits(32))}, table_size=0xb00)
+                                0x4c: pystub(c, 1, this=True, ret=lambda em, k: r.getrandbits(32))}, table_size=0xb00)   # slot 0x4c pops ONE word
     tab = e.r32(so + 0x9b)
     e.w32(tab + 0xadc, r.getrandbits(32))
     b = obj(c, 0x40, {0x290: pystub(c, 4, this=True, stackmark=(3,), side=lambda em, k: em.calllog.append(('v', tuple(em.r32(em.arg32(3) + 4 * i) for i in range(3))) if em.arg32(3) else ('v', None))), 0x294: pystub(c, 2, this=True),

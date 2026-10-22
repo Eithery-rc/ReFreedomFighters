@@ -91,10 +91,10 @@ def g472ae0(c):
     arg2 = obj(c, 0x20, {0x88: pystub(c, 2, this=True, stackmark=(1,), side=s88),
                          0x4c: pystub(c, 2, this=True)}, nslots=0x60)
 
-    def s3a8(emu, k):
-        mat9(emu, emu.arg32(0))
-        vec3(emu, emu.arg32(1), [0.0, 0.0, 0.0] if forced else None)
-        emu.calllog.append(('s3a8', bytes(emu.rbytes(emu.arg32(0), 36)), bytes(emu.rbytes(emu.arg32(1), 12))))
+    def s390(emu, k):   # slot 0x390 (ret 0xc): (bone id from slot 0x3a8, matrix, position); the bone-id slot 0x3a8 is a plain `ret`
+        mat9(emu, emu.arg32(1))
+        vec3(emu, emu.arg32(2), [0.0, 0.0, 0.0] if forced else None)
+        emu.calllog.append(('s390', emu.arg32(0), bytes(emu.rbytes(emu.arg32(1), 36)), bytes(emu.rbytes(emu.arg32(2), 12))))
 
     def s80(emu, k):
         vec3(emu, emu.arg32(1))
@@ -103,8 +103,8 @@ def g472ae0(c):
     s504 = rb() if r.random() < 0.6 else 0
     slots = {0x488: pystub(c, 1, this=True), 0x48c: pystub(c, 1, this=True), 0x484: pystub(c, 2, this=True),
              0x47c: pystub(c, 1, this=True), 0x480: pystub(c, 1, this=True), 0x448: pystub(c, 1, this=True),
-             0x44c: pystub(c, 1, this=True), 0x3a8: pystub(c, 2, this=True, stackmark=(0, 1), side=s3a8, ret=lambda emu, k: rb()),
-             0x390: pystub(c, 1, this=True), 0x98: pystub(c, 2, this=True, stackmark=(0, 1), side=logb('s98e', (36, 12))),
+             0x44c: pystub(c, 1, this=True), 0x3a8: pystub(c, 0, this=True, ret=lambda emu, k: rb()),
+             0x390: pystub(c, 3, this=True, stackmark=(1, 2), side=s390), 0x98: pystub(c, 2, this=True, stackmark=(0, 1), side=logb('s98e', (36, 12))),
              0x80: pystub(c, 2, this=True, stackmark=(0, 1), side=s80),
              0x478: pystub(c, 1, this=True, ret=lambda emu, k: r.choice([0, 1, 2, 3, 3, 4, 4, 5, 5, 6, 7])),
              0x45c: pystub(c, 2, this=True), 0x500: pystub(c, 0, this=True, ret=s500),

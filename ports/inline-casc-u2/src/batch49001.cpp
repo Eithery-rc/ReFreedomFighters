@@ -52,7 +52,7 @@ static void THISCALL fn5ecd80(u8 *self, u8 *a, u8 *ctx) {
     xr /= FL(self, 0xc3);
     in3[0] = xr;
     in3[1] = xs;
-    float out3[2] = {0, 0};
+    float out3[3] = {0, 0, FL(self, 0xbf)};   // 0x4463b0 divides by out[2] (the scale in the third word) when the context flag is clear
     ext_4463b0(ctx, out3, in3);
     u8 *p = *(u8 **)(*(u8 **)(self + 0x3a) + 4);
     FL(p, off + 0x1c) = out3[0];

@@ -2105,8 +2105,13 @@ def g478780(c):
     c.emu.wbytes(V0, struct.pack('<III', fl(), fl(), fl()))
     c.emu.wbytes(V1, struct.pack('<III', fl(), fl(), fl()))
     c.emu.w32(VT + 0x5e4, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(0)))
-    c.emu.w32(EV + 0x214, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(1)))
-    c.emu.w32(TV + 0x4c, pystub(c, 7, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(2)))
+    # slot 0x214 (0x52c240, ret 0x1c) takes SEVEN args: the setter result and the six words pushed before the 0x4c call (a0, a1 vectors, 0, 0, 0, loc byte);
+    # slot 0x4c (0x494690, ret 4) takes ONE
+    def side214(emu, k, _s=mkside(1)):
+        emu.calllog.append(('loc', emu.arg32(6) & 0xff))
+        _s(emu, k)
+    c.emu.w32(EV + 0x214, pystub(c, 7, ret=lambda emu, k: r.getrandbits(32), this=True, deref={1: 3, 2: 3}, side=side214))
+    c.emu.w32(TV + 0x4c, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(2)))
     c.emu.w32(MV + 0x20, pystub(c, 2, ret=lambda emu, k: LOG, this=True, side=mkside(3)))
     c.emu.w32(LV + 0x2c, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), pop=0, this=False, side=mkside(4)))
     def al(emu, k):

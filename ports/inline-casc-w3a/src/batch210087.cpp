@@ -13,16 +13,17 @@ static void THISCALL fn5bda50(u8 *self, u32 a, u32 b) {
     typedef u32 (THISCALL *F3)(u8 *, u32, u32, u32);
     (*(F3 *)(vt + 0x130))(*(u8 **)(self + 0x44), b, a, id);  // @5bda50_c
   } else {
-    u32 id = vcall<u32, u32, u32>(mgr(), 0x4c, b, 0);  // @5bda50_d
-    typedef u32 (THISCALL *F2)(u8 *, u32, u32);
-    (*(F2 *)(vt + 0x128))(*(u8 **)(self + 0x44), a, id);  // @5bda50_e
+    // slot 0x4c pops ONE arg (b): the `push 0` made before it stays pending and is the third argument of slot 0x128
+    u32 id = vcall<u32, u32>(mgr(), 0x4c, b);  // @5bda50_d
+    typedef u32 (THISCALL *F3)(u8 *, u32, u32, u32);
+    (*(F3 *)(vt + 0x128))(*(u8 **)(self + 0x44), a, id, 0);  // @5bda50_e
   }
   u8 *o = (u8 *)vcall<u32, u32>(mgr(), 0x58, ld32(self + 0x7d));  // @5bda50_f
   if (o) {  // @5bda50_g
     u8 *ovt = *(u8 **)o;
-    u32 id2 = vcall<u32, u32, u32>(mgr(), 0x4c, b, 0);  // @5bda50_h
-    typedef u32 (THISCALL *F2)(u8 *, u32, u32);
-    (*(F2 *)(ovt + 0x128))(o, a, id2);  // @5bda50_i
+    u32 id2 = vcall<u32, u32>(mgr(), 0x4c, b);  // @5bda50_h
+    typedef u32 (THISCALL *F3)(u8 *, u32, u32, u32);
+    (*(F3 *)(ovt + 0x128))(o, a, id2, 0);  // @5bda50_i
   }
 }
 PCREG(5bda50, fn5bda50);

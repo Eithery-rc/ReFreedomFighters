@@ -2,14 +2,14 @@
 // thiscall, ret 8. The SEH frame is not reproduced (no effect on the result). Callees stay the exe's code (ext_ bindings):
 // 0x41e290 (__builtin_new, cdecl, size), 0x5bdd30 (record constructor, thiscall, one argument), 0x47bf10 (this = record,
 // two arguments). Virtual calls, in exe order: path object slot 0x30 (ONE argument, 0: the exe pushes 0 first);
-// render manager slot 0x58 with three args (info[0], id word, &tmp); the object at this+0x44 slot 0x130 with one arg
-// (the render result); render manager slot 0x58 with one arg (info[0]); sys slot 0x1c0 with (file, line), float in ST0.
+// render manager slot 0x58 with one arg (info[0]); the object at this+0x44 slot 0x130 with three args (the render result,
+// the id word and &tmp pushed before the 0x58 call); render manager slot 0x58 with one arg (info[0]); sys slot 0x1c0 with (file, line), float in ST0.
 #include "ff.h"
 
 #define VT(o, off) ((*(void ***)(o))[(off) / 4])
 typedef u32(THISCALL *vNone)(void *self);
 typedef u32(THISCALL *vOneArg)(void *self, u32 a);
-typedef u32(THISCALL *vRm3)(void *self, u32 a, u32 b, u32 c);
+typedef u32(THISCALL *vTwo)(void *self, u32 a, u32 b, u32 c);
 typedef u32(THISCALL *vOne)(void *self, u32 a);
 typedef long double(THISCALL *vRand)(void *self, u32 file, u32 line);
 extern "C" void *ext_41e290(u32 size);                                   // __builtin_new (cdecl)
@@ -23,12 +23,13 @@ static void THISCALL setCivilianOnPath(u8 *self, u32 *info, u32 idx) {
   u8 *blk = self + off;
   u8 *path = *(u8 **)(blk + 0x4c);
   u8 *pv = *(u8 **)(path + 0x18);
-  u32 tmp = ((vOneArg)VT(pv, 0x30))(pv, 0);                              // path slot 0x30 with ONE argument (push 0)
+  struct Vec3 { u32 v, b51, b52; } vec = {0, blk[0x51], blk[0x52]};      // the 12-byte block at ebp-0x1c: the byte fields are stored before the 0x30 call
+  vec.v = ((vOneArg)VT(pv, 0x30))(pv, 0);                                // path slot 0x30 with ONE argument (push 0)
   u8 *o = *(u8 **)(self + 0x44);                                         // object at this+0x44 (its vtable gives slot 0x130)
   u8 *sys = G(u8 *, 0x70039c);
   u8 *rm = *(u8 **)(sys + 0x9b);
-  u32 x1 = ((vRm3)VT(rm, 0x58))(rm, info[0], (u32)*(u16 *)(self + 0x916), (u32)&tmp);
-  ((vOne)VT(o, 0x130))(o, x1);
+  u32 x1 = ((vOne)VT(rm, 0x58))(rm, info[0]);                            // slot 0x58 pops ONE argument; the two pushes before it stay pending
+  ((vTwo)VT(o, 0x130))(o, x1, (u32)*(u16 *)(self + 0x916), (u32)&vec);   // slot 0x130 (x1, id word, &block): the pending pushes are its trailing args; the consumer reads 3 dwords
   u32 x2 = ((vOne)VT(rm, 0x58))(rm, info[0]);
   void *p = ext_41e290(0x18);
   u32 r = 0;

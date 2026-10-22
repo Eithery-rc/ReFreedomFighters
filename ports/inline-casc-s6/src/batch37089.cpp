@@ -14,9 +14,9 @@ extern "C" u8 *THISCALL ext_63f220(u8 *self, u8 *elem);    // ret 4
 // target's counter byte at +0x3c); finally the node's stamp (+0x10) takes the engine word at +0x3c and unflagged nodes are queued the same way.
 static void THISCALL fn648a40(u8 *self, u8 *src) {
   u32 recs[0x200];
-  u32 cookie;
   u32 tmp;
-  u8 *end = (u8 *)vcall<u32>(src, 0x2b0, (u32)recs, (u32)&cookie);
+  // the second argument is the END of the buffer (the original passes the address just past its 0x800-byte array, which is where the /GS cookie lives)
+  u8 *end = (u8 *)vcall<u32>(src, 0x2b0, (u32)recs, (u32)(recs + 0x200));
   s32 n = (s32)((u8 *)end - (u8 *)recs) >> 3;
   u32 *rec = recs;
   for (; n != 0; n--, rec += 2) {

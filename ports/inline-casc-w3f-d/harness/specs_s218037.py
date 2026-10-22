@@ -67,8 +67,8 @@ def g592410(c):
     em.w32(VX + 472, pystub(c, 2, ret=R, this=True, stackmark=(0,), side=mk(2)))
     em.w32(VX + 1704, pystub(c, 0, ret=R, this=True, side=mk(3)))
     em.w32(VX + 1696, pystub(c, 1, ret=R, this=True, side=mk(4)))
-    em.w32(VX + 928, pystub(c, 2, ret=R, this=True, stackmark=(0, 1), side=mk(5)))
-    em.w32(VX + 912, pystub(c, 1, ret=R, this=True, side=mk(6)))
+    em.w32(VX + 928, pystub(c, 0, ret=R, this=True, side=mk(5)))   # slot 0x3a0 is a plain `ret`: the two pushes before it are args 2 and 3 of slot 0x390
+    em.w32(VX + 912, pystub(c, 3, ret=R, this=True, stackmark=(1, 2), side=mk(6)))   # slot 0x390 (ret 0xc)
     em.w32(VX + 32, pystub(c, 0, ret=W, this=True, side=mk(7)))
     def v132(emu, k):
         fl = [r.choice([0.0, 1.5, -2.25, 100.0, 3.0e5]) for _ in range(3)]

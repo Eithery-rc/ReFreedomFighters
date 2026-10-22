@@ -23,8 +23,8 @@ def g5c0fc0(c):
     r = c.rng
     em = c.emu
     import struct
-    TAB114 = {7027660: 4, 7027676: 4, 7027692: 4, 6967104: 6, 7008536: 5, 6970456: 6, 6973080: 5, 6967128: 6}
-    U = {0x2c: 3, 0x4c: 1, 0x50: 1, 0x58: 1, 0x68: 2, 0x84: 1, 0xd4: 2, 0x100: 1, 0x128: 1, 0x12c: 2, 0x134: 0, 0x138: 0, 0x25c: 2, 0xbc: 0}
+    TAB114 = {7027660: 4, 7027676: 4, 7027692: 4, 6967104: 4, 7008536: 4, 6970456: 4, 6973080: 4, 6967128: 4}   # slot 0x114 pops FOUR words at every site
+    U = {0x2c: 3, 0x4c: 1, 0x50: 1, 0x58: 1, 0x68: 2, 0x84: 1, 0xd4: 2, 0x100: 1, 0x128: 3, 0x12c: 3, 0x134: 0, 0x138: 0, 0x25c: 2, 0xbc: 0}
     fl = [0.0, 0.5, 1.0, -1.0, 2.0, 10.0, 100.0]
     B = lambda x: struct.unpack('<I', struct.pack('<f', x))[0]
     pool = []; olist = []; walk = [0]
@@ -47,7 +47,9 @@ def g5c0fc0(c):
                     emu.w32(v, pool[0] if walk[0] % 4 else 0)
                 elif 0x0fe00000 <= v < 0x0ff00000 and off in (0x58, 0x4c, 0x84, 0x128, 0x12c, 0xd4, 0x68) and r.random() < 0.7:
                     emu.w32(v, r.choice([0, r.getrandbits(32), pool[0]]))
-            emu.calllog.append(row_of(emu, n, off))
+            # the pointer to the 0x114 site's stack block now reaches the 0x128 / 0x12c stub as its pending argument; its third word is the frame's
+            # security cookie (ebp-dependent) at the 306 site, so only two words are compared there
+            emu.calllog.append(row_of(emu, n, off, 'a', 8 if off in (0x128, 0x12c) else 12))
         return pystub(c, n, ret=ret or R, pop=(0 if off == 0x2c else None), this='mark', stackmark=tuple(range(n)), side=side)  # slot 0x2c is a cdecl logger (add esp,0xc at the call site)
     SI = r.choice([0x401, 0x400, 0x402, r.randrange(0x1000), r.randrange(0x10000)])
     JT = r.choice(list(range(8)) + [99] * 8)

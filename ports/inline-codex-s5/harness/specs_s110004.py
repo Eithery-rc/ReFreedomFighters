@@ -9,8 +9,11 @@ def gen(c):
  def fill(em,n):
   for j,v in enumerate(mat):em.wf32(em.arg32(0)+4*j,v)
   for j,v in enumerate(pos):em.wf32(em.arg32(1)+4*j,v)
+ def fill390(em,n):   # slot 0x390 (ret 0xc): (bone id, matrix, position); the bone-id slots 0x3b8 / 0x3b4 are plain ret
+  for j,v in enumerate(mat):em.wf32(em.arg32(1)+4*j,v)
+  for j,v in enumerate(pos):em.wf32(em.arg32(2)+4*j,v)
  handle=rnd(c,0x40)
- t=obj(c,0x160,{0x3b8:pystub(c,2,this=True,nullflag=(0,1),side=fill,ret=123),0x3b4:pystub(c,2,this=True,nullflag=(0,1),side=fill,ret=456),0x390:pystub(c,1,this=True),0x20:pystub(c,6,this=True,deref={0:9,1:3},ret=handle)})
+ t=obj(c,0x160,{0x3b8:pystub(c,0,this=True,ret=123),0x3b4:pystub(c,0,this=True,ret=456),0x390:pystub(c,3,this=True,nullflag=(1,2),side=fill390),0x20:pystub(c,6,this=True,deref={0:9,1:3},ret=handle)})
  root=rnd(c,0x30)
  for i,v in enumerate(mat+pos):e.wf32(root+4*i,v)
  e.w32(t+8,root)

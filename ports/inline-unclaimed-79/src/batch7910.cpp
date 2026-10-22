@@ -12,7 +12,7 @@ extern "C" float FASTCALL ext_4e0830(u8 *ecx, u8 *edx);
 // (element, word at +0x4a or the command, arg).
 static u32 THISCALL msgForwardToActorsCommand(u8 *self, u32 cmdArg, void *arg) {
   u16 cmd = (u16)cmdArg;
-  u32 flag = 0;
+  u32 flag[3] = {0, 0, 0};   // 12-byte iterator state at ebp-0x30: slot 0x4c fills three dwords, flag[0] is the 'valid' word
   if (*(u8 **)(self + 0x50) == 0)
     return 0;
   u16 w48 = *(u16 *)(self + 0x48);
@@ -20,9 +20,9 @@ static u32 THISCALL msgForwardToActorsCommand(u8 *self, u32 cmdArg, void *arg) {
     return 0;
   if (*(u8 **)(*(u8 **)(self + 0x50) + 0x18) == 0)
     return 0;
-  vcall<void, u32 *>(*(u8 **)(*(u8 **)(self + 0x50) + 0x18), 0x4c, &flag);
-  u8 *cur = vcall<u8 *, u32 *>(*(u8 **)(*(u8 **)(self + 0x50) + 0x18), 0x5c, &flag);
-  if (flag == 0)
+  vcall<void, u32 *>(*(u8 **)(*(u8 **)(self + 0x50) + 0x18), 0x4c, flag);
+  u8 *cur = vcall<u8 *, u32 *>(*(u8 **)(*(u8 **)(self + 0x50) + 0x18), 0x5c, flag);
+  if (flag[0] == 0)
     return 0;
   do {
     u8 *t = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
@@ -48,8 +48,8 @@ static u32 THISCALL msgForwardToActorsCommand(u8 *self, u32 cmdArg, void *arg) {
         vcall<void, u32, u32, u32>(*(u8 **)(self + 0x44), 0x130, (u32)(unsigned long)edi, k, (u32)(unsigned long)arg);
       }
     }
-    cur = vcall<u8 *, u32 *>(*(u8 **)(*(u8 **)(self + 0x50) + 0x18), 0x5c, &flag);
-  } while (flag != 0);
+    cur = vcall<u8 *, u32 *>(*(u8 **)(*(u8 **)(self + 0x50) + 0x18), 0x5c, flag);
+  } while (flag[0] != 0);
   return 0;
 }
 PCREG(49f0a0, msgForwardToActorsCommand);

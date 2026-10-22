@@ -68,6 +68,25 @@ def _stub_log_arg2(c, val):
                    + b'\xb8' + struct.pack('<I', val & 0xffffffff) + b'\xc2\x08\x00')
 
 
+def _stub_plain_ret(c, val):
+    """thiscall slot with no stack word (plain `ret`), returns val (slot 0x3a0: the pushes before it stay pending for slot 0x390)."""
+    return ss.code(c, b'\xb8' + struct.pack('<I', val & 0xffffffff) + b'\xc3')
+
+
+def _stub_390(c):
+    """thiscall slot with three stack words (ret 0xc): (result of slot 0x3a0, &matrix, arg). Stores the first and the third in cells and fills the 9-dword matrix at the second (the real slot 0x390 writes a bone matrix there)."""
+    cell = c.emu.alloc(8, 4)
+    c.emu.w32(cell, 0)
+    c.emu.w32(cell + 4, 0)
+    code = bytes([0x8b, 0x54, 0x24, 0x04, 0x89, 0x15]) + struct.pack("<I", cell)           # mov edx,[esp+4]; mov [cell],edx
+    code += bytes([0x8b, 0x54, 0x24, 0x0c, 0x89, 0x15]) + struct.pack("<I", cell + 4)      # mov edx,[esp+0xc]; mov [cell+4],edx
+    code += bytes([0x8b, 0x44, 0x24, 0x08])                                                 # mov eax,[esp+8]
+    for i in range(9):                                                                      # mov dword [eax+4*i], 0x11223300+i
+        code += (bytes([0xc7, 0x00]) if i == 0 else bytes([0xc7, 0x40, 4 * i])) + struct.pack("<I", 0x11223300 + i)
+    code += bytes([0x31, 0xc0, 0xc2, 0x0c, 0x00])                                           # xor eax,eax; ret 0xc
+    return ss.code(c, code)
+
+
 def _stub_ret_none(c):
     """thiscall slot with one stack word (ret 4) and no result."""
     return ss.code(c, b'\xc2\x04\x00')
@@ -110,8 +129,8 @@ def _call_obj(c):
     v3 = c.rng.getrandbits(32)
     slots = {
         0x504: _stub_ret_val(c, r),                                           # returns o (or 0)
-        0x3a0: _stub_log_arg2(c, v3),                                          # ret 8: logs arg2, returns v3
-        0x390: ss.rec(c, 1, ret=0, log=True),
+        0x3a0: _stub_plain_ret(c, v3),                                         # plain ret: returns v3
+        0x390: _stub_390(c),                                                   # ret 0xc: (v3, &local, arg)
         0x84: ss.rec(c, 1, ret=0, log=True),
     }
     self_ = ss.mkobj(c, slots, size=0x80)   # this

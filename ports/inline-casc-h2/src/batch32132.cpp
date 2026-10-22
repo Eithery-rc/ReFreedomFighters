@@ -13,20 +13,18 @@ extern "C" u8 THISCALL ext_5c8470(u8 *self, u32 a);     // thiscall ret 4, retur
 extern "C" void THISCALL ext_5c92a0(u8 *self);          // thiscall (tail jump)
 
 // 0x516f40, thiscall(p) ret 4: the 3 dwords at p are copied (unaligned) to this+0x45; unless all three floats are ordered-equal to 0 the vector is normalised:
-// len = sqrt(x*x + y*y + z*z) in x87 53-bit precision, inv = 1.0 / len, component = (float)(c * inv).
+// len = sqrt(x*x + y*y + z*z) and inv = 1.0 / len in x87 (long double: each step rounds to the FPU control word's precision), component = (float)(c * inv).
 static void THISCALL fn516f40(u8 *self, u8 *p) {
   u8 *d = self + 0x45;
   wr32(d, rd32(p));
   wr32(d + 4, rd32(p + 4));
   wr32(d + 8, rd32(p + 8));
   if (rdf(d) == 0.0f && rdf(d + 4) == 0.0f && rdf(d + 8) == 0.0f) return;
-  double x = (double)rdf(d), y = (double)rdf(d + 4), z = (double)rdf(d + 8);
-  double s = x * x;
-  s = s + y * y;
-  s = s + z * z;
-  double len;
-  __asm__("sqrtsd %1, %0" : "=x"(len) : "x"(s));
-  double inv = 1.0 / len;
+  // x87 `long double` arithmetic like the original: under the game's FPCW (0x007f, 24-bit significand) every step (square, sum, fsqrt, 1/len, product) rounds to
+  // 24 bits; doubles with a single final rounding differ by one ulp.
+  long double x = rdf(d), y = rdf(d + 4), z = rdf(d + 8);
+  long double len = fsqrt_x87(x * x + y * y + z * z);
+  long double inv = 1.0L / len;
   wrf(d, (float)(x * inv));
   wrf(d + 4, (float)(y * inv));
   wrf(d + 8, (float)(z * inv));

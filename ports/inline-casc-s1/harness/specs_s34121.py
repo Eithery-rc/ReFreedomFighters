@@ -7,10 +7,10 @@ from recruits_util import rnd, obj, clear_hooks, pystub, hook_rec
 def _g5e0330(c):
     clear_hooks(c)
     r = c.rng
-    branch = r.random() < 0.5   # the table slot 0x4c takes three stack arguments on the first branch and one on the second
+    branch = r.random() < 0.5   # the first branch pushes three words before the table slot 0x4c, which pops one; the second branch pushes one
     o = obj(c, 0x20, {0x144: pystub(c, 1, this=True), 0x1e0: pystub(c, 1, ret=r.choice([1, 0x101, 0x201]) if branch else r.choice([0, 0x100 * r.randrange(1, 50)]), this=True),
-                      0x2d0: pystub(c, 2, this=True), 0x2f0: pystub(c, 1, this=True)}, nslots=0x2f4 // 4)
-    tbl = obj(c, 0x20, {0x4c: pystub(c, 3 if branch else 1, ret=r.getrandbits(32), this=True)}, nslots=0x50 // 4)
+                      0x2d0: pystub(c, 2, this=True), 0x2f0: pystub(c, 3, this=True)}, nslots=0x2f4 // 4)   # 0x2f0 pops 3: the 4c result and the two pending pushes
+    tbl = obj(c, 0x20, {0x4c: pystub(c, 1, ret=r.getrandbits(32), this=True)}, nslots=0x50 // 4)   # slot 0x4c pops ONE word on both branches
     so = rnd(c, 0xa0)
     c.emu.w32(so + 0x9b, tbl)
     c.emu.w32(0x70039c, so)

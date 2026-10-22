@@ -107,8 +107,9 @@ static u32 THISCALL c01aCommand(u8 *ct, u32 msg, u32 data) {
       float mat[9], pos[3];
       u8 *actor = *(u8 **)(ct + 0x4c);
       void **vt = *(void ***)actor;
-      u32 r = ((u32(THISCALL *)(u8 *, float *, float *))vt[0x3a0 / 4])(actor, mat, pos);
-      ((void(THISCALL *)(u8 *, u32))vt[0x390 / 4])(*(u8 **)(ct + 0x4c), r);
+      // slot 0x3a0 is a plain `ret`: the pushes of mat and pos stay pending for slot 0x390 (ret 0xc: bone, matrix, position)
+      u32 r = ((u32(THISCALL *)(u8 *))vt[0x3a0 / 4])(actor);
+      ((void(THISCALL *)(u8 *, u32, float *, float *))vt[0x390 / 4])(*(u8 **)(ct + 0x4c), r, mat, pos);
       u8 *g = vcall<u8 *>(*(u8 **)(ct + 0x4c), 0x20);
       vcall<void, float *>(g, 0x84, pos);
       pos[1] = pos[1] + 50.0f;

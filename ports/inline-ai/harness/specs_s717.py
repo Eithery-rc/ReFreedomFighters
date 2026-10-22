@@ -91,7 +91,10 @@ def _as(c):
         evs.append(ev)
 
     def lst_begin(em, r):
-        em.w32(em.arg32(0), 0)
+        it = em.arg32(0)
+        em.w32(it, 0)
+        em.w32(it + 4, c.rng.getrandbits(32) | 1)   # the iterator state is 12 bytes
+        em.w32(it + 8, c.rng.getrandbits(32) | 1)
         em.ret(eax=0, argbytes=4)
 
     def lst_next(em, r):

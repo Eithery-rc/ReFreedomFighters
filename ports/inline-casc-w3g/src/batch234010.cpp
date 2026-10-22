@@ -582,12 +582,12 @@ extern "C" u32 THISCALL lifted_5c0fc0(u32 ecx_in, u32 a0, u32 a1) {
   esi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(edi), sizeof v); (u32)v; });  // @88_5c0fc0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx + 155), sizeof v); (u32)v; });  // @89_5c0fc0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @90_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6967104), (u32)(0), (u32)(7027316), (u32)(291), (u32)(0), (u32)(0));  // @91_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6967104), (u32)(0), (u32)(7027316), (u32)(291));  // @91_5c0fc0  // 0x114 pops 4 words; 2 pending push(es) go to the next call
   ecx = edx = 0;  // @92_5c0fc0
   eax = (eax & 0xffff);  // @93_5c0fc0
   ecx = edi;  // @94_5c0fc0
   PV[3] = (u32)(eax);  // @95_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 296)))(ecx, PV[3]);  // @96_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 296)))(ecx, PV[3], (u32)(0), (u32)(0));  // @96_5c0fc0
   ecx = edx = 0;  // @97_5c0fc0
   L5c1175:;
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @99_5c0fc0
@@ -619,13 +619,13 @@ extern "C" u32 THISCALL lifted_5c0fc0(u32 ecx_in, u32 a0, u32 a1) {
   eax = (u32)(EBP - 12);  // @125_5c0fc0
   PV[5] = (u32)(eax);  // @126_5c0fc0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @127_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(7008536), (u32)(0), (u32)(7027316), (u32)(306), PV[5]);  // @128_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(7008536), (u32)(0), (u32)(7027316), (u32)(306));  // @128_5c0fc0  // 0x114 pops 4 words; 1 pending push(es) go to the next call
   ecx = edx = 0;  // @129_5c0fc0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 68), sizeof v); (u32)v; });  // @130_5c0fc0
   eax = (eax & 0xffff);  // @131_5c0fc0
   PV[6] = (u32)(eax);  // @132_5c0fc0
   PV[7] = (u32)(edi);  // @133_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 300)))(ecx, PV[7], PV[6]);  // @134_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 300)))(ecx, PV[7], PV[6], PV[5]);  // @134_5c0fc0
   ecx = edx = 0;  // @135_5c0fc0
   goto L5c161d;  // @136_5c0fc0
   L5c120a:;
@@ -690,12 +690,12 @@ extern "C" u32 THISCALL lifted_5c0fc0(u32 ecx_in, u32 a0, u32 a1) {
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @196_5c0fc0
   PV[13] = (u32)(esi);  // @197_5c0fc0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @198_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6970456), (u32)(0), (u32)(7027316), (u32)(330), PV[13], (u32)(0));  // @199_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6970456), (u32)(0), (u32)(7027316), (u32)(330));  // @199_5c0fc0  // 0x114 pops 4 words; 2 pending push(es) go to the next call
   ecx = edx = 0;  // @200_5c0fc0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP - 20), sizeof v); (u32)v; });  // @201_5c0fc0
   eax = (eax & 0xffff);  // @202_5c0fc0
   PV[14] = (u32)(eax);  // @203_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(edi + 296)))(ecx, PV[14]);  // @204_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 296)))(ecx, PV[14], PV[13], (u32)(0));  // @204_5c0fc0
   ecx = edx = 0;  // @205_5c0fc0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 264), sizeof v); (u32)v; });  // @206_5c0fc0
   FL[2] = (eax & eax);  // @207_5c0fc0
@@ -777,13 +777,13 @@ extern "C" u32 THISCALL lifted_5c0fc0(u32 ecx_in, u32 a0, u32 a1) {
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @283_5c0fc0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @284_5c0fc0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @285_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6973080), (u32)(0), (u32)(7027316), (u32)(347), (u32)(0));  // @286_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6973080), (u32)(0), (u32)(7027316), (u32)(347));  // @286_5c0fc0  // 0x114 pops 4 words; 1 pending push(es) go to the next call
   ecx = edx = 0;  // @287_5c0fc0
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 68), sizeof v); (u32)v; });  // @288_5c0fc0
   eax = (eax & 0xffff);  // @289_5c0fc0
   PV[16] = (u32)(eax);  // @290_5c0fc0
   PV[17] = (u32)(edi);  // @291_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 300)))(ecx, PV[17], PV[16]);  // @292_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 300)))(ecx, PV[17], PV[16], (u32)(0));  // @292_5c0fc0
   ecx = edx = 0;  // @293_5c0fc0
   X0[0] = ({ u32 v; __builtin_memcpy(&v, (void *)((u32)(7338592) + 0), 4); v; });  // @294_5c0fc0
   X0[1] = 0;  // @295_5c0fc0
@@ -845,12 +845,12 @@ extern "C" u32 THISCALL lifted_5c0fc0(u32 ecx_in, u32 a0, u32 a1) {
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @351_5c0fc0
   esi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @352_5c0fc0
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @353_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6967128), (u32)(0), (u32)(7027316), (u32)(378), (u32)(0), (u32)(0));  // @354_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6967128), (u32)(0), (u32)(7027316), (u32)(378));  // @354_5c0fc0  // 0x114 pops 4 words; 2 pending push(es) go to the next call
   ecx = edx = 0;  // @355_5c0fc0
   eax = (eax & 0xffff);  // @356_5c0fc0
   ecx = ebx;  // @357_5c0fc0
   PV[19] = (u32)(eax);  // @358_5c0fc0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(esi + 296)))(ecx, PV[19]);  // @359_5c0fc0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 296)))(ecx, PV[19], (u32)(0), (u32)(0));  // @359_5c0fc0
   ecx = edx = 0;  // @360_5c0fc0
   goto L5c161d;  // @361_5c0fc0
   L5c1552:;

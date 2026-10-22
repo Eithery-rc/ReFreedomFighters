@@ -72,11 +72,12 @@ def g5ce0b0(c):
     em.w32(VS + 0x84, pystub(c, 1, ret=R, this=True, stackmark=(0,), side=lambda emu, k: (w3(emu, emu.arg32(0)), rd12('s84')(emu, k))))
     em.w32(VS + 0x8c, pystub(c, 1, ret=R, this=True, stackmark=(0,), side=rd12('s8c')))
     em.w32(VS + 0x39c, pystub(c, 1, ret=R, this=True, stackmark=(0,), side=rd12('s39c')))
-    def s3a0(emu, k):
-        w3(emu, emu.arg32(0)); w3(emu, emu.arg32(1))
-        emu.calllog.append(('s3a0', emu.reg('ecx'), bytes(emu.rbytes(emu.arg32(0), 12)).hex(), bytes(emu.rbytes(emu.arg32(1), 12)).hex()))
-    em.w32(VS + 0x3a0, pystub(c, 2, ret=R, this=True, stackmark=(0, 1), side=s3a0))
-    em.w32(VS + 0x390, pystub(c, 1, ret=R, this=True, side=LG('s390', 1)))
+    # slot 0x3a0 (0x466c00) is a plain `ret` (no stack args): the two pointers pushed before it are the 2nd and 3rd args of slot 0x390 (0x466870, ret 0xc)
+    em.w32(VS + 0x3a0, pystub(c, 0, ret=R, this=True, side=LG('s3a0', 0)))
+    def s390(emu, k):
+        w3(emu, emu.arg32(1)); w3(emu, emu.arg32(2))
+        emu.calllog.append(('s390', emu.reg('ecx'), emu.arg32(0), bytes(emu.rbytes(emu.arg32(1), 12)).hex(), bytes(emu.rbytes(emu.arg32(2), 12)).hex()))
+    em.w32(VS + 0x390, pystub(c, 3, ret=R, this=True, stackmark=(1, 2), side=s390))
     # this (controller) slots
     def t90(emu, k):
         w3(emu, emu.arg32(0)); w3(emu, emu.arg32(1))

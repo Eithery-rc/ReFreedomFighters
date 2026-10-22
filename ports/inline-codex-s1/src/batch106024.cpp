@@ -8,9 +8,9 @@ static u32 THISCALL classify_up(u8* me,u8* arg){
  if(!vcall<u8>(*(void**)(actor+0x6c),0x34)){
   float matrix[9],pos[3]={0,0,0};ext_4de7a0(matrix);
   actor=*(u8**)(me+0x1c);u8* saved=*(u8**)actor;
-  u32 id=vcall<u32>(actor,0x3a8,matrix,pos);
+  u32 id=vcall<u32>(actor,0x3a8);   // the bone-id slot is a plain `ret`: the two pushes before it stay pending and are args 2 and 3 of slot 0x390 (ret 0xc: bone, matrix, position)
   actor=*(u8**)(me+0x1c);
-  typedef void(THISCALL *Set)(void*,u32);(*(Set*)(saved+0x390))(actor,id);
+  typedef void(THISCALL *Set)(void*,u32,float*,float*);(*(Set*)(saved+0x390))(actor,id,matrix,pos);
   vcall<void>(*(void**)(me+0x1c),0x98,matrix,pos);
   float dot=(matrix[6]*0.0f+matrix[7])+matrix[8]*0.0f;
   mode=dot>0.0f?2:1;

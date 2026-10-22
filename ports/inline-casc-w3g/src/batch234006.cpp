@@ -1254,13 +1254,13 @@ extern "C" u32 THISCALL lifted_58df40(u32 ecx_in) {
   PV[3] = (u32)(eax);  // @30_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi), sizeof v); (u32)v; });  // @31_58df40
   ecx = esi;  // @32_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6881912), (u32)(0), (u32)(6997712), (u32)(385), PV[3]);  // @33_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6881912), (u32)(0), (u32)(6997712), (u32)(385));  // @33_58df40  // pending push PV[3] belongs to the 0x12c call below
   ecx = edx = 0;  // @34_58df40
   eax = (eax & 0xffff);  // @35_58df40
   ecx = ebx;  // @36_58df40
   PV[4] = (u32)(eax);  // @37_58df40
   PV[5] = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 1654), sizeof v); (u32)v; });  // @38_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[5], PV[4]);  // @39_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[5], PV[4], PV[3]);  // @39_58df40
   ecx = edx = 0;  // @40_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @41_58df40
   ecx = ebx;  // @42_58df40
@@ -1297,13 +1297,13 @@ extern "C" u32 THISCALL lifted_58df40(u32 ecx_in) {
   PV[8] = (u32)(eax);  // @73_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi), sizeof v); (u32)v; });  // @74_58df40
   ecx = esi;  // @75_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6879092), (u32)(0), (u32)(6997712), (u32)(390), PV[8]);  // @76_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6879092), (u32)(0), (u32)(6997712), (u32)(390));  // @76_58df40  // pending push PV[8] belongs to the 0x12c call below
   ecx = edx = 0;  // @77_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP - 8), sizeof v); (u32)v; });  // @78_58df40
   eax = (eax & 0xffff);  // @79_58df40
   PV[9] = (u32)(eax);  // @80_58df40
   PV[10] = (u32)(edi);  // @81_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(ebx + 300)))(ecx, PV[10], PV[9]);  // @82_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(ebx + 300)))(ecx, PV[10], PV[9], PV[8]);  // @82_58df40
   ecx = edx = 0;  // @83_58df40
   ebx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP - 8), sizeof v); (u32)v; });  // @84_58df40
   L58e064:;
@@ -1381,13 +1381,13 @@ extern "C" u32 THISCALL lifted_58df40(u32 ecx_in) {
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @157_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @158_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @159_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(466), PV[17]);  // @160_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(466));  // @160_58df40  // pending push PV[17] belongs to the 0x12c call below
   ecx = edx = 0;  // @161_58df40
   eax = (eax & 0xffff);  // @162_58df40
   ecx = ebx;  // @163_58df40
   PV[18] = (u32)(eax);  // @164_58df40
   PV[19] = (u32)(esi);  // @165_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[19], PV[18]);  // @166_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[19], PV[18], PV[17]);  // @166_58df40
   ecx = edx = 0;  // @167_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @168_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @169_58df40
@@ -1451,13 +1451,13 @@ extern "C" u32 THISCALL lifted_58df40(u32 ecx_in) {
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @227_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @228_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @229_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(449), PV[26]);  // @230_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(449));  // @230_58df40  // pending push PV[26] belongs to the 0x12c call below
   ecx = edx = 0;  // @231_58df40
   eax = (eax & 0xffff);  // @232_58df40
   ecx = ebx;  // @233_58df40
   PV[27] = (u32)(eax);  // @234_58df40
   PV[28] = (u32)(esi);  // @235_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[28], PV[27]);  // @236_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[28], PV[27], PV[26]);  // @236_58df40
   ecx = edx = 0;  // @237_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @238_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @239_58df40
@@ -1522,13 +1522,13 @@ extern "C" u32 THISCALL lifted_58df40(u32 ecx_in) {
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @298_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @299_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @300_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(433), PV[35]);  // @301_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(433));  // @301_58df40  // pending push PV[35] belongs to the 0x12c call below
   ecx = edx = 0;  // @302_58df40
   eax = (eax & 0xffff);  // @303_58df40
   ecx = ebx;  // @304_58df40
   PV[36] = (u32)(eax);  // @305_58df40
   PV[37] = (u32)(esi);  // @306_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[37], PV[36]);  // @307_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[37], PV[36], PV[35]);  // @307_58df40
   ecx = edx = 0;  // @308_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @309_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @310_58df40
@@ -1593,13 +1593,13 @@ extern "C" u32 THISCALL lifted_58df40(u32 ecx_in) {
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx), sizeof v); (u32)v; });  // @369_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @370_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @371_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(417), PV[44]);  // @372_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6998244), (u32)(0), (u32)(6997712), (u32)(417));  // @372_58df40  // pending push PV[44] belongs to the 0x12c call below
   ecx = edx = 0;  // @373_58df40
   eax = (eax & 0xffff);  // @374_58df40
   ecx = ebx;  // @375_58df40
   PV[45] = (u32)(eax);  // @376_58df40
   PV[46] = (u32)(esi);  // @377_58df40
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[46], PV[45]);  // @378_58df40
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 300)))(ecx, PV[46], PV[45], PV[44]);  // @378_58df40
   ecx = edx = 0;  // @379_58df40
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @380_58df40
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @381_58df40

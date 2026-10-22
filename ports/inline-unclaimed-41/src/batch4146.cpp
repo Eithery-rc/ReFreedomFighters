@@ -21,8 +21,10 @@ static u8 *THISCALL fn59efb0(u8 *self, u32 id) {
   u8 *o = *(u8 **)(rm + 0x9b);
   u8 *I = (u8 *)((f2_t)vslot(C, 0x2c4))(C, *(u32 *)(o + 0xadc), 0x4954454du);
   u8 *ob = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 V = ((f3_t)vslot(ob, 0x4c))(ob, (u32)self, *(u32 *)(ob + 0xadc), 1u);
-  ((f1_t)vslot(I, 0x2f0))(I, V);
+  // slot 0x4c of this object pops ONE argument (ret 4): the two pushes made before it (+0xadc, 1) are the 2nd and 3rd
+  // arguments of the 0x2f0 call below (ret 0xc)
+  u32 V = ((f1_t)vslot(ob, 0x4c))(ob, (u32)self);
+  ((f3_t)vslot(I, 0x2f0))(I, V, *(u32 *)(ob + 0xadc), 1u);
   if ((((f1_t)vslot(I, 0x1e0))(I, 0x1007d2u) & 0xff) != 0) {
     u32 r = ((f0_t)vslot(I, 0x328))(I);
     if (r != 0) {

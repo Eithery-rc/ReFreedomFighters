@@ -7,7 +7,8 @@ def fv(r,n,scale=100):return struct.pack('<%df'%n,*[r.uniform(-scale,scale) for 
 def focal(c):
  start(c);r=c.rng;e=c.emu;payload=fv(r,9);position=fv(r,3)
  def fill(em,k):em.wbytes(em.arg32(0),payload);em.wbytes(em.arg32(1),position)
- s=obj(c,0xc00,{0x438:pystub(c,0,this=True,ret=r.choice([0,0,1,0x100,0x101])),0x4d0:pystub(c,0,this=True,ret=r.choice([0,1,0x100,0x101])),0x3a8:pystub(c,2,this=True,stackmark=(0,),ret=lambda em,k:em.arg32(0),side=fill),0x390:pystub(c,1,this=True,deref={0:9})})
+ def fill390(em,k):em.wbytes(em.arg32(1),payload);em.wbytes(em.arg32(2),position)   # slot 0x390 (ret 0xc): (bone id, matrix, position); 0x3a8 is a plain ret
+ s=obj(c,0xc00,{0x438:pystub(c,0,this=True,ret=r.choice([0,0,1,0x100,0x101])),0x4d0:pystub(c,0,this=True,ret=r.choice([0,1,0x100,0x101])),0x3a8:pystub(c,0,this=True,ret=r.getrandbits(32)),0x390:pystub(c,3,this=True,stackmark=(1,2),side=fill390,deref={1:9})})
  e.w32(s+0x417,r.choice([0,0x400,0x401,0x402,0x8000000,0x8000400,0x8000401]))
  sub=rnd(c,0xb80);e.w8(sub+0xb45,r.randrange(2));e.w32(s+0x85a,sub)
  e.wbytes(s+0x81f,struct.pack('<f',r.choice([0.,120.,130.,155.,165.,180.,210.,300.,r.uniform(-100,400)])))

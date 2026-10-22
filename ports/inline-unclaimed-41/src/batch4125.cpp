@@ -29,8 +29,9 @@ static void tailA7a(u8 *self, u8 *W, u8 *R0, u32 N, u32 b, u32 arg2) {
     u32 S = ((f1_t)vslot(Zc, 0x20))(Zc, 0x4954454du);
     u8 *Tp = (u8 *)((f1_t)vslot(R, 0x2c4))(R, S);
     u8 *ob2 = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-    u32 V2 = ((f3_t)vslot(ob2, 0x4c))(ob2, *(u32 *)self, 0u, 1u);
-    ((f1_t)vslot(Tp, 0x2f0))(Tp, V2);
+    // slot 0x4c pops ONE argument: the pushes (1, 0) made before it are the 2nd and 3rd arguments of 0x2f0 (ret 0xc)
+    u32 V2 = ((f1_t)vslot(ob2, 0x4c))(ob2, *(u32 *)self);
+    ((f3_t)vslot(Tp, 0x2f0))(Tp, V2, 0u, 1u);
     ((f2_t)vslot(Tp, 0x2d0))(Tp, 1u, 0u);
     esi = Tp;
   }
@@ -55,8 +56,8 @@ static void THISCALL fn5af990(u8 *self, u32 type, u32 n, u32 a, u32 b) {
     return;
 
   u8 *ob = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 V = ((f3_t)vslot(ob, 0x4c))(ob, *(u32 *)self, 0u, 1u);
-  ((f1_t)vslot(W, 0x2f0))(W, V);
+  u32 V = ((f1_t)vslot(ob, 0x4c))(ob, *(u32 *)self);
+  ((f3_t)vslot(W, 0x2f0))(W, V, 0u, 1u);
   ((f2_t)vslot(W, 0x2d0))(W, 1u, 0u);
   u32 N = ((f0_t)vslot(W, 0x364))(W);
 

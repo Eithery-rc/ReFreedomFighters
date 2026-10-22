@@ -32,4 +32,4 @@ def _g5df5f0(c):
     return [self, arg1, arg2, arg3]
 
 S(0x537770, 'conditional_field_add_arg', 'thiscall', None, ret='eax', gen=_g537770)
-S(0x5df5f0, 'field_init_three_args', 'thiscall', None, ret=None, gen=_g5df5f0)
+S(0x5df5f0, 'field_init_three_args', 'thiscall', None, ret='eax', gen=_g5df5f0)

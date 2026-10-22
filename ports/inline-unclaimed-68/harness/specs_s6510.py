@@ -26,6 +26,7 @@ def _list(c, items):
     def reset(e, a):
         st['pos'] = 0
         e.w32(a[0], 1 if items else 0)
+        e.w32(a[0] + 4, 0x41414141); e.w32(a[0] + 8, 0x42424242)   # a 12-byte iterator state: a 4-byte local in the port overran the saved ESI
         return (None, None)
 
     def nxt(e, a):
@@ -33,8 +34,10 @@ def _list(c, items):
             v = items[st['pos']]
             st['pos'] += 1
             e.w32(a[0], st['pos'])
+            e.w32(a[0] + 4, 0x43434343); e.w32(a[0] + 8, 0x44444444)
             return (v, None)
         e.w32(a[0], 0)
+        e.w32(a[0] + 4, 0x45454545); e.w32(a[0] + 8, 0x46464646)
         return (0, None)
 
     slots = {0x14: _slot(name, 0x14, 0, nonempty), 0x4c: _slot(name, 0x4c, 1, reset), 0x5c: _slot(name, 0x5c, 1, nxt)}

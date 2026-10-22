@@ -14,9 +14,9 @@ static u32 THISCALL fn5e0330(u8 *self) {
     vcall<void>(o, 0x2d0, 1u, 0u);
     u8 *vt = *(u8 **)*(u8 **)(self + 8);
     u8 *tbl = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-    u32 r = vcall<u32>(tbl, 0x4c, *(u32 *)(self + 0xc), 0u, 1u);
-    typedef void (THISCALL *f1)(void *, u32);
-    (*(f1 *)(vt + 0x2f0))(*(u8 **)(self + 8), r);
+    u32 r = vcall<u32>(tbl, 0x4c, *(u32 *)(self + 0xc)); // 0x4c pops ONE word; the two earlier pushes are the 2nd/3rd arguments of the 0x2f0 call (ret 0xc)
+    typedef void (THISCALL *f3)(void *, u32, u32, u32);
+    (*(f3 *)(vt + 0x2f0))(*(u8 **)(self + 8), r, 0u, 1u);
     return 0;
   }
   u8 *tbl = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);

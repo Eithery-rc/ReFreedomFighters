@@ -259,11 +259,11 @@ extern "C" u32 THISCALL lifted_607640(u32 ecx_in, u32 a0) {
   PV[19] = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP - 16), sizeof v); (u32)v; });  // @226_607640
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(edi), sizeof v); (u32)v; });  // @227_607640
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @228_607640
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 16)))(ecx, PV[19]);  // @229_607640
+  eax = ((u32(THISCALL *)(u32))(*(u32 *)(eax + 16)))(ecx);  // @229_607640: pops nothing; the push [ebp-16] stays pending for the call below
   ecx = edx = 0;  // @230_607640
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(EBP + 8), sizeof v); (u32)v; });  // @231_607640
   PV[20] = (u32)(eax);  // @232_607640
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(edi + 112)))(ecx, PV[20]);  // @233_607640
+  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 112)))(ecx, PV[20], PV[19]);  // @233_607640: two stack args (eax, the pending [ebp-16])
   ecx = edx = 0;  // @234_607640
   SEH_LEAVE();  // @235_607640
   return eax;  // @236_607640

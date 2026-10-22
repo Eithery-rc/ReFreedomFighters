@@ -1,7 +1,7 @@
 #include "ff.h"
 extern "C" void THISCALL focal_point(u8* s,u32* out){
  if(vcall<u8>(s,0x438)){
-  u32 mat[9];void* p=vcall<void*>(s,0x3a8,mat,out);vcall<void>(s,0x390,p);return;
+  u32 mat[9];void* p=vcall<void*>(s,0x3a8);vcall<void>(s,0x390,p,mat,out);return;   /* 0x3a8 is a plain ret, mat/out stay pending for 0x390 (ret 0xc) */
  }
  u32 flags=*(u32*)(s+0x417);float target;
  if(flags&0x400){bool alt=vcall<u8>(s,0x4d0)!=0;

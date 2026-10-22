@@ -59,7 +59,7 @@ def g_cmd(c):
     c.emu.w32(ct + 0x58, hero)
     c.emu.w8(ct + 0x63, c.rng.choice([0, 1]))
     g = obj(c, 16, {0x84: stub(c, 1, this=True, skip=(0,), outs=[(0, 0x41200000, 4, 0), (0, 0x3f800000, 4, 4), (0, 0, 4, 8)])})
-    actor = obj(c, 16, {0x3a0: stub(c, 2, this=True, skip=(0, 1), ret=c.rng.getrandbits(32)), 0x390: stub(c, 1, this=True),
+    actor = obj(c, 16, {0x3a0: stub(c, 0, this=True, ret=c.rng.getrandbits(32)), 0x390: stub(c, 3, this=True, skip=(1, 2)),   # 0x3a0 plain ret; 0x390 ret 0xc (bone, matrix, position)
                         0x20: stub(c, 0, this=True, ret=g)})
     c.emu.w32(ct + 0x4c, actor)
     c.emu.w32(ct + 0x44, obj(c, 16, {0x130: stub(c, 3, this=True)}))

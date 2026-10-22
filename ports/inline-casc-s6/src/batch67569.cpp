@@ -6,6 +6,7 @@ extern "C" void THISCALL ext_4dc630(u8 *rec, u32 a, u32 b);  // thiscall: ECX = 
 
 #define D32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 typedef u32 (THISCALL *tab3_t)(u8 *, u32, u32, u32);
+typedef u32 (THISCALL *tab1_t)(u8 *, u32);
 
 // 0x4ad3a0, thiscall(list) ret 4, no return value: walks a list object (slot 0x14 must be non-zero; iterator via slots 0x4c / 0x5c) and for every id that 0x4acf30 resolves to an object: when its
 // record's flag 0x400 (+0x3c) is clear it sets state 0x800000 (0x4dc630), runs slot 0x158, gives the object the handle from the table's slot 0x4c(this[0x44], 0, 0) through slot 0x2f0 and runs slot
@@ -25,8 +26,8 @@ static void THISCALL fn4ad3a0(u8 *self, u8 *list) {
         ext_4dc630(rec, 0x800000, 0);
         vcall<void>(o, 0x158);
         u8 *tab = *(u8 **)(*(u8 **)0x70039c + 0x9b);
-        u32 m = (*(tab3_t *)(*(u8 **)tab + 0x4c))(tab, D32(self, 0x44), 0, 0);
-        vcall<void>(o, 0x2f0, m);
+        u32 m = (*(tab1_t *)(*(u8 **)tab + 0x4c))(tab, D32(self, 0x44)); // 0x4c pops ONE word; the two earlier pushes are the 2nd/3rd arguments of the 0x2f0 call (ret 0xc)
+        vcall<void>(o, 0x2f0, m, 0u, 0u);
         vcall<void>(o, 0x2d0, 1u, 0u);
       }
       u8 *x = vcall<u8 *>(o, 0x2e8);

@@ -1,7 +1,7 @@
 """specs_s604.py - area 49 batch 604: CCivilianPathList::SetCivilianOnPath (0x5bf340).
 Callees hooked by address (e.hook, same for the port and the original): 0x41e290 (__builtin_new, cdecl, fixed buffer),
 0x5bdd30 (record constructor, thiscall one arg, returns a fixed value), 0x47bf10 (thiscall, two args). The render
-manager's slot 0x58 is a counting handler: first call pops 12 (three args), second pops 4 (one arg)."""
+manager's slot 0x58 pops one argument (the two pushes before it are the trailing args of slot 0x130 of the object at this+0x44)."""
 from pilot import S
 from pe_emu import F
 from wkit import rnd, stub, obj, sysobj, fedge  # noqa: F401
@@ -28,17 +28,14 @@ def _setup(c):
     def rm58(e, rr):
         n = e.r32(cnt)
         e.w32(cnt, n + 1)
-        if n == 0:
-            e.ret(eax=x1, argbytes=12)
-        else:
-            e.ret(eax=x2, argbytes=4)
+        e.ret(eax=x1 if n == 0 else x2, argbytes=4)
 
     rm = c.emu.fake_object('rm', 0x100, nslots=0x60, slots={0x58: rm58})
     sysv = obj(c, 0xa0, {0x1c0: stub(c, 2, fldv=r.choice((0.0, 0.5, 0.999, r.random())))})
     c.emu.w32(sysv + 0x9b, rm)
     c.emu.w32(sysv + 0x40, r.randint(0, 1 << 20))
     c.emu.w32(0x70039c, sysv)
-    o = obj(c, 0x40, {0x130: stub(c, 1)})
+    o = obj(c, 0x40, {0x130: stub(c, 3, skip=(2,), copy=(2, [(0, 'd'), (4, 'd'), (8, 'd')]))})   # (x1, id word, &block): the three block dwords (slot 0x30 result, bytes 0x51 and 0x52 of the entry) are recorded
     self_ = rnd(c, 0x1000)
     c.emu.w32(self_ + 0x44, o)
     c.emu.w16(self_ + 0x916, r.getrandbits(16)) if hasattr(c.emu, 'w16') else c.emu.w32(self_ + 0x916, r.getrandbits(16))

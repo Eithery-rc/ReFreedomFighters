@@ -807,13 +807,13 @@ extern "C" u32 lifted_4c7330(void) {
   eax = (u32)((EBP - 96) + 24);  // @151_4c7330
   PV[8] = (u32)(eax);  // @152_4c7330
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @153_4c7330
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6900844), (u32)(0), (u32)(6900440), (u32)(769), PV[8]);  // @154_4c7330
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(eax + 276)))(ecx, (u32)(6900844), (u32)(0), (u32)(6900440), (u32)(769));  // @154_4c7330  // 0x114 pops 4 words; 1 pending push(es) go to the next call
   ecx = edx = 0;  // @155_4c7330
   eax = (eax & 0xffff);  // @156_4c7330
   ecx = edi;  // @157_4c7330
   PV[9] = (u32)(eax);  // @158_4c7330
   PV[10] = (u32)(edi);  // @159_4c7330
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 304)))(ecx, PV[10], PV[9]);  // @160_4c7330
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 304)))(ecx, PV[10], PV[9], PV[8]);  // @160_4c7330
   ecx = edx = 0;  // @161_4c7330
   L4c7557:;
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340976), sizeof v); (u32)v; });  // @163_4c7330

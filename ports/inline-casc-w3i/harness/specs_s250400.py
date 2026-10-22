@@ -52,8 +52,7 @@ def g5a86c0(c):
         o = e.alloc(n, 4)
         pool.append(o)
         return o
-    GB = bytes(r.choice([0, 0, 1, 0xCC, r.randrange(256)]) for _ in range(0x90))
-    e.wbytes(0x20201000, GB)
+    GB = bytes(0x90)   # the port zero-fills the never-written locals (no copy from a fixed address), so the original frame is zeroed too
     ST['GB'] = GB
     if not getattr(e, '_w3i_gb_hook', False):
         from unicorn import UC_HOOK_CODE

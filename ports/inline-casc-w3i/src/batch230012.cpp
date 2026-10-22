@@ -1741,7 +1741,7 @@ extern "C" u32 THISCALL lifted_58ecd0(u32 ecx_in, u32 a0) {
   u32 W3I_C = 0;
   u8 F[0x540] __attribute__((aligned(4)));
   { u8 *d_ = F; u32 n_ = sizeof F / 4; __asm__ volatile("rep stosl" : "+D"(d_), "+c"(n_) : "a"(0xCCCCCCCCu) : "memory"); }
-  { u8 *d_ = F + 0x80 + 12; const u8 *s_ = (const u8 *)(0x20201000 + 12); u32 n_ = (0x3a0 - 12) / 4; __asm__ volatile("rep movsl" : "+D"(d_), "+S"(s_), "+c"(n_) : : "memory"); }   // w3i: same per-case garbage as the original frame (the spec fills both)   // w3i: the original frame is fresh 0xCC stack; paths that read a never-written local must see the same bytes
+  { u32 *d_ = (u32 *)(F + 0x80 + 12); u32 n_ = (0x3a0 - 12) / 4, z_ = 0; __asm__ volatile("rep stosl" : "+D"(d_), "+c"(n_) : "a"(z_) : "memory"); }   // the original reads uninitialised stack here (garbage, not reproducible): zero-filled, never read from a fixed address (0x20201000 is unmapped in the game)
   u32 EBP = (u32)(F + 0x440);
   u32 PV[157], FL[4] = {0, 0, 0, 0}; u32 ecx_zero = 0, edx_zero = 0;
   u32 X0[4] = {0,0,0,0}, X1[4] = {0,0,0,0}, X2[4] = {0,0,0,0}, X3[4] = {0,0,0,0}, X4[4] = {0,0,0,0}, X5[4] = {0,0,0,0}, X6[4] = {0,0,0,0}, X7[4] = {0,0,0,0};

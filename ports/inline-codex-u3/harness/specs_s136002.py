@@ -17,9 +17,9 @@ def gen(c):
   n=em.reg('edx');em.calllog.append(('records',n,em.rbytes(em.reg('ecx'),n*64)))
   mask=em.arg32(3);em.wbytes(mask,bytes((i+n)&255 for i in range(128)))
  hook_rec(c,0x660c00,6,this='mark',deref={3:32,4:9,5:3},side=render)
- hook_rec(c,0x648fb0,4,this=True,deref={0:32})
+ hook_rec(c,0x648fb0,4,this=True,deref={0:32},ret=r.getrandbits(32))   # EAX at exit is this callee's result (0 on the early exit)
  def fill(em,k):em.wbytes(em.arg32(0),bytes([em.arg32(1)&255])*em.arg32(2))
  hook_rec(c,0x634d10,3,pop=0,stackmark=(0,),side=fill)
  hook_rec(c,0x7003b0,0,pop=0,ret=r.getrandbits(32))
  return [s,arr,arr+count*4,r.getrandbits(32),opt]
-S(0x64a280,'GUESS compact and submit geometry records','thiscall',None,ret=None,gen=gen)
+S(0x64a280,'GUESS compact and submit geometry records','thiscall',None,ret='eax',gen=gen)

@@ -1,18 +1,18 @@
 // batch34162.cpp - cascade tier H, batch 34162: 0x484ff0 (build a vector and hand it to a slot), 0x48f7e0 (react when a value equals 2.0).
 #include "ff.h"
 
-extern "C" void THISCALL ext_443ef0(void *out, u32 p, u32 f);      // ret 8
+extern "C" void FASTCALL ext_443ef0(void *out, u32 base, u32 p, u32 f);      // ret 8: out = p * f + base (ECX = out, EDX = base)
 extern "C" void THISCALL ext_494b40(void *self, u32 a);            // ret 4
 extern "C" void THISCALL ext_494ac0(void *self, u32 a);            // ret 4
 extern "C" void FASTCALL ext_633654(u32 cookie);                    // /GS check
 
 static u32 rd32(u8 *p) { return p[0] | p[1] << 8 | p[2] << 16 | (u32)p[3] << 24; }
 
-// 0x484ff0, thiscall(a, b) ret 8, /GS: v (16 bytes on the stack) = ext_443ef0(&v, a + 0xc, -[this+0x451]) (sign flip with the mask at 0x67af40); o = this->slot0x20(); o->slot0x7c(a, &v).
+// 0x484ff0, thiscall(a, b) ret 8, /GS: v (16 bytes on the stack) = ext_443ef0(&v, EDX = b, a + 0xc, -[this+0x451]) (sign flip with the mask at 0x67af40); o = this->slot0x20(); o->slot0x7c(a, &v).
 static void THISCALL fn484ff0(u8 *self, u8 *a, u32 b) {
   u32 v[4];
   u32 f = rd32(self + 0x451) ^ G(u32, 0x67af40);
-  ext_443ef0(v, (u32)(a + 0xc), f);
+  ext_443ef0(v, b, (u32)(a + 0xc), f);
   u8 *o = vcall<u8 *>(self, 0x20);
   vcall<void>(o, 0x7c, (u32)a, (u32)v);
   ext_633654(0);

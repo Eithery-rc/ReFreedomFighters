@@ -7,7 +7,7 @@
 // +0xb0 pointer to a helper object (vtable slot 0x88).
 // 1. Fails (returns 0) unless limit - end >= 0xe4 bytes of room.
 // 2. Writes the new entry at end: [end+0x14] = ref, [end+0x10] = +0xac.
-// 3. end = helper->slot 0x88(end, begin + [ref], +0x68, &+0x70, &+0x94, &+0xa0), +0x6c += 1, returns 1.
+// 3. next = helper->slot 0x88(end, begin + [ref], +0x68, &+0x70, &+0x94, &+0xa0); when next == end returns 0 untouched, else +0x6c += 1, +0x60 = next, returns 1.
 static u8 FASTCALL stripOutCallback(u32 *ref, u8 *q) {
   u8 *begin = *(u8 **)(q + 0x5c) + *(u32 *)ref;
   u8 *end = *(u8 **)(q + 0x60);
@@ -21,8 +21,10 @@ static u8 FASTCALL stripOutCallback(u32 *ref, u8 *q) {
   typedef u8 *(THISCALL *slot88)(void *self, u8 *end, u8 *bref, u32 flags, void *p70, void *p94, void *pa0);
   u8 *next = ((slot88)((*(void ***)helper)[0x88 / 4]))(helper, end, begin, *(u32 *)(q + 0x68), q + 0x70, q + 0x94,
                                                      q + 0xa0);
-  *(u8 **)(q + 0x60) = next;
+  if (next == end)   // the helper wrote nothing: neither the end pointer nor the count change
+    return 0;
   *(u32 *)(q + 0x6c) += 1;
+  *(u8 **)(q + 0x60) = next;
   return 1;
 }
 PCREG(4ec660, stripOutCallback);

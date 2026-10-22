@@ -24,8 +24,8 @@ static u32 THISCALL fn467260(u8 *self, u32 a, u32 b, u32 c) {
     }
     D32(self, 0x153) = 0;
   }
-  u32 r = vcall<u32>(self, 0x3a0, (u32)m, (u32)v);
-  vcall<void>(self, 0x390, r);
+  u32 r = vcall<u32>(self, 0x3a0);   // plain `ret`: the matrix/vector pushes stay pending for slot 0x390 (ret 0xc: bone, matrix, vector)
+  vcall<void>(self, 0x390, r, (u32)m, (u32)v);
   u8 *cr = vcall<u8 *>(self, 0x20);
   u32 h = ext_43ec00(cr, m, v, a, b, 0, 0);
   D32(self, 0x153) = h;

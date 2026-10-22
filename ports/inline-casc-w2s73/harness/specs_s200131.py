@@ -3258,9 +3258,9 @@ def g5c6cb0(c):
     c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x138, pystub(c, 0, ret=lambda emu, k: SR_1[min(k, 0)], this=True, side=mkside(23, na=0)))
     SR_2 = [O[('ret', 2)], O[('ret', 5)], O[('ret', 12)]]
     c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x58, pystub(c, 1, ret=lambda emu, k: SR_2[min(k, 2)], this=True, side=mkside(23, na=1)))
-    c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x114, pystub(c, 6, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=6)))
+    c.emu.w32(O[('load', ('load', ('glob', 7340956), 155), 0)] + 0x114, pystub(c, 4, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=4)))   # slot 0x114 pops FOUR words
     c.emu.w32(O[('load', ('ret', 0), 0)] + 0x88, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=2)))
-    c.emu.w32(O[('load', ('ret', 2), 0)] + 0x128, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=1)))
+    c.emu.w32(O[('load', ('ret', 2), 0)] + 0x128, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(1,), side=mkside(23, na=3)))   # 3 words: the value and the two pending pushes
     SR_3 = [O[('ret', 6)], O[('ret', 13)]]
     c.emu.w32(O[('load', ('glob', 7340944), 0)] + 0x20, pystub(c, 2, ret=lambda emu, k: SR_3[min(k, 1)], this=True, side=mkside(23, na=2)))
     c.emu.w32(O[('load', ('ret', 5), 0)] + 0x1d8, pystub(c, 2, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=2)))
@@ -3269,7 +3269,7 @@ def g5c6cb0(c):
     c.emu.w32(O[('load', ('ret', 13), 0)] + 0x2c, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=3)))
     SR_4 = [O[('ret', 19)]]
     c.emu.w32(O[('load', ('load', ('load', ('glob', 7340956), 155), 2780), 0)] + 0x25c, pystub(c, 2, ret=lambda emu, k: SR_4[min(k, 0)], this=True, side=mkside(23, na=2)))
-    c.emu.w32(O[('load', ('ret', 19), 0)] + 0x128, pystub(c, 1, ret=lambda emu, k: r.getrandbits(32), this=True, side=mkside(23, na=1)))
+    c.emu.w32(O[('load', ('ret', 19), 0)] + 0x128, pystub(c, 3, ret=lambda emu, k: r.getrandbits(32), this=True, stackmark=(1,), side=mkside(23, na=3)))
     def side_4cc1d0(emu, k, _s=mkside(8, na=0)):
         _s(emu, k)
     hook_rec(c, 0x4cc1d0, 0, ret=r.getrandbits(32), pop=0, this=True, side=side_4cc1d0)

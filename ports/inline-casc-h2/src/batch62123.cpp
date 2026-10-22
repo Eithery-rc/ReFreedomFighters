@@ -13,7 +13,8 @@ static void THISCALL fn465fd0(u8 *self) {
   }
   u32 a = G(u16, self + 0x161);
   u32 b = G(u16, self + 0x163);
-  u32 result = vcall<u32>(table, 0x4c, self, a, b);
-  vcall<void>(object, 0x228, result);
+  // slot 0x4c (ret 4) pops only `self`; the pushes of b and a stay pending and are the trailing args of slot 0x228 (ret 0xc)
+  u32 result = vcall<u32>(table, 0x4c, (u32)self);
+  vcall<void>(object, 0x228, result, a, b);
 }
 PCREG(465fd0, fn465fd0);

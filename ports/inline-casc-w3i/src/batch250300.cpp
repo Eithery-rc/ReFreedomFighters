@@ -44,7 +44,7 @@ extern "C" u32 THISCALL lifted_5a86c0(u32 ecx_in) {
   u32 W3I_A = 0, W3I_B = 0, W3I_C = 0, W3I_D = 0, W3I_E = 0, W3I_F = 0;
   u8 F[0x400] __attribute__((aligned(4)));
   u32 EBP = (u32)(F + 0x300);
-  { u8 *d_ = (u8 *)(EBP - 0x78); const u8 *s_ = (const u8 *)0x20201000; u32 n_ = 0x70 / 4; __asm__ volatile("rep movsl" : "+D"(d_), "+S"(s_), "+c"(n_) : : "memory"); }   // w3i: same per-case garbage as the exe frame (spec fills both)
+  { u32 *d_ = (u32 *)(EBP - 0x78); u32 n_ = (0x70) / 4, z_ = 0; __asm__ volatile("rep stosl" : "+D"(d_), "+c"(n_) : "a"(z_) : "memory"); }   // the original reads uninitialised stack here (garbage, not reproducible): zero-filled, never read from a fixed address (0x20201000 is unmapped in the game)
   u32 PV[115], FL[4] = {0, 0, 0, 0}; u32 ecx_zero = 0, edx_zero = 0;
   u32 X0[4] = {0,0,0,0}, X1[4] = {0,0,0,0}, X2[4] = {0,0,0,0}, X3[4] = {0,0,0,0}, X4[4] = {0,0,0,0}, X5[4] = {0,0,0,0}, X6[4] = {0,0,0,0}, X7[4] = {0,0,0,0};
   u32 eax = 0, ecx = ecx_in, edx = 0, ebx = 0, esi = 0, edi = 0;

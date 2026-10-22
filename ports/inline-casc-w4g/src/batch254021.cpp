@@ -317,11 +317,11 @@ extern "C" u32 THISCALL lifted_53ac90(u32 ecx_in, u32 a0) {
   eax = (u32)(EBP - 64);  // @53_53ac90
   ecx = ebx;  // @54_53ac90
   PV[2] = (u32)(eax);  // @55_53ac90
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 928)))(ecx, PV[2], PV[1]);  // @56_53ac90
+  eax = ((u32(THISCALL *)(u32))(*(u32 *)(edi + 928)))(ecx);   // slot 0x3a0 is a plain `ret`: both pushes stay pending for slot 0x390  // @56_53ac90
   ecx = edx = 0;  // @57_53ac90
   PV[3] = (u32)(eax);  // @58_53ac90
   ecx = ebx;  // @59_53ac90
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(edi + 912)))(ecx, PV[3]);  // @60_53ac90
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 912)))(ecx, PV[3], PV[2], PV[1]);   // slot 0x390 (ret 0xc): result and the two pending pushes  // @60_53ac90
   ecx = edx = 0;  // @61_53ac90
   goto L53ad9c;  // @62_53ac90
   L53ad87:;

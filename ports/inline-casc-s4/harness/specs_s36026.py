@@ -42,8 +42,9 @@ def _g474eb0(c):
         em.ret(eax=0, argbytes=0)
     e.hook(0x441970, h70)
     e.hook(0x441940, h40)
-    a = obj(c, 0x20, {0x2b4: pystub(c, 3, this=True, ret=r.getrandbits(32), side=fill34_10, stackmark=(1, 2)),
-                      0x390: pystub(c, 1, this=True), 0x98: pystub(c, 2, this=True, deref={0: 9, 1: 3})})
+    a = obj(c, 0x20, {0x2b4: pystub(c, 1, this=True, ret=r.getrandbits(32)),
+                      0x390: pystub(c, 3, this=True, side=fill34_10, stackmark=(1, 2)),   # 0x2b4 takes one arg; buf34 / buf10 pending for 0x390 (ret 0xc)
+                       0x98: pystub(c, 2, this=True, deref={0: 9, 1: 3})})
     t = obj(c, 0x20, {0x94: pystub(c, 2, this=True, side=fill_t, stackmark=(0, 1))})
     b = obj(c, 0x20, {0x20: pystub(c, 0, this=True, ret=t), 0x2d4: pystub(c, 2, this=True, deref={0: 9, 1: 3})})
     E = rnd(c, 0x80)

@@ -45,9 +45,9 @@ static void processOne(u8 *self, u8 *p) {
 
 static u32 THISCALL fn648890(u8 *self, u8 *a) {
   u32 list[0x200];
-  u32 cookie;
   u8 *obj = *(u8 **)(*(u8 **)(a + 8) + 0x3c);
-  u8 *end = (u8 *)vcall<u32>(obj, 0x380, (u32)list, (u32)&cookie);
+  // the second argument is the END of the buffer (the original passes the address just past its 0x800-byte array, which is where the /GS cookie lives)
+  u8 *end = (u8 *)vcall<u32>(obj, 0x380, (u32)list, (u32)(list + 0x200));
   s32 n = (s32)((u8 *)end - (u8 *)list) >> 2;
   u32 count = 0;
   for (s32 i = 0; i < n; i++) {

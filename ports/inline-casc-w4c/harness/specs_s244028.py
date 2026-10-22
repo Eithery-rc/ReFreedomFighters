@@ -50,7 +50,7 @@ def g607640(c):
                             0x60: pystub(c, 1, ret=r.getrandbits(32), this=True, nullflag=(0,), side=w60),
                             0x64: pystub(c, 1, ret=r.getrandbits(32), this=True, nullflag=(0,), side=w32r),
                             0x50: pystub(c, 1, ret=r.getrandbits(32), this=True, nullflag=(0,), side=w32r),
-                            0x70: pystub(c, 1, ret=r.getrandbits(32), this=True, side=sd())})
+                            0x70: pystub(c, 2, ret=r.getrandbits(32), this=True, side=sd())})   # two stack args: eax and the pending [ebp-16]
     elem_bufs = [rnd(c, 0x50) for _ in range(4)]
     grow_bufs = [rnd(c, 0x100) for _ in range(6)]
     final = rnd(c, 0x30)
@@ -71,7 +71,7 @@ def g607640(c):
     v0c = em.r32(0x6b8508 + 0xc)
     v10 = em.r32(0x6b8508 + 0x10)
     hook_rec(c, v0c, 1, ret=r.getrandbits(32), pop=4, this=True, side=sd())
-    hook_rec(c, v10, 1, ret=r.getrandbits(32), pop=4, this=True, side=sd())
+    hook_rec(c, v10, 0, ret=r.getrandbits(32), pop=0, this=True, side=sd())   # 0x47fbd0 pops nothing (the push before it stays pending)
     me = rnd(c, 0x50)
     cap = r.choice([0, 1, 2, 3, 4, 8])
     size = r.randrange(0, cap + 3) if r.random() < 0.3 else r.randrange(0, cap + 1)

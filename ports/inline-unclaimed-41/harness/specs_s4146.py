@@ -2,9 +2,9 @@
 stack argument id, ret 4; returns eax = the item I, or the null template C).
 
 self: 0x400 random bytes; its vtable slot 0x6c8 is a one-argument stub returning C (an object, or zero one time in five). C: vtable 0x2c4 (two
-arguments) returns I (an object). I: vtable 0x2f0 (one argument), 0x1e0 (one argument, random bool), 0x328 (a sequence: [0, X] or [X, X], so the
+arguments) returns I (an object). I: vtable 0x2f0 (three arguments), 0x1e0 (one argument, random bool), 0x328 (a sequence: [0, X] or [X, X], so the
 second call only happens when the first is non-null), 0x360 (one argument), 0x358 (one argument). X: vtable 0x31c returns w. The render manager
-(0x70039c, rm+0x9b = o): o's vtable slot 0x4c (three arguments) returns V. Checksums cover heap arguments only (self and the id are kept; the
+(0x70039c, rm+0x9b = o): o's vtable slot 0x4c (ONE argument, ret 4; the two earlier pushes are the 2nd and 3rd arguments of I.vt[0x2f0]) returns V. Checksums cover heap arguments only (self and the id are kept; the
 MEDI constant and the Y pointer are constants or heap). Faulting cases must be 0 (JSON)."""
 import struct
 from pilot import S
@@ -33,7 +33,7 @@ def _layout(c):
 
     r_nonnull = c.rng.random() < 0.6
     seq328 = [X, X] if r_nonnull else [0, X]
-    s2f0, _, _ = hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)
+    s2f0, _, _ = hs.stub(c, 3, ecx=True, edx=False, mask=[1, 2, 3], cleanup=True, ret=0)   # ret 0xc: V and the two pending pushes
     s1e0, _, _ = hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=c.rng.randint(0, 1))
     s360, _, _ = hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)
     s358, _, _ = hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=0)
@@ -48,8 +48,8 @@ def _layout(c):
     self_ = _rnd(c, 0x400)
     c.emu.w32(self_, _vt(c, {0x6c8: s6c8}))
 
-    # the render manager: rm+0x9b = o (vtable 0x4c, three arguments, returns V); o+0xadc = Y (a heap value passed on)
-    s4c, _, _ = hs.stub(c, 3, ecx=True, edx=False, mask=[1, 2, 3], cleanup=True, ret=c.rng.getrandbits(32))
+    # the render manager: rm+0x9b = o (vtable 0x4c, ONE argument, returns V); o+0xadc = Y (a heap value passed on)
+    s4c, _, _ = hs.stub(c, 1, ecx=True, edx=False, mask=[1], cleanup=True, ret=c.rng.getrandbits(32))   # ret 4: pops ONE argument
     o = _rnd(c, 0x1000)
     c.emu.w32(o, _vt(c, {0x4c: s4c}))
     c.emu.w32(o + 0xadc, c.rng.getrandbits(32))

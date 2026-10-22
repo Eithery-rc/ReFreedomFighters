@@ -253,8 +253,9 @@ static long double THISCALL getActiveAnim(u8 *self, u32 *out, const float *, con
       u8 *h = *(u8 **)(self + 0x36d);
       void **hv = *(void ***)h;
       float mm[9], pos[3];
-      u32 x = ((vcallUPP)hv[0x3a0 / 4])(h, mm, pos);
-      ((vcallVU)hv[0x390 / 4])(h, x);
+      // slot 0x3a0 is a plain `ret`: the pushes of mm and pos stay pending for slot 0x390 (ret 0xc: bone, matrix, position)
+      u32 x = ((u32(THISCALL *)(void *))hv[0x3a0 / 4])(h);
+      ((void(THISCALL *)(void *, u32, void *, void *))hv[0x390 / 4])(h, x, mm, pos);
       u8 *g = (u8 *)((vcallU0)VT(*(u8 **)(self + 0x36d), 0x20))(*(u8 **)(self + 0x36d));
       ((vcallVP)VT(g, 0x84))(g, pos);
       ext_596940(*(u8 **)(*(u8 **)(self + 0x36d) + 0x852), 2, pos, 1, -1);

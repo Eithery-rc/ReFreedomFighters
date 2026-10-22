@@ -387,12 +387,12 @@ extern "C" u32 THISCALL lifted_4668d0(u32 ecx_in) {
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx + 155), sizeof v); (u32)v; });  // @12_4668d0
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi), sizeof v); (u32)v; });  // @13_4668d0
   edx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @14_4668d0
-  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32, u32, u32))(*(u32 *)(edx + 276)))(ecx, (u32)(6840152), (u32)(0), (u32)(6840032), (u32)(585), (u32)(p0_), (u32)(0));  // @15_4668d0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32, u32))(*(u32 *)(edx + 276)))(ecx, (u32)(6840152), (u32)(0), (u32)(6840032), (u32)(585));  // @15_4668d0  // 0x114 pops 4 words; 2 pending push(es) go to the next call
   ecx = edx = 0;  // @16_4668d0
   eax = (eax & 0xffff);  // @17_4668d0
   ecx = esi;  // @18_4668d0
   p1_ = eax;  // @19_4668d0
-  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(edi + 296)))(ecx, (u32)(p1_));  // @20_4668d0
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 296)))(ecx, (u32)(p1_), (u32)(p0_), (u32)(0));  // @20_4668d0
   ecx = edx = 0;  // @21_4668d0
   eax = (u32)(EBP - 16600);  // @22_4668d0
   { u32 v = (u32)((u32)(0)); __builtin_memcpy((void *)(u32)(EBP - 16600), &v, sizeof v); }  // @23_4668d0

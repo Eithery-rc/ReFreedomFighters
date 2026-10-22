@@ -7,7 +7,7 @@ static u32 THISCALL foot(u8*t,u32 right){
  u8*sys=G(u8*,0x70039c);void*dll=A(void*,sys,0x1a9f);
  if(!dll||!A(u32,t,0x14f))return 0;
  float m[9],p[3];
- if(A(u8,t,0x146)) {u32 x=vcall<u32>(t,(u8)right?0x3b8:0x3b4,m,p);vcall<void>(t,0x390,x);}
+ if(A(u8,t,0x146)) {u32 x=vcall<u32>(t,(u8)right?0x3b8:0x3b4);vcall<void>(t,0x390,x,m,p);   /* the bone-id slots are plain ret; m and p are args 2 and 3 of 0x390 (ret 0xc) */}
  else{u8*root=A(u8*,t,8);ext_4de420(m,(float*)root);for(int i=0;i<3;i++)p[i]=A(float,root,0x24+4*i);}
  ext_451890(p,m,10.f);
  u32 ground=A(u32,t,0x14b);if(!ground)ground=A(u32,t,0x147);

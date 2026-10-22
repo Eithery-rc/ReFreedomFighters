@@ -1,4 +1,4 @@
-"""specs_s210087.py - Sonnet-w3a: 0x5bda50. Manager slot 0x4c is a custom stub: with this[0x74] set its first call takes 1 argument (callee pops 4), every other call takes 2 (pops 8); targets' slots 0x130 (3 args) / 0x128 (2 args) are recorders."""
+"""specs_s210087.py - Sonnet-w3a: 0x5bda50. Manager slot 0x4c is a custom stub: it takes 1 argument (callee pops 4); targets' slots 0x130 / 0x128 (3 args each) are recorders."""
 from pilot import S
 from recruits_util import rnd, obj, clear_hooks, hook_rec, pystub
 
@@ -14,16 +14,12 @@ def g5bda50(c):
     ids = [_r(c) for _ in range(3)]
 
     def s4c(emu, res):
+        # slot 0x4c (0x48ff90 -> 0x497390, ret 4) takes ONE argument in every call; the extra `push 0` of the else branches is the third argument of slot 0x128
         k = cnt[0]; cnt[0] += 1
-        one = bool(flag) and k == 0
-        if one:
-            emu.calllog.append(('s4c1', emu.reg('ecx'), emu.arg32(0)))
-            emu.ret(eax=ids[0], argbytes=4)
-        else:
-            emu.calllog.append(('s4c2', emu.reg('ecx'), emu.arg32(0), emu.arg32(1)))
-            emu.ret(eax=ids[min(k, 2)], argbytes=8)
-    t = obj(c, 0x40, {0x130: pystub(c, 3, ret=_r(c), this=True), 0x128: pystub(c, 2, ret=_r(c), this=True)}, nslots=0x60)
-    o = 0 if c.rng.random() < 0.3 else obj(c, 0x40, {0x128: pystub(c, 2, ret=_r(c), this=True)}, nslots=0x60)
+        emu.calllog.append(('s4c', emu.reg('ecx'), emu.arg32(0)))
+        emu.ret(eax=ids[min(k, 2)], argbytes=4)
+    t = obj(c, 0x40, {0x130: pystub(c, 3, ret=_r(c), this=True), 0x128: pystub(c, 3, ret=_r(c), this=True)}, nslots=0x60)
+    o = 0 if c.rng.random() < 0.3 else obj(c, 0x40, {0x128: pystub(c, 3, ret=_r(c), this=True)}, nslots=0x60)
     mg = obj(c, 0x40, {0x4c: e.stub_fn('s4c', s4c), 0x58: pystub(c, 1, ret=o, this=True)}, nslots=0x30)
     so = rnd(c, 0x200)
     e.wbytes(so + 0x9b, mg.to_bytes(4, 'little'))

@@ -4,7 +4,7 @@
 // [this+0x56] is set. Names GUESS.
 #include "ff.h"
 
-extern "C" void STDCALL ext_4301c0(u32 edx, u32 *local);   // original, stdcall two words (stubbed in the harness)
+extern "C" void THISCALL ext_4301c0(u8 *vec, u32 pos, u32 *val);   // original: thiscall (ECX = the vector), grow + insert, ret 8
 
 typedef u32(THISCALL *SlotArgRet)(u8 *, u32);   // vtable slot, one stack word, eax result
 typedef void(THISCALL *SlotArgVoid)(u8 *, u32); // vtable slot, one stack word, no result used
@@ -25,7 +25,7 @@ static void THISCALL hitpointInit_584580(u8 *self) {
   u32 local = v;
   u32 buf = *(u32 *)(ctr + 4);
   if (buf == *(u32 *)(ctr + 8)) {
-    ext_4301c0(buf, &local);
+    ext_4301c0(ctr, buf, &local);
   } else {
     if (buf) *(u32 *)buf = v;
     *(u32 *)(ctr + 4) = buf + 4;

@@ -32,9 +32,9 @@ static inline bool team_hears(u8 *team, u8 *source) {
 static void THISCALL zffactor_OnSound(u8 *self, void *events) {
   if (!events)
     return;
-  u32 it = 0;
-  vcall<void>(events, 0x4c, &it);
-  u8 *ev = vcall<u8 *>(events, 0x64, &it);
+  u32 it[3] = {0, 0, 0};   // 12-byte iterator state: slot 0x4c fills three dwords
+  vcall<void>(events, 0x4c, it);
+  u8 *ev = vcall<u8 *>(events, 0x64, it);
   while (ev) {
     u8 *src = vcall<u8 *>(db(), 0x58, *(u32 *)(ev + 0x14));
     if (src && vcall<bool>(src, 0x1e0, 0x80200014)) {
@@ -83,13 +83,12 @@ static void THISCALL zffactor_OnSound(u8 *self, void *events) {
           blk.scale = dist * 0.00999999978f;   // 0x67da00
           blk.ref = *(u32 *)(ev + 0x14);
           blk.extra = *(u32 *)(ev + 0x1c);
-          u8 tmp16[0x10] = {0};
           u16 id = vcall<u16>(db(), 0x114, name, 0u, (const char *)0x6ae6a0, 0x683u);   // RegisterZMsg: four args
-          vcall<void>(self, 0x128, (u32)id, tmp16, (void *)0);   // slot 0x128 gets the two leftover pushes too
+          vcall<void>(self, 0x128, (u32)id, &blk, (void *)0);   // slot 0x128 (id, block, sender 0): the block pointer and the 0 pushed before the 0x114 call
         }
       }
     }
-    ev = vcall<u8 *>(events, 0x64, &it);
+    ev = vcall<u8 *>(events, 0x64, it);
   }
 }
 PCREG(5a1830, zffactor_OnSound);

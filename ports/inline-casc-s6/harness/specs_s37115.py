@@ -66,9 +66,16 @@ def _g648890(c):
         ptrs.append(arr)
     blob = b''.join(p.to_bytes(4, 'little') for p in ptrs)
 
+    wrote = [0]
+
     def fill(em, k2):
-        em.wbytes(em.arg32(0), blob)
-    obj3 = obj(c, 0x20, {0x380: pystub(c, 2, this=True, stackmark=(0,), nullflag=(1,), side=fill, ret=lambda em, k2: em.arg32(0) + len(blob))})
+        # arg0 = buffer start, arg1 = buffer END (the original passes the address just past its 0x800-byte array): at most that much is written, the return value is the cursor
+        room = (em.arg32(1) - em.arg32(0)) & 0xffffffff
+        em.calllog.append(('room', room))
+        n = min(len(blob), room & ~3) if room < 0x80000000 else 0
+        em.wbytes(em.arg32(0), blob[:n])
+        wrote[0] = n
+    obj3 = obj(c, 0x20, {0x380: pystub(c, 2, this=True, stackmark=(0, 1), side=fill, ret=lambda em, k2: em.arg32(0) + wrote[0])})
     x = rnd(c, 0x60)
     _w(c, x + 0x3c, obj3)
     src = rnd(c, 0x20)

@@ -14,15 +14,16 @@ typedef u32(*PlainFn)(void);
 static void callSlot2c(u8 *x, u8 *ecxThis, u32 a, u32 b, u32 c) {
   const u32 vtbl = *(const u32 *)x;
   const u32 fn = *(const u32 *)(vtbl + 0x2c);
+  u32 edx_io = fn;   // the callee returns with arbitrary ECX/EDX: both are in/out operands, or the compiler reuses stale values after the call
   asm volatile(
       "pushl %[c]\n\t"
       "pushl %[b]\n\t"
       "pushl %[a]\n\t"
-      "call *%[fn]\n\t"
+      "call *%%edx\n\t"
       "addl $12, %%esp\n\t"
-      :
-      : "c"(ecxThis), [fn] "r"(fn), [a] "r"(a), [b] "r"(b), [c] "r"(c)
-      : "eax", "edx", "memory", "cc");
+      : "+c"(ecxThis), "+d"(edx_io)
+      : [a] "ri"(a), [b] "ri"(b), [c] "ri"(c)
+      : "eax", "memory", "cc");
 }
 
 static u32 THISCALL actorIfGetInitialRefPos(u8 *self, u8 *params) {

@@ -55,7 +55,7 @@ def _x507(c):
     self_ = rnd(c, 0x100)
     sub = rnd(c, 0x40)
     e.w32(sub, vtable(c, 'sub18', 0x200, impl={0x5c0: lambda em, a: 0x5000 + (len(em.calllog) & 0xff)},
-                      argwords={0x5c0: 2, 0x5ac: 1}))
+                      argwords={0x5c0: 1, 0x5ac: 2}))
     e.w32(self_ + 0x18, sub)
     return [self_, x]
 
