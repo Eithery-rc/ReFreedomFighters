@@ -7,6 +7,8 @@ typedef u8 *(THISCALL *g0_t)(void *);
 typedef void(THISCALL *v2p_t)(void *, u32, u32 *);
 typedef u8 *(THISCALL *e1_t)(void *, u32);
 typedef u32(THISCALL *g6_t)(void *, u32, u32, u32, u32, u32 *, u32);
+typedef u32(THISCALL *g4_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 typedef void(THISCALL *v1_t)(void *, u32);
 
 // 0x553980, stdcall(a) ret 4. o = [engine+0x9b] slot 0x138(); id = 0, o slot 0x88(0x6a5c48, &id); p = tab slot 0x58(id) (null returns). w = low word of tab slot 0x114(0x6a5c78, 0, 0x6a57fc, 0x45c, &r, 0) (r an output dword);
@@ -25,8 +27,9 @@ static void STDCALL fn553980(u8 *a) {
   eng = G(u8 *, 0x70039c);
   tab = *(u8 **)(eng + 0x9b);
   u32 f = (*(u32 **)p)[0x128 / 4];
-  u32 w = (*(g6_t **)tab)[0x114 / 4](tab, 0x6a5c78, 0, 0x6a57fc, 0x45c, &r, 0);
-  ((v1_t)f)(p, w & 0xffff);
+  u32 w = (*(g4_t **)tab)[0x114 / 4](tab, 0x6a5c78, 0, 0x6a57fc, 0x45c);
+  // slot 0x114 pops 4 (ret 0x10); &r and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  ((v3_t)f)(p, w & 0xffff, (u32)&r, 0);
   u32 rec = ext_5003d0(*(u32 *)(a + 8), 0);
   ext_5002f0(rec, r);
 }

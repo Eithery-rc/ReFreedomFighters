@@ -5,6 +5,8 @@ extern "C" u32 THISCALL ext_562c20(u8 *self, u32 k);   // thiscall, ret 4
 extern "C" void THISCALL ext_579880(u8 *self, u32 a);  // thiscall, ret 4
 typedef u8(THISCALL *b0_t)(void *);
 typedef u32(THISCALL *g5_t)(void *, u32, u32, u32, u32, u8 *);
+typedef u32(THISCALL *g4_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 typedef void(THISCALL *v2_t)(void *, u32, u32);
 typedef void(THISCALL *v1_t)(void *, u32);
 
@@ -17,8 +19,9 @@ static u32 THISCALL fn5797e0(u8 *self, u32 k) {
     u32 f = (*(u32 **)o)[0x12c / 4];
     u8 *eng = G(u8 *, 0x70039c);
     u8 *tab = *(u8 **)(eng + 0x9b);
-    u32 w = (*(g5_t **)tab)[0x114 / 4](tab, 0x6a6ffc, 0, 0x6a9a24, 0x107, self + 0x194);
-    ((v2_t)f)(*(u8 **)(self + 0x44), *(u32 *)(self + 0x18c), w & 0xffff);
+    u32 w = (*(g4_t **)tab)[0x114 / 4](tab, 0x6a6ffc, 0, 0x6a9a24, 0x107);
+    // slot 0x114 pops 4 (ret 0x10); this + 0x194 stays pending and is arg 3 of slot 0x12c (ret 0xc)
+    ((v3_t)f)(*(u8 **)(self + 0x44), *(u32 *)(self + 0x18c), w & 0xffff, (u32)(self + 0x194));
     (*(v1_t **)self)[0xd0 / 4](self, *(u32 *)(self + 0x18c));
     return ext_562c20(self, k);
   }

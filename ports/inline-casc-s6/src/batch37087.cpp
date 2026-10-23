@@ -21,8 +21,9 @@ static u8 *THISCALL fn4fc500(u8 *self) {
   } else {
     if (!D32(self, 0x84)) {
       u8 *o = byId(D32(self, 0x78));
-      u32 h = vcall<u32>(tabObj(), 0x4c, D32(self, 0x44), 0u);
-      vcall<void>(o, 0x128, (u32)W16(self, 0x80), h);
+      // slot 0x4c pops 1 (ret 4); the 0 pushed before it stays pending and is arg 3 of slot 0x128 (ret 0xc)
+      u32 h = vcall<u32>(tabObj(), 0x4c, D32(self, 0x44));
+      vcall<void>(o, 0x128, (u32)W16(self, 0x80), h, 0u);
       if (!D32(self, 0x84)) return 0;
     }
     u8 *l = *(u8 **)(*(u8 **)(self + 0x84) + 0x48);

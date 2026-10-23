@@ -5,6 +5,8 @@ typedef u32(THISCALL *l2_t)(void *, u32, u32);
 typedef u32(THISCALL *l4_t)(void *, u32, u32, u32, u32);
 typedef u8 *(THISCALL *g0_t)(void *);
 typedef u32(THISCALL *k2_t)(void *, u32, u32);
+typedef u32(THISCALL *k1_t)(void *, u32);
+typedef u32(THISCALL *l3_t)(void *, u32, u32, u32);
 typedef void(THISCALL *v1_t)(void *, u32);
 
 // 0x5c8f10, thiscall, no args, no return value. m = engine[+0x9b][+0xadc]; this[0x7c] = m slot 0x25c(0x6b4a2c, 0). When it is zero: this[0x7c] = m slot 0x294(0x6b4a2c, 0x67f610, 0, 1) (m re-read);
@@ -26,8 +28,9 @@ static void THISCALL fn5c8f10(u8 *self) {
     eng = G(u8 *, 0x70039c);
     tab = *(u8 **)(eng + 0x9b);
     u32 *vt = *(u32 **)o;
-    u32 w = (*(k2_t **)tab)[0x4c / 4](tab, *(u32 *)(self + 0x7c), 2);
-    ((l2_t)vt[0x60 / 4])(o, 0x6b4a2c, w);
+    // slot 0x4c pops 1 (ret 4); the 2 pushed before it stays pending and is arg 3 of slot 0x60
+    u32 w = (*(k1_t **)tab)[0x4c / 4](tab, *(u32 *)(self + 0x7c));
+    ((l3_t)vt[0x60 / 4])(o, 0x6b4a2c, w, 2);
   }
   u8 *x = *(u8 **)(self + 0x7c);
   (*(v1_t **)x)[0x218 / 4](x, *(u32 *)(self + 0x44));

@@ -8,8 +8,9 @@ static void THISCALL fn565ab0(u8 *self) {
   u32 engine = G(u32, 0x70039c);
   u8 *table = (u8 *)G(u32, engine + 0x9b);
   u32 resource = vcall<u32>((void *)table, 0x138);
-  u32 item = vcall<u32>((void *)table, 0x4c, G(u32, self + 0x44), 0x10u);
-  vcall<u32>((void *)resource, 0x60, 0x6a6c10u, item);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 item = vcall<u32>((void *)table, 0x4c, G(u32, self + 0x44));
+  vcall<u32>((void *)resource, 0x60, 0x6a6c10u, item, 0x10u);
   ext_563610(self, 0x6a6c1cu);
   G(u8, self + 0x86) = 1;
 }

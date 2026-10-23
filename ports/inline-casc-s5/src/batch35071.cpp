@@ -6,6 +6,7 @@ extern "C" void THISCALL ext_563510(u8 *self, u32 a);          // ret 4
 extern "C" void THISCALL ext_563610(u8 *self, u32 a);          // ret 4
 typedef u8 *(THISCALL *g0_t)(void *);
 typedef u32(THISCALL *g2_t)(void *, u32, u32);
+typedef u32(THISCALL *g1_t)(void *, u32);
 typedef void(THISCALL *v2_t)(void *, u32, u32);
 typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 
@@ -24,8 +25,9 @@ static void THISCALL fn56cd90(u8 *self) {
   eng = G(u8 *, 0x70039c);
   tab = *(u8 **)(eng + 0x9b);
   u32 f = (*(u32 **)o)[0x60 / 4];
-  u32 id = (*(g2_t **)tab)[0x4c / 4](tab, *(u32 *)(self + 0x44), 0x10);
-  ((v2_t)f)(o, 0x6a7ffc, id);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 id = (*(g1_t **)tab)[0x4c / 4](tab, *(u32 *)(self + 0x44));
+  ((v3_t)f)(o, 0x6a7ffc, id, 0x10);
   wr32u(self + 0x1c6, 0);
   wr32u(self + 0x1be, 0);
   ext_563510(self, 0x6a8010);

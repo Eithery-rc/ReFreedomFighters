@@ -28,8 +28,9 @@ static void STDCALL fn553690(u8 *req) {
   (*(tab4_t *)(*(u8 **)tab + 0x114))(tab, 0x6a584cu, 0, 0x6a57fcu, 0x104u);
   u32 loc;
   tab = *(u8 **)(*(u8 **)0x70039c + 0x9b);
-  u32 r = (*(tab6_t *)(*(u8 **)tab + 0x114))(tab, 0x6a584cu, 0, 0x6a57fcu, 0x105u, (u32)&loc, 0);
-  vcall<void>(obj, 0x128, r & 0xffff);
+  u32 r = (*(tab4_t *)(*(u8 **)tab + 0x114))(tab, 0x6a584cu, 0, 0x6a57fcu, 0x105u);
+  // slot 0x114 pops 4 (ret 0x10); &loc and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  vcall<void>(obj, 0x128, r & 0xffff, (u32)&loc, 0u);
   u8 *o2 = vcall<u8 *>(*(u8 **)(*(u8 **)0x70039c + 0x9b), 0x58, loc);
   if (count > 0) {
     vcall<void>(o2, 0x2d0, 0u, 0u);

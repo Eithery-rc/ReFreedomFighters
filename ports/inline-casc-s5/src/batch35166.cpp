@@ -3,6 +3,8 @@
 
 typedef u8 *(THISCALL *g0_t)(void *);
 typedef u32(THISCALL *k2_t)(void *, u32, u32);
+typedef u32(THISCALL *k1_t)(void *, u32);
+typedef u32(THISCALL *l3_t)(void *, u32, u32, u32);
 typedef u32(THISCALL *l2_t)(void *, u32, u32);
 typedef u32(THISCALL *c4_t)(void *, u32, u32, u32, u32);
 
@@ -16,8 +18,9 @@ static void THISCALL fn4a1190(u8 *self) {
   eng = G(u8 *, 0x70039c);
   tab = *(u8 **)(eng + 0x9b);
   u32 *vt = *(u32 **)o;
-  u32 w = (*(k2_t **)tab)[0x4c / 4](tab, *(u32 *)(self + 0x44), 4);
-  ((l2_t)vt[0x60 / 4])(o, 0x68f75c, w);
+  // slot 0x4c pops 1 (ret 4); the 4 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 w = (*(k1_t **)tab)[0x4c / 4](tab, *(u32 *)(self + 0x44));
+  ((l3_t)vt[0x60 / 4])(o, 0x68f75c, w, 4);
   eng = G(u8 *, 0x70039c);
   tab = *(u8 **)(eng + 0x9b);
   *(u16 *)(self + 0x8b0) = (u16)(*(c4_t **)tab)[0x114 / 4](tab, 0x68f774, 0, 0x68f6b4, 0x220);

@@ -58,7 +58,8 @@ static void THISCALL fn5708a0(u8 *self) {
   u32 vt = *(u32 *)s;
   (void)vt;
   tbl = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 v = vcall<u32>(tbl, 0x4c, *(u32 *)(self + 0x44), 0x10u);
-  vcall<void>(s, 0x60, flag ? 0x6a86e0u : 0x6a86ecu, v);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 v = vcall<u32>(tbl, 0x4c, *(u32 *)(self + 0x44));
+  vcall<void>(s, 0x60, flag ? 0x6a86e0u : 0x6a86ecu, v, 0x10u);
 }
 PCREG(5708a0, fn5708a0);

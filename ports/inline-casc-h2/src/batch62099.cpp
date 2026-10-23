@@ -5,7 +5,8 @@ static u32 THISCALL fn4bb7c0(u8 *self, u8 *parser) {
   ext_4e6330(parser, (u32 *)(self + 0xf4));
   u8 *table = (u8 *)*(u32 *)(*(u32 *)0x70039c + 0x9b);
   u8 *receiver = (u8 *)vcall<u32>(table, 0x138);
-  u32 handle = vcall<u32>(table, 0x4c, *(u32 *)(self + 0x44), 0x10);
-  return vcall<u32>(receiver, 0x60, 0x692dec, handle);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 handle = vcall<u32>(table, 0x4c, *(u32 *)(self + 0x44));
+  return vcall<u32>(receiver, 0x60, 0x692dec, handle, 0x10);
 }
 PCREG(4bb7c0, fn4bb7c0);
