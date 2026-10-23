@@ -7,6 +7,8 @@ typedef void(THISCALL *v2_t)(void *, u32, u32);
 typedef u32(THISCALL *v0u_t)(void *);
 typedef u32(THISCALL *v1u_t)(void *, u32);
 typedef u32(THISCALL *v5u_t)(void *, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *v4u_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 typedef u8 *(THISCALL *v0o_t)(void *);
 typedef u8 *(THISCALL *v1o_t)(void *, u32);
 typedef u8 *(THISCALL *v2o_t)(void *, u32, u32);
@@ -22,16 +24,18 @@ static void THISCALL fn487490(u8 *E, u8 *s) {
   u8 *o = (*(v0o_t **)s)[8 / 4](s);
   if (s[0xa]) {
     u8 *t = tabOf();
-    u32 ax = (*(v5u_t **)t)[0x114 / 4](t, 0x68cf28u, 0, 0x68cee8u, 0x60, 0);
-    (*(v2_t **)o)[0x130 / 4](o, rd(E + 4), (u16)ax);
+    u32 ax = (*(v4u_t **)t)[0x114 / 4](t, 0x68cf28u, 0, 0x68cee8u, 0x60);
+    // slot 0x114 pops 4 (ret 0x10); the 0 stays pending and is arg 3 of slot 0x130 (ret 0xc)
+    (*(v3_t **)o)[0x130 / 4](o, rd(E + 4), (u16)ax, 0);
   }
   u8 *t = tabOf();
   void **vo = *(void ***)o;
   u32 y = (*(v1u_t **)t)[0x4c / 4](t, (u32)o);
   u32 ax;
-  if (s[0xb]) ax = (*(v5u_t **)t)[0x114 / 4](t, 0x68cf34u, 0, 0x68cee8u, 0x67, y);
-  else ax = (*(v5u_t **)t)[0x114 / 4](t, 0x68cf40u, 0, 0x68cee8u, 0x69, y);
-  ((v2_t)vo[0x130 / 4])(o, rd(E + 4), (u16)ax);
+  // slot 0x114 pops 4 (ret 0x10); y stays pending and is arg 3 of slot 0x130 (ret 0xc)
+  if (s[0xb]) ax = (*(v4u_t **)t)[0x114 / 4](t, 0x68cf34u, 0, 0x68cee8u, 0x67);
+  else ax = (*(v4u_t **)t)[0x114 / 4](t, 0x68cf40u, 0, 0x68cee8u, 0x69);
+  ((v3_t)vo[0x130 / 4])(o, rd(E + 4), (u16)ax, y);
 }
 PCREG(487490, fn487490);
 

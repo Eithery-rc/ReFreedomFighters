@@ -7,6 +7,8 @@ typedef void(THISCALL *v2_t)(void *, u32, u32);
 typedef u8 *(THISCALL *v0o_t)(void *);
 typedef u8 *(THISCALL *v1o_t)(void *, u32);
 typedef u32(THISCALL *v5r_t)(void *, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *v4r_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 
 static inline u32 rd(u8 *p) { return *(u32 *)p; }
 static inline void wr(u8 *p, u32 v) { *(u32 *)p = v; }
@@ -32,9 +34,10 @@ static u8 THISCALL fn56df60(u8 *d, u32 a, u32 flag) {
       u8 *w = *(u8 **)(d + 0x44);
       void **vt = *(void ***)w;
       u8 *tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-      u32 ax = (u16)(*(v5r_t **)tab)[0x114 / 4](tab, 0x6a6610u, 0, 0x6a82f4u, 0x89u, 0);
+      u32 ax = (u16)(*(v4r_t **)tab)[0x114 / 4](tab, 0x6a6610u, 0, 0x6a82f4u, 0x89u);
       w = *(u8 **)(d + 0x44);
-      ((v2_t)vt[0x130 / 4])(w, b, ax);
+      // slot 0x114 pops 4 (ret 0x10); the 0 stays pending and is arg 3 of slot 0x130 (ret 0xc)
+      ((v3_t)vt[0x130 / 4])(w, b, ax, 0);
     }
     u8 *o = ext_589c20((u32)i);
     if (o) (*(v1_t **)o)[0x88 / 4](o, 0);

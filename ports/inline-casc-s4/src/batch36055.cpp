@@ -6,6 +6,8 @@ typedef void(THISCALL *v4_t)(void *, u32, u32, u32, u32);
 typedef u8 *(THISCALL *v1o_t)(void *, u32);
 typedef u32(THISCALL *v1r_t)(void *, u32);
 typedef u32(THISCALL *v5r_t)(void *, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *v4r_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 
 static inline u32 rd(u8 *p) { return *(u32 *)p; }
 
@@ -28,7 +30,8 @@ static void fn4c7bb0() {
   u32 w = 0x69212c;
   void **vt = *(void ***)x;
   tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 ax = (u16)(*(v5r_t **)tab)[0x114 / 4](tab, 0x694c6cu, 0, 0x694ad8u, 0x2d9u, (u32)&w);
-  ((v2_t)vt[0x130 / 4])(x, (u32)x, ax);
+  u32 ax = (u16)(*(v4r_t **)tab)[0x114 / 4](tab, 0x694c6cu, 0, 0x694ad8u, 0x2d9u);
+  // slot 0x114 pops 4 (ret 0x10); &w stays pending and is arg 3 of slot 0x130 (ret 0xc)
+  ((v3_t)vt[0x130 / 4])(x, (u32)x, ax, (u32)&w);
 }
 PCREG(4c7bb0, fn4c7bb0);

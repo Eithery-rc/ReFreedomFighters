@@ -1,6 +1,8 @@
 // batch36040.cpp - cascade s4 batch 36040: 0x51f7c0, 0x539780, 0x53b100, 0x5aa190, 0x5d79f0 (tier F rows).
 #include "ff.h"
 
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
+
 typedef void(THISCALL *v0_t)(void *);
 typedef void(THISCALL *v1_t)(void *, u32);
 typedef void(THISCALL *v2_t)(void *, u32, u32);
@@ -165,7 +167,8 @@ static void THISCALL fn5d79f0(u8 *d) {
   tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
   u8 *q = (*(v0o_t **)tab)[0x138 / 4](tab);
   tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u8 *x = (*(v2o_t **)tab)[0x4c / 4](tab, rd(d + 0x44), 0x10);
-  (*(v2_t **)q)[0x60 / 4](q, 0x6b588cu, (u32)x);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u8 *x = (*(v1o_t **)tab)[0x4c / 4](tab, rd(d + 0x44));
+  (*(v3_t **)q)[0x60 / 4](q, 0x6b588cu, (u32)x, 0x10);
 }
 PCREG(5d79f0, fn5d79f0);

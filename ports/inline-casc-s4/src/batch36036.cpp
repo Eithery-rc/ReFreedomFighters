@@ -1,6 +1,9 @@
 // batch36036.cpp - cascade s4 batch 36036: 0x63f9f0, 0x64d9e0, 0x65c730, 0x40b6f0, 0x470920 (tier F rows).
 #include "ff.h"
 
+typedef u32(THISCALL *v4r_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
+
 typedef void(THISCALL *v0_t)(void *);
 typedef void(THISCALL *v1_t)(void *, u32);
 typedef void(THISCALL *v2_t)(void *, u32, u32);
@@ -190,7 +193,8 @@ static void THISCALL fn470920(u8 *s) {
   void **vt = *(void ***)s;
   u8 flag = 1;
   tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 ax = (u16)(*(v5r_t **)tab)[0x114 / 4](tab, 0x688d80u, 0, 0x6887c4u, 0xc9eu, (u32)&flag);
-  ((v2_t)vt[0x12c / 4])(s, id, ax);
+  u32 ax = (u16)(*(v4r_t **)tab)[0x114 / 4](tab, 0x688d80u, 0, 0x6887c4u, 0xc9eu);
+  // slot 0x114 pops 4 (ret 0x10); &flag stays pending and is arg 3 of slot 0x12c (ret 0xc)
+  ((v3_t)vt[0x12c / 4])(s, id, ax, (u32)&flag);
 }
 PCREG(470920, fn470920);

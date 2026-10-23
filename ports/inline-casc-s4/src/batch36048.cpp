@@ -1,6 +1,9 @@
 // batch36048.cpp - cascade s4 batch 36048: 0x4f60e0, 0x4f7f20, 0x502e30 (tier F rows).
 #include "ff.h"
 
+typedef u32(THISCALL *v4r_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
+
 typedef void(THISCALL *v0_t)(void *);
 typedef void(THISCALL *v1_t)(void *, u32);
 typedef void(THISCALL *v5o_t)(void *, u32, u32, u32, u32, u32);
@@ -89,8 +92,9 @@ static void THISCALL fn502e30(u8 *s, u8 *p) {
   u8 *w = *(u8 **)(s + 0xc);
   void **vt = *(void ***)w;
   u8 *tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 ax = (u16)(*(v5r_t **)tab)[0x114 / 4](tab, id, 0, 0x69ca10u, 0xc2u, (u32)&n);
+  u32 ax = (u16)(*(v4r_t **)tab)[0x114 / 4](tab, id, 0, 0x69ca10u, 0xc2u);
   w = *(u8 **)(s + 0xc);
-  ((v2_t)vt[0x12c / 4])(w, rd(q), ax);
+  // slot 0x114 pops 4 (ret 0x10); &n stays pending and is arg 3 of slot 0x12c (ret 0xc)
+  ((v3_t)vt[0x12c / 4])(w, rd(q), ax, (u32)&n);
 }
 PCREG(502e30, fn502e30);

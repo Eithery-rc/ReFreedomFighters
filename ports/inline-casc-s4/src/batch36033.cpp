@@ -1,6 +1,8 @@
 // batch36033.cpp - cascade s4 batch 36033: 0x55fbd0, 0x575160, 0x561200 (tier F rows).
 #include "ff.h"
 
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
+
 typedef void(THISCALL *v0_t)(void *);
 typedef void(THISCALL *v2_t)(void *, u32, u32);
 typedef u8 *(THISCALL *v0o_t)(void *);
@@ -68,8 +70,9 @@ static void THISCALL fn575160(u8 *b) {
   u8 *tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
   u8 *o = (*(v0o_t **)tab)[0x138 / 4](tab);
   tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u8 *x = (*(v2o_t **)tab)[0x4c / 4](tab, rd(b + 0x44), 0x10);
-  (*(v2_t **)o)[0x60 / 4](o, 0x6a6db0u, (u32)x);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u8 *x = (*(v1o_t **)tab)[0x4c / 4](tab, rd(b + 0x44));
+  (*(v3_t **)o)[0x60 / 4](o, 0x6a6db0u, (u32)x, 0x10);
 }
 PCREG(575160, fn575160);
 
