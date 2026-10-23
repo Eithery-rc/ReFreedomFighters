@@ -7,6 +7,8 @@ typedef u32(THISCALL *vcallUU)(void *self, u32 a);
 typedef void(THISCALL *vcallVU)(void *self, u32 a);
 typedef void(THISCALL *vcallVUU)(void *self, u32 a, u32 b);
 typedef u32(THISCALL *sendFn)(void *self, u32 name, u32 a, u32 file, u32 line, u32 param, u32 b);
+typedef u32(THISCALL *send4Fn)(void *self, u32 name, u32 a, u32 file, u32 line);   // slot 0x114 pops 4 (ret 0x10)
+typedef void(THISCALL *vcallVUUU)(void *self, u32 a, u32 b, u32 c);
 struct Quad { u32 a, b, c, d; };   // passed by value
 typedef void(THISCALL *vcallVFQ)(void *self, float f, Quad q);
 
@@ -20,8 +22,9 @@ static u8 *heroOf(u8 *self) { return *(u8 **)(self + 0x36d); }
 static void sendTo(u8 *obj, u32 name, u32 line, u32 param) {
   void **ovt = *(void ***)obj;
   u8 *rm = rmgr();
-  u16 id = (u16)((sendFn)VT(rm, 0x114))(rm, name, 0, 0x6b7a5cu, line, param, 0);
-  ((vcallVU)ovt[0x128 / 4])(obj, id);
+  u16 id = (u16)((send4Fn)VT(rm, 0x114))(rm, name, 0, 0x6b7a5cu, line);
+  // slot 0x114 pops 4 (ret 0x10); param and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  ((vcallVUUU)ovt[0x128 / 4])(obj, id, param, 0);
 }
 
 // 0x5e5300 ZFFHeroMovementMachinegun::GotControl(), thiscall. Marks the gun in use (+0x54c), stamps the hero (+0x36d)
@@ -46,8 +49,9 @@ static void THISCALL mgGotControl(u8 *self) {
   rm = rmgr();
   u32 h = ((vcallUU)VT(rm, 0x4c))(rm, (u32)heroOf(self));
   rm = rmgr();
-  u16 id = (u16)((sendFn)VT(rm, 0x114))(rm, 0x6b4a14u, 0, 0x6b7a5cu, 0x81c, h, 0);   // "SetOwner"
-  ((vcallVU)gvt[0x128 / 4])(gun, id);
+  u16 id = (u16)((send4Fn)VT(rm, 0x114))(rm, 0x6b4a14u, 0, 0x6b7a5cu, 0x81c);   // "SetOwner"
+  // slot 0x114 pops 4 (ret 0x10); h and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  ((vcallVUUU)gvt[0x128 / 4])(gun, id, h, 0);
 }
 PCREG(5e5300, mgGotControl);
 

@@ -30,8 +30,9 @@ PCREG(46cea0, fn46cea0);
 static u32 THISCALL fn4c5820(u8 *self, u32 a, u32 b) {
   u8 *p = vcall<u8 *>(SYS_TABLE, 0x138);
   u8 *vtp = *(u8 **)p;
-  u32 x = vcall<u32>(SYS_TABLE, 0x4c, *(u32 *)(self + 0x44), 0x10u);
-  return ((u32(THISCALL *)(u8 *, u32, u32)) * (u32 *)(vtp + 0x60))(p, 0x694d00, x);
+  u32 x = vcall<u32>(SYS_TABLE, 0x4c, *(u32 *)(self + 0x44));
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of the [vtp + 0x60] call
+  return ((u32(THISCALL *)(u8 *, u32, u32, u32)) * (u32 *)(vtp + 0x60))(p, 0x694d00, x, 0x10);
 }
 PCREG(4c5820, fn4c5820);
 
