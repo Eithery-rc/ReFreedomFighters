@@ -121,8 +121,9 @@ static void body_576a30(u8 *self, const char *name) {
   u8 *me = (u8 *)R32(self + 0x44);
   E = G(u8 *, 0x70039c);
   tbl = (u8 *)R32(E + 0x9b);
-  u32 w = (u16)(*(u32(THISCALL **)(void *, u32, u32, u32, u32, u32))(vt(tbl) + 0x114))(tbl, 0x68fdd4, 0, 0x6a945c, 0x18f, 0);
-  (*(V2 *)(vt(me) + 0x130))(me, (u32)edi, w);
+  // slot 0x114 pops 4 (ret 0x10); the first push 0 stays pending and is the third argument of me's slot 0x130 (ret 0xc)
+  u32 w = (u16)(*(u32(THISCALL **)(void *, u32, u32, u32, u32))(vt(tbl) + 0x114))(tbl, 0x68fdd4, 0, 0x6a945c, 0x18f);
+  (*(u32(THISCALL **)(void *, u32, u32, u32))(vt(me) + 0x130))(me, (u32)edi, w, 0);
   W32(P(0x10), 0);
   W32(P(0x14), 0);
   W32(P(0x18), 0);

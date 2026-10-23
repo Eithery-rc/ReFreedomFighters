@@ -4,6 +4,7 @@
 typedef u32(THISCALL *v0r_t)(void *);
 typedef u32(THISCALL *v1r_t)(void *, u32);
 typedef u32(THISCALL *v2r_t)(void *, u32, u32);
+typedef u32(THISCALL *v4r_t)(void *, u32, u32, u32, u32);
 typedef u32(THISCALL *v6r_t)(void *, u32, u32, u32, u32, u32, u32);
 typedef void(THISCALL *v1_t)(void *, u32);
 
@@ -42,8 +43,9 @@ static void THISCALL fn5c17c0(u8 *self) {
   void **bvt = *(void ***)b;
   u32 loc;
   t = tbl_();
-  u32 ax = (u16)(*(v6r_t **)t)[0x114 / 4](t, 0x6a5c68, 0, 0x6b3a74, 0xf9, (u32)&loc, 0);
-  ((v1_t)bvt[0x128 / 4])(b, ax);
+  // slot 0x114 pops 4 (ret 0x10); &loc and 0 stay pending and are the 2nd and 3rd arguments of b's slot 0x128 (ret 0xc)
+  u32 ax = (u16)(*(v4r_t **)t)[0x114 / 4](t, 0x6a5c68, 0, 0x6b3a74, 0xf9);
+  ((void(THISCALL *)(void *, u32, u32, u32))bvt[0x128 / 4])(b, ax, (u32)&loc, 0);
   if (loc) ext_5c21e0(self, 0);
 }
 PCREG(5c17c0, fn5c17c0);

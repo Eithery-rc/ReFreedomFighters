@@ -8,7 +8,9 @@ typedef u8 *(THISCALL *v0o_t)(void *);
 typedef u8 *(THISCALL *v1o_t)(void *, u32);
 typedef u8 *(THISCALL *v2o_t)(void *, u32, u32);
 typedef u32(THISCALL *v0r_t)(void *);
+typedef u32(THISCALL *v4r_t)(void *, u32, u32, u32, u32);
 typedef u32(THISCALL *v5r_t)(void *, u32, u32, u32, u32, u32);
+typedef void(THISCALL *v3_t)(void *, u32, u32, u32);
 
 static inline u32 rd(u8 *p) { return *(u32 *)p; }
 static inline void wr(u8 *p, u32 v) { *(u32 *)p = v; }
@@ -31,13 +33,14 @@ static u8 THISCALL fn575800(u8 *s) {
   if (name == 0) name = 0x67c8e8;
   u8 *e = *(u8 **)(s + 0x44);
   u8 *tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  u32 ax = (u16)(*(v5r_t **)tab)[0x114 / 4](tab, 0x6a77a0u, 0, 0x6a9298u, 0x144u, name);
+  // slot 0x114 pops 4 (ret 0x10); the pushed name stays pending and is the 3rd argument of e's slot 0x12c (ret 0xc)
+  u32 ax = (u16)(*(v4r_t **)tab)[0x114 / 4](tab, 0x6a77a0u, 0, 0x6a9298u, 0x144u);
   e = *(u8 **)(s + 0x44);
-  (*(v2_t **)e)[0x12c / 4](e, rd(s + 0x212), ax);
+  (*(v3_t **)e)[0x12c / 4](e, rd(s + 0x212), ax, name);
   e = *(u8 **)(s + 0x44);
   tab = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-  ax = (u16)(*(v5r_t **)tab)[0x114 / 4](tab, 0x6a9300u, 0, 0x6a9298u, 0x145u, 0);
-  (*(v2_t **)e)[0x12c / 4](e, rd(s + 0x212), ax);
+  ax = (u16)(*(v4r_t **)tab)[0x114 / 4](tab, 0x6a9300u, 0, 0x6a9298u, 0x145u);
+  (*(v3_t **)e)[0x12c / 4](e, rd(s + 0x212), ax, 0);
   w = (*(v0o_t **)s)[0x84 / 4](s);
   (*(v1_t **)w)[0x2f8 / 4](w, rd(s + 0x212));
   return 1;

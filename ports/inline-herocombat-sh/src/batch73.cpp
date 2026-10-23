@@ -199,10 +199,10 @@ static u8 THISCALL wantControl(u8 *self, const float *, const float *pos, const 
   float l2 = __builtin_bit_cast(float, (u32)pos);
   u8 *it = *(u8 **)(lst + 0x18);
   if (it) {
-    u32 at;
-    ((vcallVP)VT(it, 0x4c))(it, &at);
-    *(u32 *)(self + 0x569) = ((vcallUU)VT(*(u8 **)(lst + 0x18), 0x5c))(*(u8 **)(lst + 0x18), (u32)&at);
-    while (at) {
+    u32 at[3];   // 12-byte iterator state: slot 0x4c fills three dwords (a 4-byte local let it overwrite the saved this)
+    ((vcallVP)VT(it, 0x4c))(it, at);
+    *(u32 *)(self + 0x569) = ((vcallUU)VT(*(u8 **)(lst + 0x18), 0x5c))(*(u8 **)(lst + 0x18), (u32)at);
+    while (at[0]) {
       flag = flagOf(*(u32 *)(self + 0x569));
       if (flag) {
         u8 *pole = ext_5c1650(flag);
@@ -224,7 +224,7 @@ static u8 THISCALL wantControl(u8 *self, const float *, const float *pos, const 
           }
         }
       }
-      *(u32 *)(self + 0x569) = ((vcallUU)VT(*(u8 **)(lst + 0x18), 0x5c))(*(u8 **)(lst + 0x18), (u32)&at);
+      *(u32 *)(self + 0x569) = ((vcallUU)VT(*(u8 **)(lst + 0x18), 0x5c))(*(u8 **)(lst + 0x18), (u32)at);
     }
   }
   if (!*(u32 *)(self + 0x569))
