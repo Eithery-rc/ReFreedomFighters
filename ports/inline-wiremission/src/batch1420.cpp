@@ -52,13 +52,12 @@ static u32 THISCALL c03bCommand(u8 *ct, u32 msg, u32 data) {
   vcall<u32, const char *, u32 *>(reg, 0x88, (const char *)0x6a5c48, &h);   // LevelController
   u8 *obj = vcall<u8 *, u32>(mgr(), 0x58, h);
   if (obj) {
-    // The original pushes six words for this register call (the constructor's call pushes four). GUESS: the two
-    // extras are a second name ("C03BS_Helipad") and a zero; the callee pops all six.
-    typedef u16(THISCALL * reg6)(void *self, const char *name, u32 zero, const char *file, u32 line, const char *extra, u32 zero2);
-    u16 mid = ((reg6)(*(void ***)mgr())[0x114 / 4])(mgr(), (const char *)0x6a5c58, 0, (const char *)CARETAKER_C03B_CPP, 0x20,
-                                                    (const char *)0x6b0520, 0);   // SETMISSIONVAR
+    // The original pushes six words for this register call (the constructor's call pushes four). Slot 0x114 pops four
+    // (ret 0x10); the two extras (the string 0x6b0520 and a zero) stay pending and are args 2 and 3 of slot 0x128 (ret 0xc).
+    typedef u16(THISCALL * reg4)(void *self, const char *name, u32 zero, const char *file, u32 line);
+    u16 mid = ((reg4)(*(void ***)mgr())[0x114 / 4])(mgr(), (const char *)0x6a5c58, 0, (const char *)CARETAKER_C03B_CPP, 0x20);   // SETMISSIONVAR
     u16 id = mid;
-    vcall<void, u32>(obj, 0x128, (u32)id);
+    vcall<void, u32, const char *, u32>(obj, 0x128, (u32)id, (const char *)0x6b0520, 0);
   }
   return 0;
 }

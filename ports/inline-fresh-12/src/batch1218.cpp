@@ -18,8 +18,9 @@ static void __attribute__((stdcall)) bind555e80(u8 *a) {
   u8 *o = vcall<u8 *>(*(u8 **)(G(u8 *, 0x70039c) + 0x9b), 0x58, id);
   if (!o) return;
   u32 y = ext_506040(ext_5003d0(*(u8 **)(a + 4), 0));
-  u32 v = vcall<u32>(*(u8 **)(G(u8 *, 0x70039c) + 0x9b), 0x114, y, 0u, 0x6a57fcu, 0x439u, 0u, 0u);
-  vcall<void>(o, 0x128, (u32)(u16)v);
+  u32 v = vcall<u32>(*(u8 **)(G(u8 *, 0x70039c) + 0x9b), 0x114, y, 0u, 0x6a57fcu, 0x439u);
+  // slot 0x114 pops 4 (ret 0x10); the two 0s stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  vcall<void>(o, 0x128, (u32)(u16)v, 0u, 0u);
 }
 PCREG(555e80, bind555e80);
 

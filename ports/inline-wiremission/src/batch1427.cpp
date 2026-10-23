@@ -16,8 +16,9 @@ static inline u8 *mgr() { return *(u8 **)(sysi() + 0x9b); }
 static void THISCALL zobjInit2(u8 *self) {
   ext_562440(self);
   u8 *reg = vcall<u8 *>(mgr(), 0x138);
-  u32 t = vcall<u32, u32, u32>(mgr(), 0x4c, *(u32 *)(self + 0x44), 0x10);
-  vcall<void, const char *, u32>(reg, 0x60, (const char *)0x6a8fe8, t);
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 t = vcall<u32, u32>(mgr(), 0x4c, *(u32 *)(self + 0x44));
+  vcall<void, const char *, u32, u32>(reg, 0x60, (const char *)0x6a8fe8, t, 0x10);
 }
 PCREG(577d00, zobjInit2);
 

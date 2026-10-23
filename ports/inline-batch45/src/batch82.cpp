@@ -17,7 +17,8 @@ typedef u8(THISCALL *vcallB0)(void *self);
 typedef u32(THISCALL *trackFn)(void *self, const float *pos, float range, s32 *iter, u32 team);
 typedef void(THISCALL *playFn)(void *self, u32 clip, u32 flags, float a, float b, float c);
 typedef void(THISCALL *placeFn)(void *self, const float *m33, const float *pos, float t);
-typedef u16(THISCALL *eventFn)(void *self, const char *name, u32 a, const char *file, u32 line, s32 *arg, u32 b);
+typedef u16(THISCALL *eventFn)(void *self, const char *name, u32 a, const char *file, u32 line);   // slot 0x114 pops 4 (ret 0x10)
+typedef void(THISCALL *vcallVUUU)(void *self, u32 a, u32 b, u32 c);
 typedef u8 *(THISCALL *logGetFn)(void *self, const char *file, u32 line);
 typedef void (*logPrintFn)(void *self, const char *msg);
 
@@ -199,8 +200,9 @@ static void THISCALL gotControl(u8 *self) {
       u8 *rm = *(u8 **)(sys() + 0x9b);
       u8 *obj = (u8 *)((vcallUU)VT(rm, 0x58))(rm, *(u32 *)(self + 0x5b6));
       rm = *(u8 **)(sys() + 0x9b);
-      u16 ev = ((eventFn)VT(rm, 0x114))(rm, (const char *)0x6a4d40u, 0, (const char *)0x6b7a5cu, 0x60d, &set, 0);
-      ((vcallVU)VT(obj, 0x128))(obj, (u32)ev);
+      u16 ev = ((eventFn)VT(rm, 0x114))(rm, (const char *)0x6a4d40u, 0, (const char *)0x6b7a5cu, 0x60d);
+      // &set and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+      ((vcallVUUU)VT(obj, 0x128))(obj, (u32)ev, (u32)&set, 0);
     }
   }
   self[0x610] = 0;

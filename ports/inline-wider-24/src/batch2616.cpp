@@ -5,6 +5,7 @@
 typedef u32(THISCALL *vf0_t)(void *);
 typedef u32(THISCALL *vf1_t)(void *, u32);
 typedef u32(THISCALL *vf2_t)(void *, u32, u32);
+typedef u32(THISCALL *vf3_t)(void *, u32, u32, u32);
 typedef u32(THISCALL *vf2p_t)(void *, u32, void *);
 static inline u8 *sysp() { return *(u8 **)0x70039c; }
 static inline u8 *U8(u32 v) { return (u8 *)v; }
@@ -234,8 +235,9 @@ static u8 THISCALL fn45bf40(u8 *self, u32 a) {
   void *lg = (void *)VT(t, vf0_t, 0x138)(t);
   u32 *vt = *(u32 **)lg;
   t = *(void **)(sysp() + 0x9b);
-  u32 v = ((vf2_t)(*(u32 **)t)[0x4c / 4])(t, (u32)self, 4);
-  ((vf2_t)vt[0x60 / 4])(lg, 0x684cd4, v);
+  // slot 0x4c pops 1 (ret 4); the 4 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 v = ((vf1_t)(*(u32 **)t)[0x4c / 4])(t, (u32)self);
+  ((vf3_t)vt[0x60 / 4])(lg, 0x684cd4, v, 4);
   VT(self, vf0_t, 0x214)(self);
   u32 r = ext_45f3c0(self, a);
   return (u8)((r & 0xff) != 0);

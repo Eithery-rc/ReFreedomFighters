@@ -5,6 +5,7 @@
 typedef u32(THISCALL * f0_t)(u8 *);
 typedef u32(THISCALL * f1_t)(u8 *, u32);
 typedef u32(THISCALL * f2_t)(u8 *, u32, u32);
+typedef u32(THISCALL * f3_t)(u8 *, u32, u32, u32);
 typedef u32(THISCALL * f4_t)(u8 *, u32, u32, u32, u32);
 
 static u32 vslot(u8 *o, u32 off) {
@@ -52,8 +53,9 @@ static void THISCALL fn5c1910(u8 *self) {
     u8 *r = (u8 *)((f0_t)vslot(o3, 0x138))(o3);
     u32 e0v = *(u32 *)(self + 0xe0);
     u8 *o4 = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
-    u32 V = ((f2_t)vslot(o4, 0x4c))(o4, e0v, 2u);
-    ((f2_t)vslot(r, 0x60))(r, 0x6b3bc0u, V);
+    // slot 0x4c pops 1 (ret 4); the 2 pushed before it stays pending and is arg 3 of slot 0x60
+    u32 V = ((f1_t)vslot(o4, 0x4c))(o4, e0v);
+    ((f3_t)vslot(r, 0x60))(r, 0x6b3bc0u, V, 2u);
   }
 
   if (*(u8 *)(self + 0x10c) == 0) {

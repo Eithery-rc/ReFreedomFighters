@@ -115,8 +115,9 @@ PCREG(5da750, ZCharacterControl_Load);
 // reference, registry +0x60(name, ref) stores it; inferred from the string), then GetDefaultValues.
 static void THISCALL ZCharacterControl_Init(void *self) {
   void *reg = vcall<void *>(AT(void *, sys(), 0x9b), 0x138);
-  u32 ref = vcall<u32>(AT(void *, sys(), 0x9b), 0x4c, AT(u32, self, 0x44), (u32)0x10);
-  vcall<void>(reg, 0x60, (const char *)0x6aecc8, ref);  // "Character_Controller"
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 ref = vcall<u32>(AT(void *, sys(), 0x9b), 0x4c, AT(u32, self, 0x44));
+  vcall<void>(reg, 0x60, (const char *)0x6aecc8, ref, (u32)0x10);  // "Character_Controller"
   ZCharacterControl_GetDefaultValues(self);
 }
 PCREG(5da700, ZCharacterControl_Init);

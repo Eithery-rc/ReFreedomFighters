@@ -46,13 +46,15 @@ static void THISCALL fn452ad0(u8 *self) {
 PCREG(452ad0, fn452ad0);
 
 // 0x483570, thiscall(unused) ret 4: obj = [this+0x104]; vt = [obj]; r = word of (engine table +0x9b slot 0x114 (0x68c71c, 0, 0x68bcbc, 0x8cd, 0, 0)); vt[0x128](obj, r).
-typedef u32(THISCALL *vf6_t)(void *, u32, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *vf4_t)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef u32(THISCALL *vf3_t)(void *, u32, u32, u32);
 static u32 THISCALL fn483570(u8 *self, u32) {
   void *obj = *(void **)(self + 0x104);
   u32 *vt = *(u32 **)obj;
   void *t = *(void **)(sysp() + 0x9b);
-  u32 r = VT(t, vf6_t, 0x114)(t, 0x68c71c, 0, 0x68bcbc, 0x8cd, 0, 0) & 0xffff;
-  return ((vf1_t)vt[0x128 / 4])(*(void **)(self + 0x104), r);
+  u32 r = VT(t, vf4_t, 0x114)(t, 0x68c71c, 0, 0x68bcbc, 0x8cd) & 0xffff;
+  // slot 0x114 pops 4 (ret 0x10); the two 0s stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  return ((vf3_t)vt[0x128 / 4])(*(void **)(self + 0x104), r, 0, 0);
 }
 PCREG(483570, fn483570);
 

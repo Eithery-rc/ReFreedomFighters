@@ -9,7 +9,8 @@ typedef void(THISCALL *vcallVU)(void *self, u32 a);
 typedef void(THISCALL *vcallVP)(void *self, void *a);
 typedef void(THISCALL *vcallVPP)(void *self, void *a, void *b);
 typedef void(THISCALL *vcallVUU)(void *self, u32 a, u32 b);
-typedef u32(THISCALL *sendFn)(void *self, u32 name, u32 a, u32 file, u32 line, u32 param, u32 b);
+typedef u32(THISCALL *sendFn)(void *self, u32 name, u32 a, u32 file, u32 line);   // slot 0x114 pops 4 (ret 0x10)
+typedef void(THISCALL *vcallVUUU)(void *self, u32 a, u32 b, u32 c);
 struct Quad { u32 a, b, c, d; };   // passed by value
 typedef void(THISCALL *vcallFireAt)(void *self, float *aim, float spread, Quad q);
 
@@ -55,8 +56,9 @@ static void THISCALL mgMove(u8 *self, const float *a0, const float *a1, float *a
   ext_5cf690(*(u8 **)(hero + 0x85a), aim);
   void **gvt = *(void ***)gun;
   rm = rmgr();
-  u16 id = (u16)((sendFn)VT(rm, 0x114))(rm, 0x6b49f8u, 0, 0x6b7a5cu, 0x839, (u32)aim, 0);   // "AimWeaponAt"
-  ((vcallVU)gvt[0x128 / 4])(gun, id);
+  u16 id = (u16)((sendFn)VT(rm, 0x114))(rm, 0x6b49f8u, 0, 0x6b7a5cu, 0x839);   // "AimWeaponAt"
+  // aim and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  ((vcallVUUU)gvt[0x128 / 4])(gun, id, (u32)aim, 0);
   rm = rmgr();
   u8 *ctr = (u8 *)((vcallUU)VT(rm, 0x58))(rm, *(u32 *)(self + 0x559));
   ((vcallVPP)VT(ctr, 0x80))(ctr, a2, a3);

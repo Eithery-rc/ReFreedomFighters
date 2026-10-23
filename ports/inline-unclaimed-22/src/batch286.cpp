@@ -46,8 +46,9 @@ void THISCALL civilianPathBuild_5bea10(u8 *self) {
       pos[0] = pos[1] = pos[2] = 0.0f;
       vcall<void>(o, 0x84, (u32)pos);
       if (!firstPt) {
-        u32 q = vcall<u32>(DB, 0x4c, *(u32 *)(self + 0x44), (u32)prev, (u32)pos, 0u, 0u, 1u, 1u);
-        vcall<void>(pf, 0x214, q);
+        // slot 0x4c pops 1 (ret 4); the six words pushed before it stay pending and are args 2 to 7 of slot 0x214
+        u32 q = vcall<u32>(DB, 0x4c, *(u32 *)(self + 0x44));
+        vcall<void>(pf, 0x214, q, (u32)prev, (u32)pos, 0u, 0u, 1u, 1u);
         while (!*(u32 *)(self + 0x48)) ext_52c000(pf, 1);
         u8 *r = *(u8 **)(self + 0x48);
         u8 *seg = *(u8 **)(r + 0x1c);

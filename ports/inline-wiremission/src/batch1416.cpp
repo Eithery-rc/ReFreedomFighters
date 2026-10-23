@@ -117,7 +117,8 @@ static void THISCALL c02aInit2(u8 *ct) {
     vcall<void, float *, float *>(o, 0x7c, mat, bestPos);
   }
   u8 *reg = vcall<u8 *>(mgr(), 0x138);
-  u32 t = vcall<u32, u32, u32>(mgr(), 0x4c, *(u32 *)(ct + 0x44), 0x10);   // manager slot 0x4c(sender, 0x10) -> handle
-  vcall<void, const char *, u32>(reg, 0x60, (const char *)0x6b2b90, t);   // registry slot 0x60(name, handle): CareTaker_2A
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 t = vcall<u32, u32>(mgr(), 0x4c, *(u32 *)(ct + 0x44));   // manager slot 0x4c(sender) -> handle
+  vcall<void, const char *, u32, u32>(reg, 0x60, (const char *)0x6b2b90, t, 0x10);   // registry slot 0x60(name, handle, 0x10): CareTaker_2A
 }
 PCREG(5bb520, c02aInit2);

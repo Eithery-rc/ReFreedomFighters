@@ -1,7 +1,7 @@
 #include "ff.h"
 extern "C" void THISCALL ext_4dc630(void*,u32,u32);
 static void* table(){return *(void**)(G(u8*,0x70039c)+0x9b);}
-static void register_(u8*me,u32 key){auto svc=vcall<void*>(table(),0x138);auto id=vcall<u32>(table(),0x4c,*(void**)(me+0x44),4);vcall<void>(svc,0x5c,key,id);}
+static void register_(u8*me,u32 key){auto svc=vcall<void*>(table(),0x138);auto id=vcall<u32>(table(),0x4c,*(void**)(me+0x44));vcall<void>(svc,0x5c,key,id,4);}   // slot 0x4c pops 1; the 4 pushed before it is arg 3 of slot 0x5c
 static void THISCALL init(u8*me){
  const u32 keys[3]={0x6903d8,0x6903f0,0x6903fc},offsets[3]={0x67,0x48,0x89};
  for(u32 i=0;i<3;++i)*(u16*)(me+offsets[i])=vcall<u16>(table(),0x114,keys[i],0,(u32)0x690354,0x6b+i);

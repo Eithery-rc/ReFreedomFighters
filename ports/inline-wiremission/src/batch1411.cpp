@@ -29,8 +29,9 @@ static void THISCALL lcInit(u8 *lc) {
   if (lc[0x103c])
     vcall<void>(wc, 0x48);
   u8 *reg = vcall<u8 *>(mgr(), 0x138);
-  u32 t = vcall<u32, u32, u32>(mgr(), 0x4c, *(u32 *)(lc + 0x44), 0x10);   // manager slot 0x4c(sender, 0x10) -> handle
-  vcall<void, const char *, u32>(reg, 0x60, (const char *)0x6a5c48, t);   // registry slot 0x60(name, handle): LevelController
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 t = vcall<u32, u32>(mgr(), 0x4c, *(u32 *)(lc + 0x44));   // manager slot 0x4c(sender) -> handle
+  vcall<void, const char *, u32, u32>(reg, 0x60, (const char *)0x6a5c48, t, 0x10);   // registry slot 0x60(name, handle, 0x10): LevelController
   vcall<void, u32>(*(u8 **)(sysi() + 0x190f), 0x1b4, 1);
   if (lc[0x103f] || lc[0x103c]) {
     G(u8 *, 0x7003a0)[0x79] = 0;

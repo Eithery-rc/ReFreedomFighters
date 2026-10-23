@@ -144,8 +144,9 @@ static u8 THISCALL mgWantControl(u8 *self, const float *, const float *pos, cons
             u32 res = 0;
             void **gvt = *(void ***)g;
             rm = rmgr();
-            u16 id = (u16)((sendFn)VT(rm, 0x114))(rm, 0x6a5830u, 0, 0x6b7a5cu, 0x7f3, (u32)&res, 0);   // "GetOwner"
-            ((vcallVU)gvt[0x128 / 4])(g, id);
+            u16 id = (u16)((send4Fn)VT(rm, 0x114))(rm, 0x6a5830u, 0, 0x6b7a5cu, 0x7f3);   // "GetOwner"
+            // &res and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+            ((vcallVUUU)gvt[0x128 / 4])(g, id, (u32)&res, 0);
             if (res == 0)
               break;
           }

@@ -52,9 +52,10 @@ static u32 THISCALL fn4ac9d0(u8 *T, u8 *X) {
       edi = ((f1_t)vslot(o2, 0x58))(o2, edi);
       u8 *o3 = *(u8 **)(G(u8 *, 0x70039c) + 0x9b);
       u8 *ebxv = *(u8 **)(u8 *)edi;   // ebx = edi's vtable, read before the call below
-      u32 s = ((f3_t)vslot(o3, 0x4c))(o3, (u32)X, 0u, 1u);
+      // slot 0x4c pops 1 (ret 4); the 0 and 1 pushed before it stay pending and are args 2 and 3 of slot 0x2f0
+      u32 s = ((f1_t)vslot(o3, 0x4c))(o3, (u32)X);
       u32 fn2f0 = *(u32 *)(ebxv + 0x2f0);
-      ((f1_t)fn2f0)((u8 *)edi, s);
+      ((f3_t)fn2f0)((u8 *)edi, s, 0u, 1u);
     }
 
     if (((f0_t)vslot(M, 0x14))(M) == 0)

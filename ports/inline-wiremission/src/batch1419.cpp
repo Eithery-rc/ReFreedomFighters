@@ -24,8 +24,9 @@ static inline void send(u8 *ct, u32 target, u32 msg) {
 // report to it.
 static void registerSelf(u8 *ct) {
   u8 *reg = vcall<u8 *>(mgr(), 0x138);
-  u32 t = vcall<u32, u32, u32>(mgr(), 0x4c, U32(0x44), 0x10);   // manager slot 0x4c(sender, 0x10) -> handle
-  vcall<void, const char *, u32>(reg, 0x60, (const char *)0x6b2cd8, t);   // registry slot 0x60(name, handle)
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 t = vcall<u32, u32>(mgr(), 0x4c, U32(0x44));   // manager slot 0x4c(sender) -> handle
+  vcall<void, const char *, u32, u32>(reg, 0x60, (const char *)0x6b2cd8, t, 0x10);   // registry slot 0x60(name, handle, 0x10)
 }
 // Distance between two points as the original computes it: x87-free SSE squares, sum in the order y+x then +z,
 // CRT sqrt on the double, rounded to float.

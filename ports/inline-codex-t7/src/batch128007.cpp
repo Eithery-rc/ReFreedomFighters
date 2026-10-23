@@ -4,8 +4,8 @@ static u32 THISCALL setup8(u8*self){
  ext_562440(self);
  void*table=*(void**)(G(u8*,0x70039c)+0x9b);
  void*res=vcall<void*>(table,0x138);
- u32 handle=vcall<u32>(*(void**)(G(u8*,0x70039c)+0x9b),0x4c,*(u32*)(self+0x44),0x10u);
- vcall<void>(res,0x60,0x6a70a8u,handle);
+ u32 handle=vcall<u32>(*(void**)(G(u8*,0x70039c)+0x9b),0x4c,*(u32*)(self+0x44));   // slot 0x4c pops 1; the 0x10 pushed before it is arg 3 of slot 0x60
+ vcall<void>(res,0x60,0x6a70a8u,handle,0x10u);
  res=vcall<void*>(*(void**)(G(u8*,0x70039c)+0x9b),0x138);
  u32 ref=0;vcall<void>(res,0x88,0x6a71d4u,&ref);
  void*widget=vcall<void*>(*(void**)(G(u8*,0x70039c)+0x9b),0x58,ref);
