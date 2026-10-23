@@ -4,6 +4,8 @@ typedef u32(THISCALL *V0)(void *);
 typedef u32(THISCALL *V1)(void *, u32);
 typedef u32(THISCALL *V2)(void *, u32, u32);
 typedef u32(THISCALL *V6)(void *, u32, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *V4)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef u32(THISCALL *V3)(void *, u32, u32, u32);
 
 extern "C" void FASTCALL ext_633654(u32 cookie);
 extern "C" double VECTORCALL ext_634d70(double x);  // cos
@@ -82,8 +84,9 @@ extern "C" u32 THISCALL fn_5dfaa0(u8 *self) {
     float cy = C[1] + G(float, 0x68c74c);
     __builtin_memcpy(&F[5], &cy, 4);
     F[0] = r;
-    u32 res = (*(V6 *)(vt(table()) + 0x114))(table(), 0x69eaac, 0, 0x6b74a4, 0x268, (u32)F, 0);
-    (*(V1 *)(evt + 0x128))(Y, (u16)res);
+    u32 res = (*(V4 *)(vt(table()) + 0x114))(table(), 0x69eaac, 0, 0x6b74a4, 0x268);
+    // slot 0x114 pops 4 (ret 0x10); F and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+    (*(V3 *)(evt + 0x128))(Y, (u16)res, (u32)F, 0);
   }
   ext_633654(G(u32, 0x6f5630));
   return 0;

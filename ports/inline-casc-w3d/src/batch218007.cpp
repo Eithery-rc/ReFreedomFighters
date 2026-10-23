@@ -493,11 +493,11 @@ extern "C" u32 THISCALL lifted_5b6d00(u32 ecx_in) {
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx + 155), sizeof v); (u32)v; });  // @9_5b6d00
   edi = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(esi), sizeof v); (u32)v; });  // @10_5b6d00
   edx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @11_5b6d00
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edx + 76)))(ecx, PV[0], (u32)(16));  // @12_5b6d00
+  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(edx + 76)))(ecx, PV[0]);  // @12_5b6d00  slot 0x4c pops 1; the 16 stays pending and is arg 3 of slot 0x60
   ecx = edx = 0;  // @13_5b6d00
   PV[1] = (u32)(eax);  // @14_5b6d00
   ecx = esi;  // @15_5b6d00
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(edi + 96)))(ecx, (u32)(6970372), PV[1]);  // @16_5b6d00
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(edi + 96)))(ecx, (u32)(6970372), PV[1], (u32)(16));  // @16_5b6d00
   ecx = edx = 0;  // @17_5b6d00
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(7340956), sizeof v); (u32)v; });  // @18_5b6d00
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @19_5b6d00

@@ -161,8 +161,9 @@ static void body_56e050(u8 *self) {
     u8 *me = (u8 *)R32(P(0x648));
     u8 *o44 = (u8 *)R32((u8 *)R32(me + 0x94) + 0x44);
     T = (u8 *)R32(G(u8 *, 0x70039c) + 0x9b);
-    u32 w = (u16)vcall<u32>(T, 0x114);
-    vcall<u32>(o44, 0x128, w, R32(d1 + 0x20), 0u, 0x6a82f4u, 0x12au, 0u, 0u);
+    // slot 0x114 pops 4 (ret 0x10); the two 0s pushed first stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+    u32 w = (u16)vcall<u32>(T, 0x114, R32(d1 + 0x20), 0u, 0x6a82f4u, 0x12au);
+    vcall<u32>(o44, 0x128, w, 0u, 0u);
   }
   char *buf = (char *)P(0x404);
   for (u32 i = 0; i < 0x21; i++) {

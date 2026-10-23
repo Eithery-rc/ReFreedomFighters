@@ -4,6 +4,8 @@ typedef u32(THISCALL *V0)(void *);
 typedef u32(THISCALL *V1)(void *, u32);
 typedef u32(THISCALL *V2)(void *, u32, u32);
 typedef u32(THISCALL *V5)(void *, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *V4)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef u32(THISCALL *V3)(void *, u32, u32, u32);
 
 extern "C" void FASTCALL ext_633654(u32 cookie);
 extern "C" void THISCALL ext_59b0a0(void *self);
@@ -72,8 +74,9 @@ extern "C" void THISCALL fn_59b820(u8 *self) {
       u8 *o44 = (u8 *)rd32u(self + 0x44);
       u8 *edi = vt(o44);
       u8 *K = tab();
-      u32 ax = (*(V5 *)(vt(K) + 0x114))(K, 0x682e18, 0, 0x6adc28, 0x122, 0);
-      (*(V2 *)(edi + 0x130))(o44, (u32)ebx, (u16)ax);
+      u32 ax = (*(V4 *)(vt(K) + 0x114))(K, 0x682e18, 0, 0x6adc28, 0x122);
+      // slot 0x114 pops 4 (ret 0x10); the 0 stays pending and is arg 3 of slot 0x130 (ret 0xc)
+      (*(V3 *)(edi + 0x130))(o44, (u32)ebx, (u16)ax, 0);
     }
   }
   if (self[0x103c] != 0) {

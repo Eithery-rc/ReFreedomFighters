@@ -1310,14 +1310,15 @@ extern "C" u32 THISCALL ext_5aab10(u8 *, u32);
 #define HP(off) ((u32)(F + 0x30 - (off)))
 
 static inline void msg599040(u8 *self, u32 a0, u32 line, u32 s4) {
-  typedef u32 (THISCALL * M6)(u8 *, u32, u32, u32, u32, u32, u32);
-  typedef u32 (THISCALL * M1)(u8 *, u32);
+  typedef u32 (THISCALL * M4)(u8 *, u32, u32, u32, u32);
+  typedef u32 (THISCALL * M3)(u8 *, u32, u32, u32);
   u8 *W = *(u8 **)(self + 0x1d0b);
   u8 *vtW = *(u8 **)W;
   u8 *sys = (u8 *)G(u32, 0x70039c);
   u8 *T = *(u8 **)(sys + 0x9b);
-  u32 ax = (u16)(*(M6 *)(*(u8 **)T + 0x114))(T, a0, 0, 0x6ad784, line, s4, 0);  // @599040_m
-  (*(M1 *)(vtW + 0x128))(*(u8 **)(self + 0x1d0b), ax);  // @599040_n
+  u32 ax = (u16)(*(M4 *)(*(u8 **)T + 0x114))(T, a0, 0, 0x6ad784, line);  // @599040_m
+  // slot 0x114 pops 4 (ret 0x10); s4 and 0 stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+  (*(M3 *)(vtW + 0x128))(*(u8 **)(self + 0x1d0b), ax, s4, 0);  // @599040_n
 }
 
 static inline void log599040(u8 *sysp, u32 line, u32 slot) {

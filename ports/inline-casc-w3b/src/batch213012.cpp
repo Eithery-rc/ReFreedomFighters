@@ -3,6 +3,7 @@
 typedef u32(THISCALL *V0)(void *);
 typedef u32(THISCALL *V1)(void *, u32);
 typedef u32(THISCALL *V2)(void *, u32, u32);
+typedef u32(THISCALL *V3)(void *, u32, u32, u32);
 
 extern "C" u32 THISCALL ext_663a40(void *self, u32 a);
 extern "C" u32 THISCALL ext_663520(void *self, u32 a);
@@ -95,8 +96,9 @@ void THISCALL fn_56a140(u8 *self) {
     u8 *vt = *(u8 **)o;
     u8 *eng2 = G(u8 *, 0x70039c);
     void *tab2 = *(void **)(eng2 + 0x9b);
-    u32 r = (*(V2 *)(*(u8 **)tab2 + 0x4c))(tab2, *(u32 *)(self + 0x44), 0x10);
-    (*(V2 *)(vt + 0x60))(o, rd32u(self + 0x1c1), r);
+    // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+    u32 r = (*(V1 *)(*(u8 **)tab2 + 0x4c))(tab2, *(u32 *)(self + 0x44));
+    (*(V3 *)(vt + 0x60))(o, rd32u(self + 0x1c1), r, 0x10);
   }
 }
 PCREG(56a140, fn_56a140);

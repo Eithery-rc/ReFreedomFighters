@@ -10,6 +10,8 @@ typedef u32 (THISCALL *ThisFn0)(u32);
 typedef u32 (THISCALL *ThisFn1)(u32, u32);
 typedef u32 (THISCALL *ThisFn2)(u32, u32, u32);
 typedef u32 (THISCALL *ThisFn5)(u32, u32, u32, u32, u32, u32);
+typedef u32 (THISCALL *ThisFn4)(u32, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
+typedef u32 (THISCALL *ThisFn3)(u32, u32, u32, u32);
 
 // 0x5c5910: countdown on this[0x4c] against this[0x50]; when it expires reroll this[0x50] = engine.rand(0x6b42a0, 0x20) % this[0x48],
 // log the engine value through the [0x700390] logger and push the string id into this[0x44]
@@ -32,8 +34,9 @@ extern "C" u32 THISCALL port_5c5910(u32 self) {
   u32 P = R32(self + 0x44);
   u32 vp = R32(P);
   u32 T = R32(R32(0x70039c) + 0x9b);
-  u32 h = ((ThisFn5)R32(R32(T) + 0x114))(T, 0x6b4280, 0, 0x6b42a0, 0x23, 0);
-  return ((ThisFn2)R32(vp + 0x130))(P, P, h & 0xffff);
+  u32 h = ((ThisFn4)R32(R32(T) + 0x114))(T, 0x6b4280, 0, 0x6b42a0, 0x23);
+  // slot 0x114 pops 4 (ret 0x10); the 0 stays pending and is arg 3 of slot 0x130 (ret 0xc)
+  return ((ThisFn3)R32(vp + 0x130))(P, P, h & 0xffff, 0);
 }
 PCREG(5c5910, port_5c5910);
 

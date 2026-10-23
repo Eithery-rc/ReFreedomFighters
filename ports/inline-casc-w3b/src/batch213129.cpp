@@ -3,6 +3,8 @@
 typedef u32(THISCALL *V0)(void *);
 typedef u32(THISCALL *V1)(void *, u32);
 typedef u32(THISCALL *V2)(void *, u32, u32);
+typedef u32(THISCALL *V3)(void *, u32, u32, u32);
+typedef u32(THISCALL *V4)(void *, u32, u32, u32, u32);   // slot 0x114 (pops 4, ret 0x10)
 typedef u32(THISCALL *V6)(void *, u32, u32, u32, u32, u32, u32);
 
 extern "C" void FASTCALL ext_633654(u32 cookie);
@@ -75,8 +77,9 @@ extern "C" u32 STDCALL fn_57b0d0(u32 id, u32 b) {
     if (Q == 0) goto done;
     u8 *qv = vt(Q);
     u8 *K = tab();
-    u32 h = (*(V6 *)(vt(K) + 0x114))(K, 0x69c594, 0, 0x6aa2f4, 0x12d, 0, 0);
-    (*(V1 *)(qv + 0x128))(Q, (u16)h);
+    u32 h = (*(V4 *)(vt(K) + 0x114))(K, 0x69c594, 0, 0x6aa2f4, 0x12d);
+    // slot 0x114 pops 4 (ret 0x10); the two 0s stay pending and are args 2 and 3 of slot 0x128 (ret 0xc)
+    (*(V3 *)(qv + 0x128))(Q, (u16)h, 0, 0);
   } else if (kind == 3) {
     wr32u(eng() + 0x97, b);
     (*(V1 *)(vt(R) + 0x378))(R, tbl(0x6ecc78, b));

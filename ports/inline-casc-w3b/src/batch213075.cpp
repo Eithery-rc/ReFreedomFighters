@@ -26,8 +26,9 @@ extern "C" void THISCALL fn_572be0(u8 *self) {
   u32 f60 = *(u32 *)(vt(S1) + 0x60);
   {
     void *T = *(void **)(G(u8 *, 0x70039c) + 0x9b);
-    u32 n = (*(V2 *)(vt(T) + 0x4c))(T, rd32u(self + 0x44), 0x10);
-    (*(V2 *)&f60)(S1, 0x6a8a74, n);
+    // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+    u32 n = (*(V1 *)(vt(T) + 0x4c))(T, rd32u(self + 0x44));
+    (*(V3 *)&f60)(S1, 0x6a8a74, n, 0x10);
   }
   void *T2 = *(void **)(G(u8 *, 0x70039c) + 0x9b);
   void *S2 = (void *)(*(V0 *)(vt(T2) + 0x138))(T2);

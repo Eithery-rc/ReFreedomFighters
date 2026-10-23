@@ -2406,8 +2406,9 @@ extern "C" u32 THISCALL hand_5c6f40(u32 ecx_in) {
   a = *(u32 *)(G(u32, 0x70039c) + 0x9b);
   u32 hh = ((u32(THISCALL *)(u32))VSLOT(a, 0x138))(a);  // @h35_5c6f40
   a = *(u32 *)(G(u32, 0x70039c) + 0x9b);
-  u32 r2 = ((u32(THISCALL *)(u32, u32, u32))VSLOT(a, 0x4c))(a, *(u32 *)(ebx + 0x44), 0x10);  // @h36_5c6f40
-  u32 ret = ((u32(THISCALL *)(u32, u32, u32))VSLOT(hh, 0x60))(hh, 0x6b43a0, r2);  // @h37_5c6f40
+  // slot 0x4c pops 1 (ret 4); the 0x10 pushed before it stays pending and is arg 3 of slot 0x60
+  u32 r2 = ((u32(THISCALL *)(u32, u32))VSLOT(a, 0x4c))(a, *(u32 *)(ebx + 0x44));  // @h36_5c6f40
+  u32 ret = ((u32(THISCALL *)(u32, u32, u32, u32))VSLOT(hh, 0x60))(hh, 0x6b43a0, r2, 0x10);  // @h37_5c6f40
   SEH_LEAVE();
   return ret;
 }

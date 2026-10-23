@@ -60,13 +60,13 @@ extern "C" u32 THISCALL lifted_47c690(u32 ecx_in, u32 a0) {
   PV[1] = (u32)(edx);  // @32_47c690
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(eax + 155), sizeof v); (u32)v; });  // @33_47c690
   eax = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ecx), sizeof v); (u32)v; });  // @34_47c690
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(eax + 76)))(ecx, PV[1], (u32)(0));  // @35_47c690
+  eax = ((u32(THISCALL *)(u32, u32))(*(u32 *)(eax + 76)))(ecx, PV[1]);  // @35_47c690  slot 0x4c pops 1; the 0 stays pending and is arg 3 of slot 0x128
   ecx = edx = 0;  // @36_47c690
   PV[2] = (u32)(eax);  // @37_47c690
   eax = ({ u16 v; __builtin_memcpy(&v, (void *)(u32)(7338552), sizeof v); (u32)v; });  // @38_47c690
   ecx = ebx;  // @39_47c690
   PV[3] = (u32)(eax);  // @40_47c690
-  eax = ((u32(THISCALL *)(u32, u32, u32))(*(u32 *)(esi + 296)))(ecx, PV[3], PV[2]);  // @41_47c690
+  eax = ((u32(THISCALL *)(u32, u32, u32, u32))(*(u32 *)(esi + 296)))(ecx, PV[3], PV[2], (u32)(0));  // @41_47c690
   ecx = edx = 0;  // @42_47c690
   L47c71d:;
   ecx = ({ u32 v; __builtin_memcpy(&v, (void *)(u32)(ebx + 1734), sizeof v); (u32)v; });  // @44_47c690
