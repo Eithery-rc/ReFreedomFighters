@@ -141,6 +141,7 @@ extern "C" u32 THISCALL ext_506040(void *self);          // plain ret
 // 0x554bf0, stdcall(a) ret 4: 0x5002f0(0x5003d0(a[8], 0), 0); x = tab->slot 0x138(); local = 0; x->slot 0x88(0x6a5c48, &local); obj = tab->slot 0x58(local), null returns.
 // 0x506040(0x5003d0(a[4], 0)); id = tab->slot 0x114(0x6a5c68, 0, 0x6a57fc, 0x451, &out, 0); obj->slot 0x128((u16)id); 0x5002f0(0x5003d0(a[8], 0), out).
 typedef u32(THISCALL *v6b_t)(void *, u32, u32, u32, u32, u32, u32);
+typedef u32(THISCALL *v4b_t)(void *, u32, u32, u32, u32);
 static void STDCALL fn554bf0(u8 *a) {
   u32 local = 0;
   u32 out;
@@ -156,8 +157,9 @@ static void STDCALL fn554bf0(u8 *a) {
   (void)ext_506040(r1);
   void **ovt = *(void ***)obj;
   t = tabOf();
-  u32 id = (*(v6b_t **)t)[0x114 / 4](t, 0x6a5c68, 0, 0x6a57fc, 0x451, (u32)&out, 0);
-  ((v1_t)ovt[0x128 / 4])(obj, (u16)id);
+  // slot 0x114 pops 4 (ret 0x10); &out and 0 stay pending and are the 2nd and 3rd arguments of obj's slot 0x128 (ret 0xc)
+  u32 id = (*(v4b_t **)t)[0x114 / 4](t, 0x6a5c68, 0, 0x6a57fc, 0x451);
+  ((void(THISCALL *)(void *, u32, u32, u32))ovt[0x128 / 4])(obj, (u16)id, (u32)&out, 0);
   u8 *r2 = ext_5003d0(*(u8 **)(a + 8), 0);
   ext_5002f0(r2, out);
 }
